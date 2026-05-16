@@ -733,6 +733,7 @@ async function lancer(force){
   if(m>0){setTimeout(function(){exportDB()},500)}
 }
 function stopCol(){stopFlag=true;document.getElementById('btnStop').style.display='none'}
+
 // ---- PREDICTION ENGINE ----
 function buildCache(){
   var db=getDB(),tz=getTz();
@@ -797,7 +798,6 @@ function predict(match,cache,s){
     seuilAdapte:seuilAdaptatif(lig)}
 }
 
-  
 // ---- MATCHS DU JOUR ----
 async function loadMatchs(){
   if(!cfg.apiKey){showAl('tdAl','er','Entre ta cle dans Config');return}
@@ -861,7 +861,7 @@ function renderMatchsList(){
         pBtts:pred.btts!==null?Math.round(pred.btts*100):null,
         pConf:pred.conf||0,pConv:pred.convergence||0,pNbSig:pred.nbSig||0,auto:true});
       setTrack(track);
-    }}
+    }
     var pHTML='';
     if(pred){
       var p25=pred.plus!==null?Math.round(pred.plus*100):null;
@@ -947,7 +947,6 @@ function saveResult(){
   document.getElementById('modal').classList.remove('on');
   renderMatchsList();
 }
-
 
 // ---- STATS ----
 function initStDates(){
@@ -1072,7 +1071,7 @@ function renderComps(){
 }
 function toggleComp(head){head.parentElement.querySelector('.comp-body').classList.toggle('open')}
 function filterComps(){renderComps()}
-  
+
 // ---- TICKETS ----
 // Cote 1xBet estimée selon la probabilité (simplifiée)
 function estCote(prob){
@@ -1159,6 +1158,7 @@ async function genTickets(){
 
   // Trier par score décroissant
   candidates.sort(function(a,b){return b.score-a.score});
+
   // Générer les tickets
   var tickets=[];
   var nbSelMax=Math.min(candidates.length,12); // pool de matchs
@@ -1470,3 +1470,18 @@ document.querySelectorAll('[data-tab]').forEach(function(btn){
 </script>
 </body>
 </html>
+ew Error(err.error?err.error.message:'Erreur '+res.status)}
+    var data=await res.json();
+    var txt=data.content&&data.content[0]?data.content[0].text:'Pas de reponse';
+    var html=txt.replace(/^## (.+)$/gm,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+    document.getElementById('aiTxt').innerHTML=html;document.getElementById('aiOut').style.display='block';
+  }catch(e){showAl('aiAl','er',e.message)}
+  document.getElementById('btnAI').disabled=false;document.getElementById('aiLd').classList.remove('on');
+}
+function copyAI(){navigator.clipboard.writeText(document.getElementById('aiTxt').innerText).then(function(){alert('Copie!')})}
+
+// ---- INIT ----
+buildTz();initCfg();majDB();preset(2);
+document.getElementById('tdDate').value=today();
+document.getElementById('tkDate').value=today();
+document.querySelectorAll('[data-tab]').f
