@@ -416,6 +416,7 @@ tr:hover td{background:var(--s2)}
 
   <div id="tkOut" style="display:none"></div>
 </div>
+
 <!-- FIABILITE -->
 <div class="panel" id="p6">
   <div class="card">
@@ -707,9 +708,19 @@ async function lancer(force){
     var data=await apiCall('/fixtures',{date:date});
     if(!data){e++;addLog('Erreur API: '+date,'var(--r)')}
     else{
-      var ms=(data.response||[]).filter(function(f){return TERM.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).map(function(f){return parseFix(f,tz)});
+      var allFx=data.response||[];
+      var ms;
+      if(isToday){
+        // Aujourd'hui: sauvegarder TOUS les matchs (terminés + live + à venir)
+        ms=allFx.map(function(f){return parseFix(f,tz)});
+        addLog(date+' - '+ms.length+' matchs (dont '+allFx.filter(function(f){return TERM.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).length+' termines)','var(--g)');
+      } else {
+        // Jours passés: seulement les terminés
+        ms=allFx.filter(function(f){return TERM.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).map(function(f){return parseFix(f,tz)});
+        addLog(date+' - '+ms.length+' matchs termines','var(--g)');
+      }
       if(ms.length>0){db[date]=ms;setDB(db)}
-      j++;m+=ms.length;addLog(date+' - '+ms.length+' matchs','var(--g)');
+      j++;m+=ms.length;
     }
     setS();if(i<dates.length-1&&!stopFlag)await sleep(400);
   }
@@ -722,7 +733,6 @@ async function lancer(force){
   if(m>0){setTimeout(function(){exportDB()},500)}
 }
 function stopCol(){stopFlag=true;document.getElementById('btnStop').style.display='none'}
-
 // ---- PREDICTION ENGINE ----
 function buildCache(){
   var db=getDB(),tz=getTz();
@@ -787,6 +797,7 @@ function predict(match,cache,s){
     seuilAdapte:seuilAdaptatif(lig)}
 }
 
+  
 // ---- MATCHS DU JOUR ----
 async function loadMatchs(){
   if(!cfg.apiKey){showAl('tdAl','er','Entre ta cle dans Config');return}
@@ -850,7 +861,7 @@ function renderMatchsList(){
         pBtts:pred.btts!==null?Math.round(pred.btts*100):null,
         pConf:pred.conf||0,pConv:pred.convergence||0,pNbSig:pred.nbSig||0,auto:true});
       setTrack(track);
-    }
+    }}
     var pHTML='';
     if(pred){
       var p25=pred.plus!==null?Math.round(pred.plus*100):null;
@@ -936,6 +947,7 @@ function saveResult(){
   document.getElementById('modal').classList.remove('on');
   renderMatchsList();
 }
+
 
 // ---- STATS ----
 function initStDates(){
@@ -1060,7 +1072,7 @@ function renderComps(){
 }
 function toggleComp(head){head.parentElement.querySelector('.comp-body').classList.toggle('open')}
 function filterComps(){renderComps()}
-
+  
 // ---- TICKETS ----
 // Cote 1xBet estimée selon la probabilité (simplifiée)
 function estCote(prob){
@@ -1147,7 +1159,6 @@ async function genTickets(){
 
   // Trier par score décroissant
   candidates.sort(function(a,b){return b.score-a.score});
-  
   // Générer les tickets
   var tickets=[];
   var nbSelMax=Math.min(candidates.length,12); // pool de matchs
