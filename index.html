@@ -71,9 +71,6 @@ tr:hover td{background:var(--s2)}
 .bf{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:6px;font-size:.66rem;font-weight:700;color:#000;transition:width .6s}
 .bv{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:.66rem;color:var(--dm)}
 .log{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:12px;max-height:160px;overflow-y:auto;font-size:.68rem;font-family:monospace;margin-top:10px;display:none}
-.aio{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px;font-size:.83rem;line-height:1.7;max-height:60vh;overflow-y:auto}
-.aio h3{color:var(--g);font-weight:900;font-size:.88rem;margin:14px 0 6px}
-.aio strong{color:var(--y)}
 .lc{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
 .ln{font-weight:700;font-size:.9rem}.lsu{font-size:.68rem;color:var(--dm);margin-top:2px}
@@ -135,7 +132,6 @@ tr:hover td{background:var(--s2)}
 .sort-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .sort-btn{padding:5px 10px;font-size:.64rem;font-weight:600;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:inherit}
 .sort-btn.on{border-color:var(--g);color:var(--g);background:rgba(0,230,118,.07)}
-/* Tickets */
 .tk-card{background:var(--s1);border:2px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
 .tk-card.best{border-color:var(--g);background:rgba(0,230,118,.04)}
 .tk-card.good{border-color:var(--y);background:rgba(255,214,0,.03)}
@@ -152,46 +148,48 @@ tr:hover td{background:var(--s2)}
 .tk-result-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
 .tk-stat{background:var(--s2);border-radius:8px;padding:6px 4px;text-align:center;font-size:.7rem}
 .tk-stat .v{font-weight:900;font-size:.95rem}
-.conv-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:5px;font-size:.62rem;font-weight:700}
-/* Filtre convergence */
 .conv-filter-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .conv-f-btn{padding:6px 12px;font-size:.7rem;font-weight:700;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:inherit;transition:all .15s}
 .conv-f-btn.on{background:rgba(0,230,118,.1);border-color:var(--g);color:var(--g)}
 .conv-f-btn.flash{background:rgba(255,214,0,.1);border-color:var(--y);color:var(--y)}
-/* Badge convergence sur carte match */
 .conv-star{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:.68rem;font-weight:900}
 .conv-3{background:rgba(0,230,118,.15);color:var(--g);border:1px solid rgba(0,230,118,.4)}
 .conv-2{background:rgba(255,214,0,.12);color:var(--y);border:1px solid rgba(255,214,0,.3)}
 .conv-1{background:rgba(68,138,255,.1);color:var(--b);border:1px solid rgba(68,138,255,.3)}
 .conv-0{background:rgba(255,255,255,.04);color:var(--dm);border:1px solid var(--bd)}
+/* Info banner */
+.info-api{background:rgba(68,138,255,.08);border:1px solid rgba(68,138,255,.3);border-radius:10px;padding:12px 14px;font-size:.72rem;color:var(--b);margin-bottom:12px;line-height:1.6}
+.info-api strong{color:#fff}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="hdr"><h1>FOOTBALL STATS</h1><p>Collecteur · Predictions · Stats</p></div>
 <div class="tabs">
-  <button class="tab on" data-tab="0">Config</button>
-  <button class="tab" data-tab="1">Collecte</button>
-  <button class="tab" data-tab="2">Matchs</button>
-  <button class="tab" data-tab="3">Stats</button>
-  <button class="tab" data-tab="4">Compet.</button>
-  <button class="tab" data-tab="5">Tickets</button>
-  <button class="tab" data-tab="6">Fiabilite</button>
-  <button class="tab" data-tab="7">IA</button>
+  <button class="tab on" onclick="goTab(0)">Config</button>
+  <button class="tab" onclick="goTab(1)">Collecte</button>
+  <button class="tab" onclick="goTab(2)">Matchs</button>
+  <button class="tab" onclick="goTab(3)">Stats</button>
+  <button class="tab" onclick="goTab(4)">Compet.</button>
+  <button class="tab" onclick="goTab(5)">Tickets</button>
+  <button class="tab" onclick="goTab(6)">Fiabilite</button>
 </div>
 
 <!-- CONFIG -->
 <div class="panel on" id="p0">
   <div class="warn-banner">Tes cles API sont stockees localement. N'utilise pas cette app sur un appareil partage.</div>
+
+  <div class="info-api">
+    <strong>Comment utiliser l'API :</strong><br>
+    1. Inscris-toi sur <a href="https://dashboard.api-football.com/register" target="_blank" style="color:var(--g)">dashboard.api-football.com</a><br>
+    2. Copie ta cle API ci-dessous<br>
+    3. Plan gratuit : 100 requetes/jour, historique 2 jours max<br>
+    4. <strong>Si erreur API :</strong> verifie le quota dans l'onglet Collecte
+  </div>
+
   <div class="card">
     <span class="clbl">Cle API-Football (api-sports.io)</span>
-    <div style="display:flex;gap:8px"><input class="inp" id="cfgKey" type="password" placeholder="Cle api-sports.io..."/><button class="bsm" onclick="togglePwd('cfgKey')">voir</button></div>
-    <div style="font-size:.66rem;color:var(--dm);margin-top:6px">Gratuit: <a href="https://dashboard.api-football.com/register" target="_blank" style="color:var(--b)">dashboard.api-football.com</a> - 100 req/jour</div>
-  </div>
-  <div class="card">
-    <span class="clbl">Cle Claude (pour IA)</span>
-    <div style="display:flex;gap:8px"><input class="inp" id="cfgClaude" type="password" placeholder="sk-ant-..."/><button class="bsm" onclick="togglePwd('cfgClaude')">voir</button></div>
-    <div style="font-size:.66rem;color:var(--dm);margin-top:6px"><a href="https://console.anthropic.com" target="_blank" style="color:var(--b)">console.anthropic.com</a></div>
+    <div style="display:flex;gap:8px"><input class="inp" id="cfgKey" type="password" placeholder="Ta cle api-sports.io..."/><button class="bsm" onclick="togglePwd('cfgKey')">voir</button></div>
   </div>
   <div class="card">
     <span class="clbl">Fuseau horaire</span>
@@ -234,7 +232,9 @@ tr:hover td{background:var(--s2)}
     <div class="fgap">
       <button class="bsm" onclick="preset(1)" style="border-color:var(--g);color:var(--g)">Hier</button>
       <button class="bsm" onclick="preset(2)" style="border-color:var(--g);color:var(--g)">2j</button>
-      <button class="bsm" onclick="preset(7)">7j</button><button class="bsm" onclick="preset(30)">30j</button><button class="bsm" onclick="preset(90)">3 mois</button>
+      <button class="bsm" onclick="preset(7)">7j</button>
+      <button class="bsm" onclick="preset(30)">30j</button>
+      <button class="bsm" onclick="preset(90)">3 mois</button>
     </div>
     <div style="font-size:.68rem;color:var(--y);margin-top:8px;padding:8px;background:rgba(255,214,0,.06);border-radius:8px">Plan gratuit: 2 jours historique max. Collecte chaque jour et exporte!</div>
   </div>
@@ -244,6 +244,7 @@ tr:hover td{background:var(--s2)}
       <span id="quotaTxt" style="font-size:.8rem;color:var(--dm)">Non verifie</span>
       <button class="bsm" onclick="checkQuota()">Verifier</button>
     </div>
+    <div id="quotaErr" style="display:none;font-size:.7rem;color:var(--r);margin-top:6px;padding:8px;background:rgba(255,64,96,.06);border-radius:8px;line-height:1.5"></div>
   </div>
   <div class="al" id="colAl"></div>
   <div class="ld" id="colLd"><div class="sp"></div><p id="colMsg">...</p><div class="lb"><div class="lf" id="colFill" style="width:0%"></div></div><p id="colSub" style="margin-top:8px;font-size:.68rem;color:var(--dm)"></p></div>
@@ -268,20 +269,24 @@ tr:hover td{background:var(--s2)}
       <div><div class="lsm">Date</div><input class="inp" id="tdDate" type="date"/></div>
       <div><div class="lsm">Mode</div>
         <select class="inp" id="tdMode">
-          <option value="all">Tous</option><option value="live">Live</option>
-          <option value="soon">A venir</option><option value="done">Termines</option>
+          <option value="all">Tous</option>
+          <option value="live">Live</option>
+          <option value="soon">A venir</option>
+          <option value="done">Termines</option>
         </select>
       </div>
     </div>
     <div style="margin-bottom:10px">
       <div class="lsm">Seuil prediction</div>
       <div class="chips" id="tdChips">
-        <div class="chip" onclick="setSeuilTd(1.5)">+1.5</div><div class="chip on" onclick="setSeuilTd(2.5)">+2.5</div>
-        <div class="chip" onclick="setSeuilTd(3.5)">+3.5</div><div class="chip" onclick="setSeuilTd(4.5)">+4.5</div>
+        <div class="chip" onclick="setSeuilTd(1.5)">+1.5</div>
+        <div class="chip on" onclick="setSeuilTd(2.5)">+2.5</div>
+        <div class="chip" onclick="setSeuilTd(3.5)">+3.5</div>
+        <div class="chip" onclick="setSeuilTd(4.5)">+4.5</div>
       </div>
     </div>
     <div style="margin-bottom:12px">
-      <div class="lsm">Trier par convergence signaux</div>
+      <div class="lsm">Filtrer par convergence signaux</div>
       <div class="conv-filter-row">
         <button class="conv-f-btn on" id="convF0" onclick="setConvFilter(0)">Tous</button>
         <button class="conv-f-btn" id="convF1" onclick="setConvFilter(1)">1/3+</button>
@@ -289,7 +294,15 @@ tr:hover td{background:var(--s2)}
         <button class="conv-f-btn" id="convF3" onclick="setConvFilter(3)">3/3 ⚡</button>
       </div>
     </div>
-    <button class="btn bo" onclick="loadMatchs()">CHARGER LES MATCHS</button>
+    <!-- Boutons source -->
+    <div class="sg g2" style="margin-bottom:10px">
+      <button class="btn bg" onclick="loadMatchs('local')" style="font-size:.78rem;padding:10px;letter-spacing:.5px">DEPUIS LA BASE</button>
+      <button class="btn bb" onclick="loadMatchs('api')" style="font-size:.78rem;padding:10px;letter-spacing:.5px">DEPUIS L'API ↻</button>
+    </div>
+    <div style="font-size:.68rem;color:var(--dm);line-height:1.5;padding:8px;background:rgba(255,255,255,.03);border-radius:8px">
+      <b style="color:var(--tx)">Base locale</b> = matchs deja collectes (rapide, hors-ligne)<br>
+      <b style="color:var(--tx)">API</b> = actualise depuis api-football (consomme quota)
+    </div>
   </div>
   <div class="al" id="tdAl"></div>
   <div class="ld" id="tdLd"><div class="sp"></div><p>Chargement...</p></div>
@@ -360,7 +373,7 @@ tr:hover td{background:var(--s2)}
 <div class="panel" id="p5">
   <div class="card">
     <span class="clbl">Generateur de tickets combines</span>
-    <p style="font-size:.76rem;color:var(--dm);margin-bottom:12px;line-height:1.5">Selectionne les meilleurs matchs selon les signaux et construit des tickets optimises. Tu peux entrer les cotes 1xBet manuellement.</p>
+    <p style="font-size:.76rem;color:var(--dm);margin-bottom:12px;line-height:1.5">Selectionne les meilleurs matchs selon les signaux et construit des tickets optimises.</p>
     <div class="r2" style="margin-bottom:10px">
       <div><div class="lsm">Date des matchs</div><input class="inp" id="tkDate" type="date"/></div>
       <div><div class="lsm">Nb tickets</div>
@@ -401,19 +414,16 @@ tr:hover td{background:var(--s2)}
     </div>
     <button class="btn bg" id="btnTk" onclick="genTickets()">GENERER LES TICKETS</button>
   </div>
-
   <div class="al" id="tkAl"></div>
   <div class="ld" id="tkLd"><div class="sp"></div><p>Analyse des matchs...</p></div>
-
   <div id="tkCotesSection" style="display:none">
     <div class="card">
-      <span class="clbl">Cotes 1xBet (optionnel)</span>
-      <p style="font-size:.7rem;color:var(--dm);margin-bottom:10px;line-height:1.5">Entre les cotes exactes 1xBet pour affiner les tickets. Laisse vide pour une estimation auto.</p>
+      <span class="clbl">Cotes manuelles (optionnel)</span>
+      <p style="font-size:.7rem;color:var(--dm);margin-bottom:10px;line-height:1.5">Entre les cotes exactes pour affiner les tickets.</p>
       <div id="tkCotesForm"></div>
       <button class="btn bg" onclick="appliquerCotes()" style="margin-top:10px">RECALCULER AVEC CES COTES</button>
     </div>
   </div>
-
   <div id="tkOut" style="display:none"></div>
 </div>
 
@@ -421,7 +431,7 @@ tr:hover td{background:var(--s2)}
 <div class="panel" id="p6">
   <div class="card">
     <span class="clbl">Fiabilite des predictions</span>
-    <p style="font-size:.78rem;color:var(--dm);margin-bottom:12px;line-height:1.5">Compare les predictions avec les resultats reels. Les matchs termines charges dans l'onglet Matchs sont automatiquement trackes.</p>
+    <p style="font-size:.78rem;color:var(--dm);margin-bottom:12px;line-height:1.5">Compare les predictions avec les resultats reels.</p>
     <div style="margin-bottom:10px">
       <div class="lsm">Seuil analyse</div>
       <div class="chips" id="fiabChips">
@@ -435,34 +445,6 @@ tr:hover td{background:var(--s2)}
   </div>
   <div class="al" id="fiabAl"></div>
   <div id="fiabOut" style="display:none"></div>
-</div>
-
-<!-- IA -->
-<div class="panel" id="p7">
-  <div class="card">
-    <span class="clbl">Analyse IA</span>
-    <p style="font-size:.78rem;color:var(--dm);margin-bottom:12px;line-height:1.5">Claude analyse tes donnees et identifie les tendances rentables.</p>
-    <div style="margin-bottom:10px"><div class="lsm">Question (optionnel)</div><textarea class="inp" id="aiQ" rows="3" placeholder="Ex: Quelles ligues favoriser en +2.5 ?"></textarea></div>
-    <div class="r2" style="margin-bottom:10px">
-      <div><div class="lsm">Du</div><input class="inp" id="aiDu" type="date"/></div>
-      <div><div class="lsm">Au</div><input class="inp" id="aiAu" type="date"/></div>
-    </div>
-    <div style="margin-bottom:12px">
-      <div class="lsm">Seuil</div>
-      <div class="chips" id="aiChips">
-        <div class="chip" onclick="setSeuilAI(1.5)">+1.5</div><div class="chip on" onclick="setSeuilAI(2.5)">+2.5</div>
-        <div class="chip" onclick="setSeuilAI(3.5)">+3.5</div><div class="chip" onclick="setSeuilAI(4.5)">+4.5</div>
-      </div>
-    </div>
-    <button class="btn bg" id="btnAI" onclick="lancerIA()">ANALYSER AVEC L IA</button>
-  </div>
-  <div class="al" id="aiAl"></div>
-  <div class="ld" id="aiLd"><div class="sp"></div><p>Claude analyse...</p></div>
-  <div id="aiOut" style="display:none">
-    <div class="st">ANALYSE</div>
-    <div class="aio" id="aiTxt"></div>
-    <button class="bsm" onclick="copyAI()" style="margin-top:10px;padding:10px 20px">Copier</button>
-  </div>
 </div>
 
 <!-- MODAL RESULTAT -->
@@ -496,13 +478,24 @@ tr:hover td{background:var(--s2)}
 </div>
 <script>
 var DB_KEY='fsa_db_v5',CFG_KEY='fsa_cfg_v5',RES_KEY='fsa_res_v1',TRACK_KEY='fsa_track_v1',TK_KEY='fsa_tickets_v1';
-var PROXY='https://corsproxy.io/?',API='https://v3.football.api-sports.io';
-var TERM=['FT','AET','PEN','AWD','WO'],LIVE=['1H','HT','2H','ET','BT','P','INT','LIVE'];
-var seuil=2.5,seuilSt=2.5,seuilAI=2.5,seuilTd=2.5,seuilComp=2.5,seuilFiab=2.5,seuilTk=2.5;
+
+// ---- PROXIES (ordre de priorite) ----
+// On essaie plusieurs proxies car corsproxy.io peut bloquer les headers custom
+var PROXIES=[
+  'https://api.allorigins.win/raw?url=',
+  'https://corsproxy.io/?',
+  'https://proxy.cors.sh/'
+];
+var API='https://v3.football.api-sports.io';
+var activeProxy=PROXIES[0];
+
+var TERM=['FT','AET','PEN','AWD','WO'];
+var LIVE=['1H','HT','2H','ET','BT','P','INT','LIVE'];
+var seuil=2.5,seuilSt=2.5,seuilTd=2.5,seuilComp=2.5,seuilFiab=2.5,seuilTk=2.5;
 var convFilterVal=0,convTkVal=1;
 var compSort='plus',compData=[];
 var stopFlag=false,modalMatch=null,currentTickets=[],modalTkIdx=-1;
-var cfg={apiKey:'',claudeKey:'',tz:0};
+var cfg={apiKey:'',tz:0};
 var allMatchsCache=[];
 
 // ---- UTILS ----
@@ -535,25 +528,58 @@ function parseFix(f,tz){
     h:h,a:a,total:(h!==null&&a!==null)?h+a:null,v1x2:v,btts:(h!==null&&a!==null)?(h>0&&a>0):null}
 }
 
-// ---- API ----
+// ---- API avec gestion d'erreur robuste ----
 async function apiCall(endpoint,params){
+  if(!cfg.apiKey){return null}
   var url=new URL(API+endpoint);
   Object.keys(params).forEach(function(k){url.searchParams.set(k,params[k])});
-  var proxied=PROXY+encodeURIComponent(url.toString());
+  
+  // Strategie 1 : header x-apisports-key via proxy allorigins
   try{
-    var res=await fetch(proxied,{headers:{'x-apisports-key':cfg.apiKey}});
-    if(!res.ok)return null;
-    var data=await res.json();
-    if(data.errors&&!Array.isArray(data.errors)&&Object.keys(data.errors).length)return null;
-    return data;
-  }catch(e){return null}
+    var proxiedUrl=activeProxy+encodeURIComponent(url.toString());
+    var res=await fetch(proxiedUrl,{
+      method:'GET',
+      headers:{
+        'x-apisports-key':cfg.apiKey,
+        'x-rapidapi-key':cfg.apiKey
+      }
+    });
+    if(res.ok){
+      var data=await res.json();
+      if(data&&data.response!==undefined){return data}
+    }
+  }catch(e){}
+  
+  // Strategie 2 : cle en query param (certains proxies ne transmettent pas les headers)
+  try{
+    url.searchParams.set('api_key',cfg.apiKey);
+    var proxied2=activeProxy+encodeURIComponent(url.toString());
+    var res2=await fetch(proxied2);
+    if(res2.ok){
+      var data2=await res2.json();
+      if(data2&&data2.response!==undefined){return data2}
+    }
+  }catch(e2){}
+
+  // Strategie 3 : essayer un autre proxy
+  try{
+    var alt=PROXIES[1]+encodeURIComponent(API+endpoint+'?'+new URLSearchParams(params).toString());
+    var res3=await fetch(alt,{headers:{'x-apisports-key':cfg.apiKey,'x-rapidapi-host':'v3.football.api-sports.io','x-rapidapi-key':cfg.apiKey}});
+    if(res3.ok){
+      var data3=await res3.json();
+      if(data3&&data3.response!==undefined){return data3}
+    }
+  }catch(e3){}
+
+  return null;
 }
 
 // ---- UI ----
 function goTab(i){
   document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('on',i===j)});
   document.querySelectorAll('.panel').forEach(function(p,j){p.classList.toggle('on',i===j)});
-  if(i===0)majDB();if(i===3)initStDates();if(i===7)initAIDates();
+  if(i===0)majDB();
+  if(i===3)initStDates();
   if(i===5){document.getElementById('tkDate').value=today();}
 }
 function showAl(id,t,msg){var e=document.getElementById(id);e.className='al on a'+t;e.innerHTML=msg}
@@ -562,7 +588,6 @@ function togglePwd(id){var e=document.getElementById(id);e.type=e.type==='passwo
 function setChips(sel,v){document.querySelectorAll(sel+' .chip').forEach(function(c){c.classList.toggle('on',parseFloat(c.textContent.replace('+',''))===v)})}
 function setSeuil(v){seuil=v;setChips('#cfgChips',v)}
 function setSeuilSt(v){seuilSt=v;setChips('#stChips',v)}
-function setSeuilAI(v){seuilAI=v;setChips('#aiChips',v)}
 function setSeuilTd(v){seuilTd=v;setChips('#tdChips',v)}
 function setSeuilComp(v){seuilComp=v;setChips('#compChips',v)}
 function setSeuilFiab(v){seuilFiab=v;setChips('#fiabChips',v)}
@@ -584,8 +609,6 @@ function majDB(){
   document.getElementById('dbJ').textContent=j;
   document.getElementById('dbL').textContent=l;
 }
-
-// ---- FILTRE CONVERGENCE MATCHS ----
 function setConvFilter(v){
   convFilterVal=v;
   [0,1,2,3].forEach(function(i){
@@ -605,7 +628,13 @@ function setConvTk(v){
 // ---- CONFIG ----
 function buildTz(){
   var sel=document.getElementById('cfgTz'),auto=autoTz();
-  for(var i=-12;i<=12;i++){var o=document.createElement('option');o.value=i;o.textContent='UTC'+(i>=0?'+':'')+i+(i===auto?' (auto)':'');if(i===auto)o.selected=true;sel.appendChild(o)}
+  for(var i=-12;i<=12;i++){
+    var o=document.createElement('option');
+    o.value=i;
+    o.textContent='UTC'+(i>=0?'+':'')+i+(i===auto?' (auto)':'');
+    if(i===auto)o.selected=true;
+    sel.appendChild(o);
+  }
 }
 function majTz(){
   var off=parseInt(document.getElementById('cfgTz').value);
@@ -615,19 +644,19 @@ function majTz(){
 }
 function saveCfgUI(){
   cfg.apiKey=document.getElementById('cfgKey').value.trim();
-  cfg.claudeKey=document.getElementById('cfgClaude').value.trim();
   cfg.tz=parseInt(document.getElementById('cfgTz').value);
   if(isNaN(cfg.tz))cfg.tz=0;
-  cfg.seuil=seuil;setCfg(cfg);
+  cfg.seuil=seuil;
+  setCfg(cfg);
   showAl('cfgAl','ok','Configuration sauvegardee!');
-  setTimeout(function(){hideAl('cfgAl')},2500);majDB();
+  setTimeout(function(){hideAl('cfgAl')},2500);
+  majDB();
 }
 function initCfg(){
   var s=getCfg();
-  cfg=Object.assign({apiKey:'',claudeKey:'',tz:autoTz(),seuil:2.5},s);
+  cfg=Object.assign({apiKey:'',tz:autoTz(),seuil:2.5},s);
   if(isNaN(cfg.tz))cfg.tz=0;
   document.getElementById('cfgKey').value=cfg.apiKey||'';
-  document.getElementById('cfgClaude').value=cfg.claudeKey||'';
   if(cfg.seuil){seuil=cfg.seuil;setSeuil(seuil)}
   var sel=document.getElementById('cfgTz');
   for(var i=0;i<sel.options.length;i++){if(parseInt(sel.options[i].value)===cfg.tz){sel.selectedIndex=i;break}}
@@ -666,20 +695,34 @@ function clearDB(){
 
 // ---- COLLECTE ----
 function preset(n){document.getElementById('colDu').value=nAgo(n);document.getElementById('colAu').value=today()}
+
 async function checkQuota(){
   if(!cfg.apiKey){showAl('colAl','er','Entre ta cle dans Config');return}
   document.getElementById('quotaTxt').textContent='Verification...';
+  document.getElementById('quotaErr').style.display='none';
   var data=await apiCall('/status',{});
-  if(!data){document.getElementById('quotaTxt').textContent='Erreur - verifie ta cle';return}
+  if(!data){
+    document.getElementById('quotaTxt').textContent='Erreur connexion';
+    document.getElementById('quotaErr').style.display='block';
+    document.getElementById('quotaErr').innerHTML='Impossible de joindre l\'API.<br>• Verifie ta cle dans Config<br>• Verifie ta connexion internet<br>• Le proxy peut etre bloque - reessaie dans quelques secondes';
+    return;
+  }
   var req=(data.response&&data.response.requests)||{};
   var used=req.current||0,lim=req.limit_day||100;
   document.getElementById('quotaTxt').textContent=used+'/'+lim+' utilisees - Restant: '+(lim-used);
+  if(lim-used<10){
+    document.getElementById('quotaErr').style.display='block';
+    document.getElementById('quotaErr').style.color='var(--y)';
+    document.getElementById('quotaErr').textContent='Attention: quota presque epuise! Utilise la base locale.';
+  }
 }
+
 function addLog(msg,col){
   var el=document.getElementById('colLog');el.style.display='block';
   var d=document.createElement('div');d.style.color=col||'var(--dm)';d.textContent=msg;
   el.appendChild(d);el.scrollTop=el.scrollHeight;
 }
+
 async function lancer(force){
   if(!cfg.apiKey){showAl('colAl','er','Entre ta cle dans Config');return}
   var du=document.getElementById('colDu').value,au=document.getElementById('colAu').value;
@@ -706,38 +749,49 @@ async function lancer(force){
     if(!force&&!isToday&&db[date]&&db[date].length>0){addLog('Deja en base: '+date+' ('+db[date].length+' matchs)');j++;m+=db[date].length;setS();continue}
     r++;
     var data=await apiCall('/fixtures',{date:date});
-    if(!data){e++;addLog('Erreur API: '+date,'var(--r)')}
-    else{
+    if(!data){
+      e++;
+      addLog('Erreur API: '+date+' - verifie ta cle et le quota','var(--r)');
+    } else {
       var allFx=data.response||[];
       var ms;
       if(isToday){
-        // Aujourd'hui: sauvegarder TOUS les matchs (terminés + live + à venir)
+        // Aujourd'hui: TOUS les matchs (termines + live + a venir)
         ms=allFx.map(function(f){return parseFix(f,tz)});
-        addLog(date+' - '+ms.length+' matchs (dont '+allFx.filter(function(f){return TERM.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).length+' termines)','var(--g)');
+        var nbTerm=allFx.filter(function(f){return TERM.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).length;
+        var nbLive=allFx.filter(function(f){return LIVE.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).length;
+        addLog(date+' - '+ms.length+' matchs ('+nbTerm+' termines, '+nbLive+' live, '+(ms.length-nbTerm-nbLive)+' a venir)','var(--g)');
       } else {
-        // Jours passés: seulement les terminés
+        // Jours passes: seulement les termines
         ms=allFx.filter(function(f){return TERM.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).map(function(f){return parseFix(f,tz)});
         addLog(date+' - '+ms.length+' matchs termines','var(--g)');
       }
       if(ms.length>0){db[date]=ms;setDB(db)}
       j++;m+=ms.length;
     }
-    setS();if(i<dates.length-1&&!stopFlag)await sleep(400);
+    setS();if(i<dates.length-1&&!stopFlag)await sleep(500);
   }
   document.getElementById('colFill').style.width='100%';
   document.getElementById('colMsg').textContent=stopFlag?'Arrete':'Termine!';
   document.getElementById('colSub').textContent=m+' matchs sur '+j+' jours';
   document.getElementById('btnCol').disabled=false;document.getElementById('btnStop').style.display='none';
   document.getElementById('colLd').classList.remove('on');
-  showAl('colAl','ok',m+' matchs collectes sur '+j+' jours');majDB();
-  if(m>0){setTimeout(function(){exportDB()},500)}
+  if(e>0){
+    showAl('colAl','er',e+' erreur(s) API. Verifie ta cle dans Config et ton quota. Collecte terminee: '+m+' matchs sur '+j+' jours.');
+  } else {
+    showAl('colAl','ok',m+' matchs collectes sur '+j+' jours');
+  }
+  majDB();
+  if(m>0){setTimeout(function(){exportDB()},600)}
 }
 function stopCol(){stopFlag=true;document.getElementById('btnStop').style.display='none'}
 
 // ---- PREDICTION ENGINE ----
 function buildCache(){
   var db=getDB(),tz=getTz();
-  var all=Object.values(db).reduce(function(a,v){return a.concat(v)},[]).filter(function(m){return m.total!==null});
+  // Pour le cache de prédiction, on utilise SEULEMENT les matchs terminés (scores connus)
+  var all=Object.values(db).reduce(function(a,v){return a.concat(v)},[])
+    .filter(function(m){return m.total!==null&&TERM.indexOf(m.status)>=0});
   var byL={},byH={},byD=[0,1,2,3,4,5,6].map(function(){return{p15:0,p25:0,p35:0,p45:0,v1:0,x:0,v2:0,bO:0,total:0,buts:0}});
   all.forEach(function(m){
     var k=m.league+'|'+m.country;
@@ -799,50 +853,90 @@ function predict(match,cache,s){
 }
 
 // ---- MATCHS DU JOUR ----
-async function loadMatchs(){
-  if(!cfg.apiKey){showAl('tdAl','er','Entre ta cle dans Config');return}
-  hideAl('tdAl');document.getElementById('tdLd').classList.add('on');
-  document.getElementById('tdSum').style.display='none';document.getElementById('tdList').innerHTML='';
-  var date=document.getElementById('tdDate').value,mode=document.getElementById('tdMode').value,tz=getTz();
+// source = 'local' ou 'api'
+async function loadMatchs(source){
+  if(!source)source='local';
+  var date=document.getElementById('tdDate').value;
+  if(!date){showAl('tdAl','er','Selectionne une date');return}
+
+  hideAl('tdAl');
+  document.getElementById('tdLd').classList.add('on');
+  document.getElementById('tdSum').style.display='none';
+  document.getElementById('tdList').innerHTML='';
+
+  var tz=getTz();
   var cache=buildCache();
   var fx=[];
 
-  // 1. Essayer d'abord depuis la base locale (collecte)
-  var db=getDB();
-  if(mode!=='live'&&db[date]&&db[date].length>0){
-    fx=db[date].slice(); // données déjà collectées
-    document.getElementById('tdAl').className='al on ain';
-    document.getElementById('tdAl').innerHTML='Donnees chargees depuis la base locale. <button class="bsm" onclick="loadMatchsApi()" style="margin-left:8px;padding:4px 10px">Actualiser via API</button>';
-  } else {
-    // 2. Fallback: appel API
-    var data=await apiCall('/fixtures',mode==='live'?{live:'all'}:{date:date});
-    document.getElementById('tdLd').classList.remove('on');
-    if(!data){
-      showAl('tdAl','er','Erreur API. <b>Collecte d'abord les matchs</b> dans l'onglet Collecte, puis reviens ici.');
+  if(source==='local'){
+    // Charger depuis la base locale
+    var db=getDB();
+    if(db[date]&&db[date].length>0){
+      fx=db[date].slice();
+      document.getElementById('tdLd').classList.remove('on');
+      showAl('tdAl','in','Donnees depuis la base locale ('+fx.length+' matchs). Clique "API" pour actualiser.');
+    } else {
+      document.getElementById('tdLd').classList.remove('on');
+      showAl('tdAl','er','Aucun match en base pour le '+date+'. Lance d\'abord la Collecte, ou charge depuis l\'API.');
       return;
     }
-    fx=(data.response||[]).map(function(f){return parseFix(f,tz)});
-    // Sauvegarder en base pour les prochaines fois
-    if(fx.length>0&&date===today()){db[date]=fx;setDB(db);}
+  } else {
+    // Charger depuis l'API
+    if(!cfg.apiKey){
+      document.getElementById('tdLd').classList.remove('on');
+      showAl('tdAl','er','Entre ta cle API dans Config');
+      return;
+    }
+    var data=await apiCall('/fixtures',{date:date});
+    document.getElementById('tdLd').classList.remove('on');
+    if(!data){
+      showAl('tdAl','er','Erreur API. Verifie ta cle dans Config et ton quota. Tu peux charger depuis la Base locale si tu as deja collecte.');
+      return;
+    }
+    var allFx=data.response||[];
+    fx=allFx.map(function(f){return parseFix(f,tz)});
+    // Sauvegarder en base (mise a jour)
+    if(fx.length>0){
+      var db2=getDB();
+      db2[date]=fx;
+      setDB(db2);
+      majDB();
+    }
+    showAl('tdAl','ok',fx.length+' matchs charges depuis l\'API et sauvegardes.');
   }
-  document.getElementById('tdLd').classList.remove('on');
-  if(mode==='soon')fx=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0});
-  else if(mode==='done')fx=fx.filter(function(f){return TERM.indexOf(f.status)>=0});
-  else if(mode==='live')fx=fx.filter(function(f){return LIVE.indexOf(f.status)>=0});
-  // Ajouter les prédictions à chaque match pour le tri
-  fx.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd):null});
-  // Tri initial par heure puis par convergence décroissante
-  fx.sort(function(a,b){
+
+  // Appliquer filtre mode
+  var mode=document.getElementById('tdMode').value;
+  var fxFiltered;
+  if(mode==='soon'){
+    fxFiltered=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0});
+  } else if(mode==='done'){
+    fxFiltered=fx.filter(function(f){return TERM.indexOf(f.status)>=0});
+  } else if(mode==='live'){
+    fxFiltered=fx.filter(function(f){return LIVE.indexOf(f.status)>=0});
+  } else {
+    fxFiltered=fx.slice();
+  }
+
+  // Ajouter predictions
+  fxFiltered.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd):null});
+
+  // Tri : convergence décroissante puis heure
+  fxFiltered.sort(function(a,b){
     var ca=a._pred?a._pred.convergence:-1,cb=b._pred?b._pred.convergence:-1;
-    if(cb!==ca)return cb-ca; // convergence décroissante
-    return a.heure.localeCompare(b.heure); // puis heure croissante
+    if(cb!==ca)return cb-ca;
+    return (a.heure||'').localeCompare(b.heure||'');
   });
-  allMatchsCache=fx;
+
+  allMatchsCache=fxFiltered;
+
+  // Compteurs (basés sur fx complet pour le résumé)
   document.getElementById('tTot').textContent=fx.length;
   document.getElementById('tLiv').textContent=fx.filter(function(f){return LIVE.indexOf(f.status)>=0}).length;
   document.getElementById('tSoo').textContent=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0}).length;
   document.getElementById('tDon').textContent=fx.filter(function(f){return TERM.indexOf(f.status)>=0}).length;
   document.getElementById('tdSum').style.display='block';
+
   renderMatchsList();
 }
 
@@ -856,7 +950,7 @@ function renderMatchsList(){
     return c>=convFilterVal;
   });
   if(!fx.length){
-    list.innerHTML='<div style="text-align:center;color:var(--dm);padding:30px;font-size:.84rem">Aucun match avec '+(convFilterVal)+'/3+ signaux.<br>Baisse le filtre ou collecte plus de donnees.</div>';
+    list.innerHTML='<div style="text-align:center;color:var(--dm);padding:30px;font-size:.84rem">Aucun match pour ce filtre.<br>Baisse la convergence minimum ou la date.</div>';
     return;
   }
   var results=getRes(),track=getTrack();
@@ -868,7 +962,7 @@ function renderMatchsList(){
     var scls=isLv?'slv':isDn?'sdn':'ssn';
     var score=(m.h!==null&&m.a!==null)?m.h+' - '+m.a:m.heure;
     var res=results[m.id];
-    // Auto-track
+    // Auto-track matchs terminés
     if(isDn&&m.h!==null&&m.a!==null&&pred&&!track.find(function(t){return t.id===m.id})){
       track.push({id:m.id,date:today(),home:m.home,away:m.away,league:m.league,country:m.country,seuil:seuilTd,
         rH:m.h,rA:m.a,rTotal:m.total,rV1x2:m.v1x2,rBtts:m.btts,rPlus:m.total>seuilTd,
@@ -924,9 +1018,7 @@ function renderMatchsList(){
         +'<div class="rr"><span style="color:var(--dm)">+'+seuilTd+'</span><span style="color:'+(ok?'var(--g)':'var(--r)')+'">'+( ok?'OUI':'NON')+'</span></div>'
         +'<div class="rr"><span style="color:var(--dm)">BTTS</span><span style="color:'+(res.h>0&&res.a>0?'var(--g)':'var(--r)')+'">'+( res.h>0&&res.a>0?'OUI':'NON')+'</span></div></div>';
     }
-    // Stocker le match dans un tableau global indexé pour éviter les problèmes de guillemets
-    var midx=window._matchRefs?window._matchRefs.length:0;
-    if(!window._matchRefs)window._matchRefs=[];
+    var midx=window._matchRefs.length;
     window._matchRefs[midx]={id:m.id,home:m.home,away:m.away,league:m.league,country:m.country,
       _seuil:seuilTd,_pred:pred?{plus:pred.plus,v1:pred.v1,x:pred.x,v2:pred.v2,btts:pred.btts,
       conf:pred.conf,convergence:pred.convergence,nbSig:pred.nbSig}:null};
@@ -938,8 +1030,8 @@ function renderMatchsList(){
     list.appendChild(card);
   });
 }
+
 function openModal(idx){
-  // Supporte à la fois un index numérique (nouveau) et un objet direct (legacy)
   var match=typeof idx==='number'?window._matchRefs[idx]:idx;
   if(!match)return;
   modalMatch=match;
@@ -973,34 +1065,6 @@ function saveResult(){
   renderMatchsList();
 }
 
-// Force actualisation API depuis l'onglet Matchs
-async function loadMatchsApi(){
-  hideAl('tdAl');
-  var date=document.getElementById('tdDate').value,tz=getTz();
-  document.getElementById('tdLd').classList.add('on');
-  var data=await apiCall('/fixtures',{date:date});
-  document.getElementById('tdLd').classList.remove('on');
-  if(!data){showAl('tdAl','er','Erreur API - verifie ta cle et le quota');return}
-  var db=getDB();
-  var fx=(data.response||[]).map(function(f){return parseFix(f,tz)});
-  if(fx.length>0){db[date]=fx;setDB(db);}
-  var cache=buildCache();
-  fx.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd):null});
-  fx.sort(function(a,b){
-    var ca=a._pred?a._pred.convergence:-1,cb=b._pred?b._pred.convergence:-1;
-    if(cb!==ca)return cb-ca;
-    return a.heure.localeCompare(b.heure);
-  });
-  allMatchsCache=fx;
-  document.getElementById('tTot').textContent=fx.length;
-  document.getElementById('tLiv').textContent=fx.filter(function(f){return LIVE.indexOf(f.status)>=0}).length;
-  document.getElementById('tSoo').textContent=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0}).length;
-  document.getElementById('tDon').textContent=fx.filter(function(f){return TERM.indexOf(f.status)>=0}).length;
-  document.getElementById('tdSum').style.display='block';
-  hideAl('tdAl');
-  renderMatchsList();
-}
-
 // ---- STATS ----
 function initStDates(){
   var db=getDB(),dates=Object.keys(db).sort();if(!dates.length)return;
@@ -1016,9 +1080,13 @@ function calcStats(){
   hideAl('stAl');document.getElementById('stLd').classList.add('on');document.getElementById('stOut').style.display='none';
   setTimeout(function(){
     var matchs=[];
-    dates.forEach(function(d){var ms=db[d]||[];if(lf)ms=ms.filter(function(m){return m.league.toLowerCase().indexOf(lf)>=0});matchs=matchs.concat(ms)});
+    dates.forEach(function(d){
+      var ms=(db[d]||[]).filter(function(m){return TERM.indexOf(m.status)>=0}); // seulement terminés
+      if(lf)ms=ms.filter(function(m){return m.league.toLowerCase().indexOf(lf)>=0});
+      matchs=matchs.concat(ms);
+    });
     var av=matchs.filter(function(m){return m.total!==null}),n=av.length;
-    if(!n){document.getElementById('stLd').classList.remove('on');showAl('stAl','er','Aucun match avec score');return}
+    if(!n){document.getElementById('stLd').classList.remove('on');showAl('stAl','er','Aucun match termine avec score');return}
     var plus=av.filter(function(m){return m.total>s}).length;
     var v1=av.filter(function(m){return m.v1x2==='V1'}).length;
     var xr=av.filter(function(m){return m.v1x2==='X'}).length;
@@ -1078,7 +1146,7 @@ function calcStats(){
 function buildComps(){
   var db=getDB(),s=seuilComp;
   var all=Object.values(db).reduce(function(a,v){return a.concat(v)},[]);
-  var av=all.filter(function(m){return m.total!==null});
+  var av=all.filter(function(m){return m.total!==null&&TERM.indexOf(m.status)>=0});
   if(!av.length){showAl('compAl','er','Aucune donnee - Lance la collecte');return}
   hideAl('compAl');
   var lm={};
@@ -1126,15 +1194,11 @@ function toggleComp(head){head.parentElement.querySelector('.comp-body').classLi
 function filterComps(){renderComps()}
 
 // ---- TICKETS ----
-// Cote 1xBet estimée selon la probabilité (simplifiée)
 function estCote(prob){
   if(!prob||prob<=0)return 1.5;
-  var cote=1/prob;
-  // Marge bookmaker simulée (~10%)
-  cote=cote*0.9;
+  var cote=1/prob*0.9;
   return Math.max(1.10,Math.round(cote*100)/100);
 }
-// Sélectionner le type de pari et sa probabilité pour un match
 function selectPari(pred,type){
   if(!pred)return null;
   var s=seuilTk;
@@ -1155,7 +1219,6 @@ function selectPari(pred,type){
     return{label:best,prob:bestProb,coteEst:estCote(bestProb)};
   }
   if(type==='mix'){
-    // Prendre le pari avec la meilleure probabilité parmi +seuil, BTTS, V1
     var options=[];
     if(pred.plus!==null)options.push({label:'+'+s+' buts',prob:pred.plus,coteEst:estCote(pred.plus)});
     if(pred.btts!==null)options.push({label:'BTTS Oui',prob:pred.btts,coteEst:estCote(pred.btts)});
@@ -1175,74 +1238,54 @@ async function genTickets(){
   var coteMax=parseFloat(document.getElementById('tkCoteMax').value)||10;
   var nbTickets=parseInt(document.getElementById('tkNb').value)||4;
   var tkType=document.getElementById('tkType').value;
-
   hideAl('tkAl');
   document.getElementById('tkLd').classList.add('on');
   document.getElementById('tkOut').style.display='none';
   document.getElementById('tkCotesSection').style.display='none';
-
-  // Récupérer les matchs du jour
   var tz=getTz(),cache=buildCache();
-  var data=await apiCall('/fixtures',{date:date});
+  // Essayer d'abord la base locale, sinon l'API
+  var fx=[];
+  var db=getDB();
+  if(db[date]&&db[date].length>0){
+    fx=db[date].filter(function(f){return TERM.indexOf(f.status)<0}); // seulement pas terminés
+  } else {
+    var data=await apiCall('/fixtures',{date:date});
+    if(!data){document.getElementById('tkLd').classList.remove('on');showAl('tkAl','er','Erreur API - Essaie de collecter d\'abord les matchs de ce jour');return}
+    var allFx=data.response||[];
+    fx=allFx.map(function(f){return parseFix(f,tz)}).filter(function(f){return TERM.indexOf(f.status)<0});
+  }
   document.getElementById('tkLd').classList.remove('on');
-  if(!data){showAl('tkAl','er','Erreur API');return}
-
-  var fx=(data.response||[]).map(function(f){return parseFix(f,tz)});
-  // Garder seulement les matchs à venir + live (pas terminés)
-  var upcoming=fx.filter(function(f){return TERM.indexOf(f.status)<0});
-  if(!upcoming.length){showAl('tkAl','in','Aucun match a venir pour cette date. Essaie aujourd\'hui ou demain.');return}
-
-  // Calculer prédictions + score pour chaque match
+  if(!fx.length){showAl('tkAl','in','Aucun match a venir pour cette date.');return}
   var candidates=[];
-  upcoming.forEach(function(m){
+  fx.forEach(function(m){
     var pred=cache.total>0?predict(m,cache,seuilTk):null;
     if(!pred)return;
-    if(pred.convergence<convTkVal)return; // filtre convergence
+    if(pred.convergence<convTkVal)return;
     var pari=selectPari(pred,tkType);
-    if(!pari||pari.prob<0.45)return; // prob minimum 45%
-    // Score = prob * convergence_boost * conf_boost
+    if(!pari||pari.prob<0.45)return;
     var convBoost=pred.nbSig>0?1+pred.convergence/pred.nbSig*0.3:1;
     var confBoost=1+pred.conf/200;
     var score=pari.prob*convBoost*confBoost;
     candidates.push({m:m,pred:pred,pari:pari,score:score});
   });
-
   if(candidates.length<2){showAl('tkAl','er','Pas assez de matchs eligibles ('+candidates.length+'). Baisse la convergence minimum ou collecte plus de donnees.');return}
-
-  // Trier par score décroissant
   candidates.sort(function(a,b){return b.score-a.score});
-
-  // Générer les tickets
   var tickets=[];
-  var nbSelMax=Math.min(candidates.length,12); // pool de matchs
-  var pool=candidates.slice(0,nbSelMax);
-
+  var pool=candidates.slice(0,Math.min(candidates.length,12));
   for(var t=0;t<nbTickets;t++){
-    // Chaque ticket = combiné de 3-5 matchs visant la cote cible
     var tkMatchs=[];
     var coteCumul=1.0;
-    var targetCote=(coteMin+coteMax)/2;
     var shuffled=pool.slice().sort(function(){return Math.random()-0.5});
-
     for(var i=0;i<shuffled.length&&tkMatchs.length<5;i++){
       var cand=shuffled[i];
-      // Éviter les doublons dans ce ticket
       if(tkMatchs.find(function(x){return x.m.id===cand.m.id}))continue;
       var newCote=coteCumul*cand.pari.coteEst;
-      if(newCote<=coteMax){
-        tkMatchs.push(cand);
-        coteCumul=newCote;
-      }
+      if(newCote<=coteMax){tkMatchs.push(cand);coteCumul=newCote}
       if(coteCumul>=coteMin&&tkMatchs.length>=3)break;
     }
-
-    if(tkMatchs.length>=2){
-      tickets.push({id:t+1,matchs:tkMatchs,coteTotal:Math.round(coteCumul*100)/100,date:date,status:'pending',result:null});
-    }
+    if(tkMatchs.length>=2){tickets.push({id:t+1,matchs:tkMatchs,coteTotal:Math.round(coteCumul*100)/100,date:date,status:'pending',result:null})}
   }
-
-  if(!tickets.length){showAl('tkAl','er','Impossible de construire des tickets dans cette plage de cotes. Elargis la plage.');return}
-
+  if(!tickets.length){showAl('tkAl','er','Impossible de construire des tickets dans cette plage de cotes.');return}
   currentTickets=tickets;
   renderTickets(tickets);
   buildCotesForm(tickets);
@@ -1251,34 +1294,22 @@ async function genTickets(){
 function renderTickets(tickets){
   var out=document.getElementById('tkOut');
   out.innerHTML='';
-
   var savedTk=getTickets();
-
   tickets.forEach(function(tk,idx){
     var coteColor=tk.coteTotal>=5?'var(--r)':tk.coteTotal>=3?'var(--y)':'var(--g)';
     var cls=idx===0?'best':idx===1?'good':'';
-    var html='<div class="tk-card '+cls+'">'
-      +'<div class="tk-head"><div class="tk-title">Ticket '+(idx+1)+(idx===0?' ⭐':'')+'</div><div class="tk-cote" style="color:'+coteColor+'">x'+tk.coteTotal+'</div></div>';
-
+    var html='<div class="tk-card '+cls+'"><div class="tk-head"><div class="tk-title">Ticket '+(idx+1)+(idx===0?' ⭐':'')+'</div><div class="tk-cote" style="color:'+coteColor+'">x'+tk.coteTotal+'</div></div>';
     tk.matchs.forEach(function(cand){
       var pred=cand.pred;
       var convCls='conv-'+pred.convergence;
       var probP=Math.round(cand.pari.prob*100);
-      html+='<div class="tk-row">'
-        +'<div class="tk-match-name">'+cand.m.home+' vs '+cand.m.away+'</div>'
-        +'<div class="tk-pred-row">'
-          +'<span style="font-size:.68rem;color:var(--dm)">'+cand.m.league+'</span>'
-          +'<div style="display:flex;gap:5px;align-items:center">'
-            +'<span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span>'
-            +'<span class="tk-p tk-pend">'+cand.pari.label+' '+probP+'%</span>'
-            +'<span style="font-size:.7rem;color:var(--y);font-weight:700">x'+cand.pari.coteEst+'</span>'
-          +'</div>'
-        +'</div>'
-        +'<div style="font-size:.62rem;color:var(--dm);margin-top:3px">'+cand.m.heure+' · Conf. '+pred.conf+'% · '+pred.ligTotal+' matchs hist.</div>'
-      +'</div>';
+      html+='<div class="tk-row"><div class="tk-match-name">'+cand.m.home+' vs '+cand.m.away+'</div>'
+        +'<div class="tk-pred-row"><span style="font-size:.68rem;color:var(--dm)">'+cand.m.league+'</span>'
+        +'<div style="display:flex;gap:5px;align-items:center"><span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span>'
+        +'<span class="tk-p tk-pend">'+cand.pari.label+' '+probP+'%</span>'
+        +'<span style="font-size:.7rem;color:var(--y);font-weight:700">x'+cand.pari.coteEst+'</span></div></div>'
+        +'<div style="font-size:.62rem;color:var(--dm);margin-top:3px">'+cand.m.heure+' · Conf. '+pred.conf+'% · '+pred.ligTotal+' matchs hist.</div></div>';
     });
-
-    // Stats du ticket
     var avgProb=Math.round(tk.matchs.reduce(function(s,c){return s+c.pari.prob},0)/tk.matchs.length*100);
     var avgConv=Math.round(tk.matchs.reduce(function(s,c){return s+c.pred.convergence},0)/tk.matchs.length*10)/10;
     html+='<div class="tk-result-row">'
@@ -1286,40 +1317,27 @@ function renderTickets(tickets){
       +'<div class="tk-stat"><div class="v" style="color:var(--b)">'+avgConv+'/3</div><div class="sl">Moy sig</div></div>'
       +'<div class="tk-stat"><div class="v" style="color:var(--y)">x'+tk.coteTotal+'</div><div class="sl">Cote tot</div></div>'
     +'</div>';
-
-    // Résultat si sauvegardé
     var saved=savedTk.find(function(s){return s.id===tk.id&&s.date===tk.date});
     if(saved){
-      var resCol=saved.result==='won'?'var(--g)':saved.result==='lost'?'var(--r)':'var(--y)';
-      var resTxt=saved.result==='won'?'GAGNE':'PERDU';
+      var resCol=saved.result==='won'?'var(--g)':'var(--r)';
+      var resTxt=saved.result==='won'?'GAGNE ✓':'PERDU ✗';
       html+='<div style="margin-top:10px;padding:8px;background:rgba(0,0,0,.2);border-radius:8px;text-align:center;font-weight:900;color:'+resCol+'">'+resTxt+'</div>';
     } else {
       html+='<button class="bsm" onclick="openTkModal('+idx+')" style="width:100%;padding:9px;text-align:center;margin-top:10px">Marquer le resultat</button>';
     }
-
     html+='</div>';
     out.innerHTML+=html;
   });
-
   out.style.display='block';
 }
 
 function buildCotesForm(tickets){
-  // Collecter tous les matchs uniques
-  var seen={};
-  var allMatchsTk=[];
-  tickets.forEach(function(tk){
-    tk.matchs.forEach(function(c){
-      if(!seen[c.m.id]){seen[c.m.id]=true;allMatchsTk.push(c)}
-    });
-  });
-
+  var seen={},allMatchsTk=[];
+  tickets.forEach(function(tk){tk.matchs.forEach(function(c){if(!seen[c.m.id]){seen[c.m.id]=true;allMatchsTk.push(c)}})});
   var html='';
   allMatchsTk.forEach(function(c){
-    html+='<div style="margin-bottom:10px">'
-      +'<div class="lsm">'+c.m.home+' vs '+c.m.away+' ('+c.pari.label+')</div>'
-      +'<input class="inp" type="number" id="cote_'+c.m.id+'" placeholder="Cote 1xBet (ex: 1.75)" step="0.01" min="1.01" value=""/>'
-      +'</div>';
+    html+='<div style="margin-bottom:10px"><div class="lsm">'+c.m.home+' vs '+c.m.away+' ('+c.pari.label+')</div>'
+      +'<input class="inp" type="number" id="cote_'+c.m.id+'" placeholder="Cote (ex: 1.75)" step="0.01" min="1.01" value=""/></div>';
   });
   document.getElementById('tkCotesForm').innerHTML=html;
   document.getElementById('tkCotesSection').style.display='block';
@@ -1327,7 +1345,6 @@ function buildCotesForm(tickets){
 
 function appliquerCotes(){
   if(!currentTickets.length)return;
-  // Relire les cotes saisies et recalculer
   currentTickets.forEach(function(tk){
     var newCote=1.0;
     tk.matchs.forEach(function(c){
@@ -1343,7 +1360,6 @@ function appliquerCotes(){
   setTimeout(function(){hideAl('tkAl')},2000);
 }
 
-// Modal résultat ticket
 function openTkModal(idx){
   modalTkIdx=idx;
   var tk=currentTickets[idx];
@@ -1351,9 +1367,7 @@ function openTkModal(idx){
   var html='';
   tk.matchs.forEach(function(c){
     html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px solid var(--bd);font-size:.76rem">'
-      +'<span>'+c.m.home+' vs '+c.m.away+'</span>'
-      +'<span class="tk-p tk-pend">'+c.pari.label+'</span>'
-    +'</div>';
+      +'<span>'+c.m.home+' vs '+c.m.away+'</span><span class="tk-p tk-pend">'+c.pari.label+'</span></div>';
   });
   document.getElementById('tkModalRows').innerHTML=html;
   document.getElementById('modalTk').classList.add('on');
@@ -1363,12 +1377,9 @@ function saveTkResult(result){
   if(modalTkIdx<0)return;
   var tk=currentTickets[modalTkIdx];
   var saved=getTickets();
-  // Supprimer l'entrée existante si elle existe
   saved=saved.filter(function(s){return!(s.id===tk.id&&s.date===tk.date)});
-  saved.push({
-    id:tk.id,date:tk.date,result:result,coteTotal:tk.coteTotal,
-    matchs:tk.matchs.map(function(c){return{home:c.m.home,away:c.m.away,pari:c.pari.label,prob:Math.round(c.pari.prob*100),conv:c.pred.convergence,nbSig:c.pred.nbSig,cote:c.pari.coteEst}})
-  });
+  saved.push({id:tk.id,date:tk.date,result:result,coteTotal:tk.coteTotal,
+    matchs:tk.matchs.map(function(c){return{home:c.m.home,away:c.m.away,pari:c.pari.label,prob:Math.round(c.pari.prob*100),conv:c.pred.convergence,nbSig:c.pred.nbSig,cote:c.pari.coteEst}})});
   setTickets(saved);
   document.getElementById('modalTk').classList.remove('on');
   renderTickets(currentTickets);
@@ -1398,13 +1409,10 @@ function calcFiabilite(){
   var mises=entries.filter(function(t){return t.pPlus!==null&&t.pPlus>=60});
   var misesGain=mises.filter(function(t){return t.rPlus}).length;
   var misesAcc=mises.length?Math.round(misesGain/mises.length*100):0;
-
-  // Stats tickets
   var savedTk=getTickets();
   var tkWon=savedTk.filter(function(t){return t.result==='won'}).length;
   var tkLost=savedTk.filter(function(t){return t.result==='lost'}).length;
   var tkTotal=tkWon+tkLost;
-
   var tranches=[{lbl:'<40%',min:0,max:39,n:0,ok:0},{lbl:'40-49%',min:40,max:49,n:0,ok:0},{lbl:'50-59%',min:50,max:59,n:0,ok:0},{lbl:'60-69%',min:60,max:69,n:0,ok:0},{lbl:'70-79%',min:70,max:79,n:0,ok:0},{lbl:'80%+',min:80,max:100,n:0,ok:0}];
   plusEntries.forEach(function(t){tranches.forEach(function(tr){if(t.pPlus>=tr.min&&t.pPlus<=tr.max){tr.n++;if(t.rPlus)tr.ok++}})});
   var convStats=[{lbl:'0/3',n:0,ok:0},{lbl:'1/3',n:0,ok:0},{lbl:'2/3',n:0,ok:0},{lbl:'3/3',n:0,ok:0}];
@@ -1465,61 +1473,16 @@ function clearTrack(){
   showAl('fiabAl','in','Tracking efface');setTimeout(function(){hideAl('fiabAl')},2500);
 }
 
-// ---- IA ----
-function initAIDates(){
-  var db=getDB(),dates=Object.keys(db).sort();if(!dates.length)return;
-  if(!document.getElementById('aiDu').value)document.getElementById('aiDu').value=dates[0];
-  if(!document.getElementById('aiAu').value)document.getElementById('aiAu').value=dates[dates.length-1];
-}
-async function lancerIA(){
-  var key=cfg.claudeKey;
-  if(!key){showAl('aiAl','er','Entre ta cle Claude dans Config');return}
-  var db=getDB(),du=document.getElementById('aiDu').value,au=document.getElementById('aiAu').value;
-  var q=document.getElementById('aiQ').value.trim(),s=seuilAI,tz=getTz();
-  var dates=Object.keys(db).filter(function(d){return(!du||d>=du)&&(!au||d<=au)}).sort();
-  if(!dates.length){showAl('aiAl','er','Aucune donnee');return}
-  hideAl('aiAl');document.getElementById('btnAI').disabled=true;
-  document.getElementById('aiLd').classList.add('on');document.getElementById('aiOut').style.display='none';
-  var matchs=[];dates.forEach(function(d){matchs=matchs.concat(db[d]||[])});
-  var av=matchs.filter(function(m){return m.total!==null}),n=av.length;
-  if(!n){showAl('aiAl','er','Aucun match avec score');document.getElementById('btnAI').disabled=false;document.getElementById('aiLd').classList.remove('on');return}
-  var plus=av.filter(function(m){return m.total>s}).length;
-  var v1=av.filter(function(m){return m.v1x2==='V1'}).length;
-  var xr=av.filter(function(m){return m.v1x2==='X'}).length;
-  var v2=av.filter(function(m){return m.v1x2==='V2'}).length;
-  var bO=av.filter(function(m){return m.btts===true}).length;
-  var lm={};
-  av.forEach(function(m){var k=m.league+' ('+m.country+')';if(!lm[k])lm[k]={plus:0,total:0,buts:0};lm[k].total++;lm[k].buts+=m.total;if(m.total>s)lm[k].plus++});
-  var tl=Object.keys(lm).filter(function(k){return lm[k].total>=5}).map(function(k){var v=lm[k];return{name:k,p:Math.round(v.plus/v.total*100),plus:v.plus,total:v.total,moy:(v.buts/v.total).toFixed(2)}}).sort(function(a,b){return b.p-a.p}).slice(0,20);
-  var jm=[{n:'Dim'},{n:'Lun'},{n:'Mar'},{n:'Mer'},{n:'Jeu'},{n:'Ven'},{n:'Sam'}].map(function(j){return Object.assign({plus:0,total:0},j)});
-  av.forEach(function(m){if(!m.ts)return;var d=new Date((m.ts+tz*3600)*1000);var dw=d.getUTCDay();jm[dw].total++;if(m.total>s)jm[dw].plus++});
-  var hm={};
-  av.forEach(function(m){var hk=(m.heure?m.heure.split(':')[0]:'??')+'h';if(!hm[hk])hm[hk]={plus:0,total:0};hm[hk].total++;if(m.total>s)hm[hk].plus++});
-  var mB=(av.reduce(function(a,m){return a+(m.total||0)},0)/n).toFixed(2);
-  var track=getTrack();
-  var tkStats=getTickets();
-  var tkWon=tkStats.filter(function(t){return t.result==='won'}).length;
-  var tkLost=tkStats.filter(function(t){return t.result==='lost'}).length;
-  var prompt='Expert paris sportifs football.\n'+n+' matchs sur '+dates.length+' jours ('+dates[0]+' au '+dates[dates.length-1]+').\nSeuil: +'+s+'\nTaux global: '+plus+'/'+n+' = '+Math.round(plus/n*100)+'%\nV1:'+Math.round(v1/n*100)+'% X:'+Math.round(xr/n*100)+'% V2:'+Math.round(v2/n*100)+'% BTTS:'+Math.round(bO/n*100)+'% Moy:'+mB+'\n\nCOMPETITIONS:\n'+tl.map(function(l){return l.name+': '+l.p+'% moy:'+l.moy+' ('+l.plus+'/'+l.total+')'}).join('\n')+'\n\nPAR JOUR: '+[1,2,3,4,5,6,0].map(function(i){return jm[i].n+':'+(jm[i].total?Math.round(jm[i].plus/jm[i].total*100)+'%':'-')+'('+jm[i].total+')'}).join(' ')+'\nPAR HEURE: '+Object.keys(hm).sort().map(function(hk){return hk+':'+Math.round(hm[hk].plus/hm[hk].total*100)+'%('+hm[hk].total+')'}).join(' ')+'\n\nTICKETS: '+tkWon+' gagnes / '+tkLost+' perdus\nFIABILITE: '+track.length+' matchs traces'+(q?'\n\nQUESTION: '+q:'')+'\n\nAnalyse en francais:\n## 1. VERDICT GLOBAL\n## 2. MEILLEURES COMPETITIONS\n## 3. CRENEAUX FAVORABLES\n## 4. 1X2 ET BTTS\n## 5. RECOMMANDATIONS TICKETS\n## 6. LIMITES';
-  try{
-    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})});
-    if(!res.ok){var err=await res.json().catch(function(){return{}});throw new Error(err.error?err.error.message:'Erreur '+res.status)}
-    var data=await res.json();
-    var txt=data.content&&data.content[0]?data.content[0].text:'Pas de reponse';
-    var html=txt.replace(/^## (.+)$/gm,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-    document.getElementById('aiTxt').innerHTML=html;document.getElementById('aiOut').style.display='block';
-  }catch(e){showAl('aiAl','er',e.message)}
-  document.getElementById('btnAI').disabled=false;document.getElementById('aiLd').classList.remove('on');
-}
-function copyAI(){navigator.clipboard.writeText(document.getElementById('aiTxt').innerText).then(function(){alert('Copie!')})}
-
 // ---- INIT ----
 buildTz();initCfg();majDB();preset(2);
 document.getElementById('tdDate').value=today();
 document.getElementById('tkDate').value=today();
-document.querySelectorAll('[data-tab]').forEach(function(btn){
-  btn.addEventListener('click',function(){goTab(parseInt(this.getAttribute('data-tab')))});
-});
 </script>
 </body>
 </html>
+ class="bsm" onclick="exportTrack()" style="padding:10px;text-align:center">Exporter JSON</button>'
+    +'<button class="bsm" onclick="clearTrack()" style="padding:10px;text-align:center;color:var(--r);border-color:var(--r)">Effacer</button>'
+    +'</div>';
+  var out=document.getElementById('fiabOut');out.innerHTML=html;out.style.display='block';
+}
+function exportTrac
