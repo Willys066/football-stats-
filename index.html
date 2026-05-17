@@ -805,10 +805,27 @@ async function loadMatchs(){
   document.getElementById('tdSum').style.display='none';document.getElementById('tdList').innerHTML='';
   var date=document.getElementById('tdDate').value,mode=document.getElementById('tdMode').value,tz=getTz();
   var cache=buildCache();
-  var data=await apiCall('/fixtures',mode==='live'?{live:'all'}:{date:date});
+  var fx=[];
+
+  // 1. Essayer d'abord depuis la base locale (collecte)
+  var db=getDB();
+  if(mode!=='live'&&db[date]&&db[date].length>0){
+    fx=db[date].slice(); // données déjà collectées
+    document.getElementById('tdAl').className='al on ain';
+    document.getElementById('tdAl').innerHTML='Donnees chargees depuis la base locale. <button class="bsm" onclick="loadMatchsApi()" style="margin-left:8px;padding:4px 10px">Actualiser via API</button>';
+  } else {
+    // 2. Fallback: appel API
+    var data=await apiCall('/fixtures',mode==='live'?{live:'all'}:{date:date});
+    document.getElementById('tdLd').classList.remove('on');
+    if(!data){
+      showAl('tdAl','er','Erreur API. <b>Collecte d'abord les matchs</b> dans l'onglet Collecte, puis reviens ici.');
+      return;
+    }
+    fx=(data.response||[]).map(function(f){return parseFix(f,tz)});
+    // Sauvegarder en base pour les prochaines fois
+    if(fx.length>0&&date===today()){db[date]=fx;setDB(db);}
+  }
   document.getElementById('tdLd').classList.remove('on');
-  if(!data){showAl('tdAl','er','Erreur API - verifie ta cle');return}
-  var fx=(data.response||[]).map(function(f){return parseFix(f,tz)});
   if(mode==='soon')fx=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0});
   else if(mode==='done')fx=fx.filter(function(f){return TERM.indexOf(f.status)>=0});
   else if(mode==='live')fx=fx.filter(function(f){return LIVE.indexOf(f.status)>=0});
@@ -830,6 +847,7 @@ async function loadMatchs(){
 }
 
 function renderMatchsList(){
+  window._matchRefs=[];
   var list=document.getElementById('tdList');
   list.innerHTML='';
   var fx=allMatchsCache.filter(function(m){
@@ -906,21 +924,28 @@ function renderMatchsList(){
         +'<div class="rr"><span style="color:var(--dm)">+'+seuilTd+'</span><span style="color:'+(ok?'var(--g)':'var(--r)')+'">'+( ok?'OUI':'NON')+'</span></div>'
         +'<div class="rr"><span style="color:var(--dm)">BTTS</span><span style="color:'+(res.h>0&&res.a>0?'var(--g)':'var(--r)')+'">'+( res.h>0&&res.a>0?'OUI':'NON')+'</span></div></div>';
     }
-    var mdataObj={id:m.id,home:m.home,away:m.away,league:m.league,country:m.country,_seuil:seuilTd,
-      _pred:pred?{plus:pred.plus,v1:pred.v1,x:pred.x,v2:pred.v2,btts:pred.btts,conf:pred.conf,convergence:pred.convergence,nbSig:pred.nbSig}:null};
-    var mdata=JSON.stringify(mdataObj).replace(/"/g,"'");
+    // Stocker le match dans un tableau global indexé pour éviter les problèmes de guillemets
+    var midx=window._matchRefs?window._matchRefs.length:0;
+    if(!window._matchRefs)window._matchRefs=[];
+    window._matchRefs[midx]={id:m.id,home:m.home,away:m.away,league:m.league,country:m.country,
+      _seuil:seuilTd,_pred:pred?{plus:pred.plus,v1:pred.v1,x:pred.x,v2:pred.v2,btts:pred.btts,
+      conf:pred.conf,convergence:pred.convergence,nbSig:pred.nbSig}:null};
     var card=document.createElement('div');card.className='mc '+cls;
     card.innerHTML='<div class="mt"><div class="ml">'+m.league+' · '+m.country+'</div><div class="ms '+scls+'">'+stxt+'</div></div>'
       +'<div class="mte"><div class="tn th">'+m.home+'</div><div class="msc">'+score+'</div><div class="tn ta">'+m.away+'</div></div>'
       +pHTML+resHTML
-      +(!res?'<button class="bsm" onclick="openModal('+mdata+')" style="width:100%;padding:9px;text-align:center;margin-top:4px">Saisir le resultat</button>':'');
+      +(!res?'<button class="bsm" onclick="openModal('+midx+')" style="width:100%;padding:9px;text-align:center;margin-top:4px">Saisir le resultat</button>':'');
     list.appendChild(card);
   });
 }
-function openModal(match){
+function openModal(idx){
+  // Supporte à la fois un index numérique (nouveau) et un objet direct (legacy)
+  var match=typeof idx==='number'?window._matchRefs[idx]:idx;
+  if(!match)return;
   modalMatch=match;
   document.getElementById('moName').textContent=match.home+' vs '+match.away;
-  document.getElementById('moH').textContent=match.home;document.getElementById('moA').textContent=match.away;
+  document.getElementById('moH').textContent=match.home;
+  document.getElementById('moA').textContent=match.away;
   document.getElementById('moSH').value='';document.getElementById('moSA').value='';
   document.getElementById('modal').classList.add('on');
 }
@@ -945,6 +970,34 @@ function saveResult(){
     }
   }
   document.getElementById('modal').classList.remove('on');
+  renderMatchsList();
+}
+
+// Force actualisation API depuis l'onglet Matchs
+async function loadMatchsApi(){
+  hideAl('tdAl');
+  var date=document.getElementById('tdDate').value,tz=getTz();
+  document.getElementById('tdLd').classList.add('on');
+  var data=await apiCall('/fixtures',{date:date});
+  document.getElementById('tdLd').classList.remove('on');
+  if(!data){showAl('tdAl','er','Erreur API - verifie ta cle et le quota');return}
+  var db=getDB();
+  var fx=(data.response||[]).map(function(f){return parseFix(f,tz)});
+  if(fx.length>0){db[date]=fx;setDB(db);}
+  var cache=buildCache();
+  fx.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd):null});
+  fx.sort(function(a,b){
+    var ca=a._pred?a._pred.convergence:-1,cb=b._pred?b._pred.convergence:-1;
+    if(cb!==ca)return cb-ca;
+    return a.heure.localeCompare(b.heure);
+  });
+  allMatchsCache=fx;
+  document.getElementById('tTot').textContent=fx.length;
+  document.getElementById('tLiv').textContent=fx.filter(function(f){return LIVE.indexOf(f.status)>=0}).length;
+  document.getElementById('tSoo').textContent=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0}).length;
+  document.getElementById('tDon').textContent=fx.filter(function(f){return TERM.indexOf(f.status)>=0}).length;
+  document.getElementById('tdSum').style.display='block';
+  hideAl('tdAl');
   renderMatchsList();
 }
 
@@ -1470,18 +1523,3 @@ document.querySelectorAll('[data-tab]').forEach(function(btn){
 </script>
 </body>
 </html>
-ew Error(err.error?err.error.message:'Erreur '+res.status)}
-    var data=await res.json();
-    var txt=data.content&&data.content[0]?data.content[0].text:'Pas de reponse';
-    var html=txt.replace(/^## (.+)$/gm,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-    document.getElementById('aiTxt').innerHTML=html;document.getElementById('aiOut').style.display='block';
-  }catch(e){showAl('aiAl','er',e.message)}
-  document.getElementById('btnAI').disabled=false;document.getElementById('aiLd').classList.remove('on');
-}
-function copyAI(){navigator.clipboard.writeText(document.getElementById('aiTxt').innerText).then(function(){alert('Copie!')})}
-
-// ---- INIT ----
-buildTz();initCfg();majDB();preset(2);
-document.getElementById('tdDate').value=today();
-document.getElementById('tkDate').value=today();
-document.querySelectorAll('[data-tab]').f
