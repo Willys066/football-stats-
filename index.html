@@ -24,7 +24,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);min-h
 .clbl{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--dm);margin-bottom:8px;display:block}
 .inp{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;color:var(--tx);font-size:.84rem;outline:none;font-family:inherit}
 .inp:focus{border-color:var(--g)}.inp::placeholder{color:var(--dm)}
-select.inp{cursor:pointer}textarea.inp{resize:vertical}
+select.inp{cursor:pointer}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .lsm{font-size:.66rem;color:var(--dm);margin-bottom:4px}
 .btn{width:100%;padding:13px;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-size:.95rem;letter-spacing:1.5px;font-family:inherit}
@@ -92,7 +92,6 @@ tr:hover td{background:var(--s2)}
 .mte{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
 .tn{flex:1;font-weight:700;font-size:.88rem;line-height:1.2}.th{text-align:left}.ta{text-align:right}
 .msc{text-align:center;font-weight:900;font-size:1.5rem;letter-spacing:2px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;flex-shrink:0}
-.pds{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:10px}
 .pd{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:7px 4px;text-align:center}
 .pd.best{border-color:var(--g);background:rgba(0,230,118,.08)}.pd.good{border-color:var(--y);background:rgba(255,214,0,.06)}
 .pp{font-weight:900;font-size:.95rem;line-height:1}.pl{font-size:.55rem;letter-spacing:.5px;text-transform:uppercase;color:var(--dm);margin-top:2px}
@@ -142,14 +141,12 @@ tr:hover td{background:var(--s2)}
 .tk-match-name{font-weight:600;margin-bottom:4px}
 .tk-pred-row{display:flex;justify-content:space-between;align-items:center}
 .tk-p{padding:3px 8px;border-radius:6px;font-size:.68rem;font-weight:700}
-.tk-ok{background:rgba(0,230,118,.15);color:var(--g);border:1px solid rgba(0,230,118,.3)}
-.tk-ko{background:rgba(255,64,96,.12);color:var(--r);border:1px solid rgba(255,64,96,.3)}
 .tk-pend{background:rgba(255,214,0,.1);color:var(--y);border:1px solid rgba(255,214,0,.3)}
 .tk-result-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
 .tk-stat{background:var(--s2);border-radius:8px;padding:6px 4px;text-align:center;font-size:.7rem}
 .tk-stat .v{font-weight:900;font-size:.95rem}
 .conv-filter-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.conv-f-btn{padding:6px 12px;font-size:.7rem;font-weight:700;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:inherit;transition:all .15s}
+.conv-f-btn{padding:6px 12px;font-size:.7rem;font-weight:700;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:inherit}
 .conv-f-btn.on{background:rgba(0,230,118,.1);border-color:var(--g);color:var(--g)}
 .conv-f-btn.flash{background:rgba(255,214,0,.1);border-color:var(--y);color:var(--y)}
 .conv-star{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:.68rem;font-weight:900}
@@ -159,40 +156,19 @@ tr:hover td{background:var(--s2)}
 .conv-0{background:rgba(255,255,255,.04);color:var(--dm);border:1px solid var(--bd)}
 .info-api{background:rgba(68,138,255,.08);border:1px solid rgba(68,138,255,.3);border-radius:10px;padding:12px 14px;font-size:.72rem;color:var(--b);margin-bottom:12px;line-height:1.6}
 .info-api strong{color:#fff}
-
-/* ── FIABILITE AMELIOREE ── */
-.fiab-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.fiab-tab{padding:7px 14px;font-size:.68rem;font-weight:700;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .15s}
-.fiab-tab.on{background:rgba(0,230,118,.1);border-color:var(--g);color:var(--g)}
-.mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.mkt-card{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:12px;position:relative;overflow:hidden}
-.mkt-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;border-radius:0 0 12px 12px}
-.mkt-good::after{background:var(--g)}
-.mkt-mid::after{background:var(--y)}
-.mkt-bad::after{background:var(--r)}
-.mkt-name{font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dm);margin-bottom:6px}
-.mkt-acc{font-size:1.7rem;font-weight:900;line-height:1;margin-bottom:4px}
-.mkt-sub{font-size:.62rem;color:var(--dm)}
-.mkt-bar{height:4px;background:var(--s2);border-radius:2px;margin-top:8px;overflow:hidden}
-.mkt-fill{height:100%;border-radius:2px;transition:width .7s}
-/* Calibration heatmap */
-.calib-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:10px}
-.calib-cell{border-radius:6px;padding:6px 4px;text-align:center;border:1px solid var(--bd)}
-.calib-pred{font-size:.56rem;color:var(--dm);margin-bottom:3px}
-.calib-real{font-size:.88rem;font-weight:900}
-.calib-n{font-size:.5rem;color:var(--dm);margin-top:2px}
-/* Auto-calibration badges */
-.calib-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:.62rem;font-weight:700}
-.cb-ok{background:rgba(0,230,118,.12);color:var(--g);border:1px solid rgba(0,230,118,.3)}
-.cb-hi{background:rgba(255,64,96,.1);color:var(--r);border:1px solid rgba(255,64,96,.3)}
-.cb-lo{background:rgba(68,138,255,.1);color:var(--b);border:1px solid rgba(68,138,255,.3)}
-/* Marche selector */
+/* Fiabilite tabs — meme style que .tabs principal */
+.fiab-tabs{display:flex;background:var(--s1);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.fiab-tab{flex:1;padding:9px 2px;text-align:center;cursor:pointer;font-size:.56rem;font-weight:600;color:var(--dm);background:transparent;border:none;font-family:inherit;letter-spacing:.3px}
+.fiab-tab.on{background:var(--s3);color:var(--g)}
+/* badges calibration */
+.calib-badge{display:inline-flex;align-items:center;padding:2px 6px;border-radius:4px;font-size:.58rem;font-weight:700}
+.cb-ok{background:rgba(0,230,118,.1);color:var(--g);border:1px solid rgba(0,230,118,.3)}
+.cb-hi{background:rgba(255,64,96,.08);color:var(--r);border:1px solid rgba(255,64,96,.3)}
+.cb-lo{background:rgba(68,138,255,.08);color:var(--b);border:1px solid rgba(68,138,255,.3)}
+/* selector marche calibration */
 .mkt-sel-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
-.mkt-sel-btn{padding:5px 10px;font-size:.62rem;font-weight:700;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:inherit;transition:all .15s}
+.mkt-sel-btn{padding:5px 10px;font-size:.62rem;font-weight:600;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:inherit}
 .mkt-sel-btn.on{border-color:var(--g);color:var(--g);background:rgba(0,230,118,.07)}
-/* ROI simulation */
-.roi-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--bd);font-size:.74rem}
-.roi-val{font-weight:900;font-size:.9rem}
 </style>
 </head>
 <body>
@@ -300,10 +276,8 @@ tr:hover td{background:var(--s2)}
       <div><div class="lsm">Date</div><input class="inp" id="tdDate" type="date"/></div>
       <div><div class="lsm">Mode</div>
         <select class="inp" id="tdMode">
-          <option value="all">Tous</option>
-          <option value="live">Live</option>
-          <option value="soon">A venir</option>
-          <option value="done">Termines</option>
+          <option value="all">Tous</option><option value="live">Live</option>
+          <option value="soon">A venir</option><option value="done">Termines</option>
         </select>
       </div>
     </div>
@@ -408,9 +382,7 @@ tr:hover td{background:var(--s2)}
       <div><div class="lsm">Date des matchs</div><input class="inp" id="tkDate" type="date"/></div>
       <div><div class="lsm">Nb tickets</div>
         <select class="inp" id="tkNb">
-          <option value="3">3 tickets</option>
-          <option value="4" selected>4 tickets</option>
-          <option value="5">5 tickets</option>
+          <option value="3">3 tickets</option><option value="4" selected>4 tickets</option><option value="5">5 tickets</option>
         </select>
       </div>
     </div>
@@ -465,7 +437,7 @@ tr:hover td{background:var(--s2)}
 <div class="panel" id="p6">
   <div class="card">
     <span class="clbl">Fiabilite & auto-calibration</span>
-    <p style="font-size:.76rem;color:var(--dm);margin-bottom:10px;line-height:1.5">Compare toutes les predictions avec les resultats. Le systeme ajuste automatiquement les poids du moteur.</p>
+    <p style="font-size:.78rem;color:var(--dm);margin-bottom:12px;line-height:1.5">Compare toutes les predictions avec les resultats reels sur les 14 marches. Le moteur ajuste automatiquement ses predictions.</p>
     <div style="margin-bottom:10px">
       <div class="lsm">Seuil analyse</div>
       <div class="chips" id="fiabChips">
@@ -496,7 +468,7 @@ tr:hover td{background:var(--s2)}
   </div>
 </div>
 
-<!-- MODAL TICKET RESULTAT -->
+<!-- MODAL TICKET -->
 <div class="mo" id="modalTk" onclick="closeTkModal(event)">
   <div class="mb">
     <div class="mt2" id="tkModalTitle">Resultat du ticket</div>
@@ -513,11 +485,9 @@ tr:hover td{background:var(--s2)}
 </div>
 <script>
 var DB_KEY='fsa_db_v5',CFG_KEY='fsa_cfg_v5',RES_KEY='fsa_res_v1',TRACK_KEY='fsa_track_v2',TK_KEY='fsa_tickets_v1',CALIB_KEY='fsa_calib_v1';
-
 var PROXIES=['https://api.allorigins.win/raw?url=','https://corsproxy.io/?','https://proxy.cors.sh/'];
 var API='https://v3.football.api-sports.io';
 var activeProxy=PROXIES[0];
-
 var TERM=['FT','AET','PEN','AWD','WO'];
 var LIVE=['1H','HT','2H','ET','BT','P','INT','LIVE'];
 var seuil=2.5,seuilSt=2.5,seuilTd=2.5,seuilComp=2.5,seuilFiab=2.5,seuilTk=2.5;
@@ -526,26 +496,7 @@ var compSort='plus',compData=[];
 var stopFlag=false,modalMatch=null,currentTickets=[],modalTkIdx=-1;
 var cfg={apiKey:'',tz:0};
 var allMatchsCache=[];
-var fiabView='overview'; // 'overview','markets','calibration','convergence','roi'
-
-// ---- CALIBRATION STORE ----
-// Stocke les biais detectes par marche pour corriger les predictions
-function getCalib(){
-  try{return JSON.parse(localStorage.getItem(CALIB_KEY)||'{}')}catch(e){return{}}
-}
-function setCalib(c){localStorage.setItem(CALIB_KEY,JSON.stringify(c))}
-function resetCalib(){
-  if(!confirm('Reinitialiser tous les facteurs de calibration?'))return;
-  localStorage.removeItem(CALIB_KEY);
-  showAl('fiabAl','ok','Calibration reinitalisee - les predictions utilisent maintenant les donnees brutes.');
-  setTimeout(function(){hideAl('fiabAl')},3000);
-}
-// Retourne le facteur de correction pour un marche (ex: 'over','btts','v1',...)
-// Si biais > +10%: predictions trop basses => facteur > 1; si biais < -10%: facteur < 1
-function getCalibFactor(market){
-  var c=getCalib();
-  return c[market]!==undefined?c[market]:1.0;
-}
+// ---- CALIBRATION ----
 
 // ---- UTILS ----
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
@@ -579,25 +530,12 @@ function parseFix(f,tz){
 
 // ---- API ----
 async function apiCall(endpoint,params){
-  if(!cfg.apiKey){return null}
+  if(!cfg.apiKey)return null;
   var url=new URL(API+endpoint);
   Object.keys(params).forEach(function(k){url.searchParams.set(k,params[k])});
-  try{
-    var proxiedUrl=activeProxy+encodeURIComponent(url.toString());
-    var res=await fetch(proxiedUrl,{method:'GET',headers:{'x-apisports-key':cfg.apiKey,'x-rapidapi-key':cfg.apiKey}});
-    if(res.ok){var data=await res.json();if(data&&data.response!==undefined){return data}}
-  }catch(e){}
-  try{
-    url.searchParams.set('api_key',cfg.apiKey);
-    var proxied2=activeProxy+encodeURIComponent(url.toString());
-    var res2=await fetch(proxied2);
-    if(res2.ok){var data2=await res2.json();if(data2&&data2.response!==undefined){return data2}}
-  }catch(e2){}
-  try{
-    var alt=PROXIES[1]+encodeURIComponent(API+endpoint+'?'+new URLSearchParams(params).toString());
-    var res3=await fetch(alt,{headers:{'x-apisports-key':cfg.apiKey,'x-rapidapi-host':'v3.football.api-sports.io','x-rapidapi-key':cfg.apiKey}});
-    if(res3.ok){var data3=await res3.json();if(data3&&data3.response!==undefined){return data3}}
-  }catch(e3){}
+  try{var r=await fetch(activeProxy+encodeURIComponent(url.toString()),{headers:{'x-apisports-key':cfg.apiKey,'x-rapidapi-key':cfg.apiKey}});if(r.ok){var d=await r.json();if(d&&d.response!==undefined)return d}}catch(e){}
+  try{url.searchParams.set('api_key',cfg.apiKey);var r2=await fetch(activeProxy+encodeURIComponent(url.toString()));if(r2.ok){var d2=await r2.json();if(d2&&d2.response!==undefined)return d2}}catch(e){}
+  try{var r3=await fetch(PROXIES[1]+encodeURIComponent(API+endpoint+'?'+new URLSearchParams(params).toString()),{headers:{'x-apisports-key':cfg.apiKey,'x-rapidapi-host':'v3.football.api-sports.io','x-rapidapi-key':cfg.apiKey}});if(r3.ok){var d3=await r3.json();if(d3&&d3.response!==undefined)return d3}}catch(e){}
   return null;
 }
 
@@ -605,9 +543,8 @@ async function apiCall(endpoint,params){
 function goTab(i){
   document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('on',i===j)});
   document.querySelectorAll('.panel').forEach(function(p,j){p.classList.toggle('on',i===j)});
-  if(i===0)majDB();
-  if(i===3)initStDates();
-  if(i===5){document.getElementById('tkDate').value=today();}
+  if(i===0)majDB();if(i===3)initStDates();
+  if(i===5)document.getElementById('tkDate').value=today();
 }
 function showAl(id,t,msg){var e=document.getElementById(id);e.className='al on a'+t;e.innerHTML=msg}
 function hideAl(id){document.getElementById(id).className='al'}
@@ -622,67 +559,44 @@ function setSeuilTk(v){seuilTk=v;setChips('#tkChips',v)}
 function setSort(key){
   compSort=key;
   document.querySelectorAll('.sort-btn').forEach(function(b){b.classList.remove('on')});
-  var cap=key.charAt(0).toUpperCase()+key.slice(1);
-  var btn=document.getElementById('sortBtn'+cap);
+  var btn=document.getElementById('sortBtn'+key.charAt(0).toUpperCase()+key.slice(1));
   if(btn)btn.classList.add('on');
   renderComps();
 }
 function majDB(){
-  var db=getDB();
-  var j=Object.keys(db).length;
+  var db=getDB(),j=Object.keys(db).length;
   var m=Object.values(db).reduce(function(s,v){return s+(v.length||0)},0);
   var l=new Set(Object.values(db).reduce(function(a,v){return a.concat(v.map(function(x){return x.league}))},[])).size;
-  document.getElementById('dbM').textContent=m;
-  document.getElementById('dbJ').textContent=j;
-  document.getElementById('dbL').textContent=l;
+  document.getElementById('dbM').textContent=m;document.getElementById('dbJ').textContent=j;document.getElementById('dbL').textContent=l;
 }
 function setConvFilter(v){
   convFilterVal=v;
-  [0,1,2,3].forEach(function(i){
-    var btn=document.getElementById('convF'+i);
-    if(btn)btn.classList.toggle('on',i===v);
-  });
+  [0,1,2,3].forEach(function(i){var b=document.getElementById('convF'+i);if(b)b.classList.toggle('on',i===v)});
   renderMatchsList();
 }
 function setConvTk(v){
   convTkVal=v;
-  [1,2,3].forEach(function(i){
-    var btn=document.getElementById('tkc'+i);
-    if(btn)btn.classList.toggle('on',i===v);
-  });
+  [1,2,3].forEach(function(i){var b=document.getElementById('tkc'+i);if(b)b.classList.toggle('on',i===v)});
 }
 
 // ---- CONFIG ----
 function buildTz(){
   var sel=document.getElementById('cfgTz'),auto=autoTz();
-  for(var i=-12;i<=12;i++){
-    var o=document.createElement('option');
-    o.value=i;
-    o.textContent='UTC'+(i>=0?'+':'')+i+(i===auto?' (auto)':'');
-    if(i===auto)o.selected=true;
-    sel.appendChild(o);
-  }
+  for(var i=-12;i<=12;i++){var o=document.createElement('option');o.value=i;o.textContent='UTC'+(i>=0?'+':'')+i+(i===auto?' (auto)':'');if(i===auto)o.selected=true;sel.appendChild(o)}
 }
 function majTz(){
-  var off=parseInt(document.getElementById('cfgTz').value);
-  if(isNaN(off))off=0;
+  var off=parseInt(document.getElementById('cfgTz').value);if(isNaN(off))off=0;
   var now=new Date(),d=new Date(now.getTime()+now.getTimezoneOffset()*60000+off*3600000);
   document.getElementById('tzInfo').textContent='Heure locale: '+('0'+d.getUTCHours()).slice(-2)+':'+('0'+d.getUTCMinutes()).slice(-2);
 }
 function saveCfgUI(){
   cfg.apiKey=document.getElementById('cfgKey').value.trim();
-  cfg.tz=parseInt(document.getElementById('cfgTz').value);
-  if(isNaN(cfg.tz))cfg.tz=0;
-  cfg.seuil=seuil;
-  setCfg(cfg);
-  showAl('cfgAl','ok','Configuration sauvegardee!');
-  setTimeout(function(){hideAl('cfgAl')},2500);
-  majDB();
+  cfg.tz=parseInt(document.getElementById('cfgTz').value);if(isNaN(cfg.tz))cfg.tz=0;
+  cfg.seuil=seuil;setCfg(cfg);
+  showAl('cfgAl','ok','Configuration sauvegardee!');setTimeout(function(){hideAl('cfgAl')},2500);majDB();
 }
 function initCfg(){
-  var s=getCfg();
-  cfg=Object.assign({apiKey:'',tz:autoTz(),seuil:2.5},s);
-  if(isNaN(cfg.tz))cfg.tz=0;
+  var s=getCfg();cfg=Object.assign({apiKey:'',tz:autoTz(),seuil:2.5},s);if(isNaN(cfg.tz))cfg.tz=0;
   document.getElementById('cfgKey').value=cfg.apiKey||'';
   if(cfg.seuil){seuil=cfg.seuil;setSeuil(seuil)}
   var sel=document.getElementById('cfgTz');
@@ -708,7 +622,7 @@ function importDB(ev,force){
         else skipped++;
       });
       setDB(existing);majDB();
-      showAl('cfgAl','ok','Import: '+added+' ajoutes, '+updated+' mis a jour, '+skipped+' ignores');
+      showAl('cfgAl','ok','Import: '+added+' ajoutes, '+updated+' maj, '+skipped+' ignores');
       setTimeout(function(){hideAl('cfgAl')},4000);
     }catch(err){showAl('cfgAl','er','Fichier invalide')}
   };
@@ -722,450 +636,226 @@ function clearDB(){
 
 // ---- COLLECTE ----
 function preset(n){document.getElementById('colDu').value=nAgo(n);document.getElementById('colAu').value=today()}
-
 async function checkQuota(){
   if(!cfg.apiKey){showAl('colAl','er','Entre ta cle dans Config');return}
-  document.getElementById('quotaTxt').textContent='Verification...';
-  document.getElementById('quotaErr').style.display='none';
+  document.getElementById('quotaTxt').textContent='Verification...';document.getElementById('quotaErr').style.display='none';
   var data=await apiCall('/status',{});
-  if(!data){
-    document.getElementById('quotaTxt').textContent='Erreur connexion';
-    document.getElementById('quotaErr').style.display='block';
-    document.getElementById('quotaErr').innerHTML='Impossible de joindre l\'API.<br>• Verifie ta cle dans Config<br>• Verifie ta connexion internet';
-    return;
-  }
-  var req=(data.response&&data.response.requests)||{};
-  var used=req.current||0,lim=req.limit_day||100;
+  if(!data){document.getElementById('quotaTxt').textContent='Erreur connexion';document.getElementById('quotaErr').style.display='block';document.getElementById('quotaErr').innerHTML='Impossible de joindre l\'API.<br>• Verifie ta cle<br>• Verifie ta connexion';return}
+  var req=(data.response&&data.response.requests)||{};var used=req.current||0,lim=req.limit_day||100;
   document.getElementById('quotaTxt').textContent=used+'/'+lim+' utilisees - Restant: '+(lim-used);
-  if(lim-used<10){
-    document.getElementById('quotaErr').style.display='block';
-    document.getElementById('quotaErr').style.color='var(--y)';
-    document.getElementById('quotaErr').textContent='Attention: quota presque epuise!';
-  }
+  if(lim-used<10){document.getElementById('quotaErr').style.display='block';document.getElementById('quotaErr').style.color='var(--y)';document.getElementById('quotaErr').textContent='Attention: quota presque epuise!'}
 }
-
 function addLog(msg,col){
   var el=document.getElementById('colLog');el.style.display='block';
-  var d=document.createElement('div');d.style.color=col||'var(--dm)';d.textContent=msg;
-  el.appendChild(d);el.scrollTop=el.scrollHeight;
+  var d=document.createElement('div');d.style.color=col||'var(--dm)';d.textContent=msg;el.appendChild(d);el.scrollTop=el.scrollHeight;
 }
-
 async function lancer(force){
   if(!cfg.apiKey){showAl('colAl','er','Entre ta cle dans Config');return}
   var du=document.getElementById('colDu').value,au=document.getElementById('colAu').value;
   if(!du||!au){showAl('colAl','er','Selectionne une periode');return}
-  var dates=getDates(du,au);
-  if(!dates.length){showAl('colAl','er','Periode invalide');return}
+  var dates=getDates(du,au);if(!dates.length){showAl('colAl','er','Periode invalide');return}
   var db=getDB();
-  var nouv=dates.filter(function(d){return!db[d]||!db[d].length});
-  if(nouv.length>95&&!confirm(nouv.length+' requetes necessaires. Continue?'))return;
-  hideAl('colAl');stopFlag=false;
-  document.getElementById('colLog').innerHTML='';document.getElementById('colLog').style.display='none';
-  document.getElementById('colLd').classList.add('on');
-  document.getElementById('btnCol').disabled=true;document.getElementById('btnStop').style.display='block';
+  if(dates.filter(function(d){return!db[d]||!db[d].length}).length>95&&!confirm('Beaucoup de requetes. Continue?'))return;
+  hideAl('colAl');stopFlag=false;document.getElementById('colLog').innerHTML='';document.getElementById('colLog').style.display='none';
+  document.getElementById('colLd').classList.add('on');document.getElementById('btnCol').disabled=true;document.getElementById('btnStop').style.display='block';
   var j=0,m=0,r=0,e=0,tz=getTz();
   function setS(){document.getElementById('cJ').textContent=j;document.getElementById('cM').textContent=m;document.getElementById('cR').textContent=r;document.getElementById('cE').textContent=e}
   for(var i=0;i<dates.length;i++){
     if(stopFlag)break;
-    var date=dates[i];
-    var pct=Math.round(i/dates.length*100);
-    document.getElementById('colFill').style.width=pct+'%';
-    document.getElementById('colMsg').textContent='Collecte... '+pct+'%';
-    document.getElementById('colSub').textContent=date+' ('+(i+1)+'/'+dates.length+')';
+    var date=dates[i],pct=Math.round(i/dates.length*100);
+    document.getElementById('colFill').style.width=pct+'%';document.getElementById('colMsg').textContent='Collecte... '+pct+'%';document.getElementById('colSub').textContent=date+' ('+(i+1)+'/'+dates.length+')';
     var isToday=(date===today());
     if(!force&&!isToday&&db[date]&&db[date].length>0){addLog('Deja en base: '+date+' ('+db[date].length+' matchs)');j++;m+=db[date].length;setS();continue}
-    r++;
-    var data=await apiCall('/fixtures',{date:date});
-    if(!data){
-      e++;addLog('Erreur API: '+date,'var(--r)');
-    } else {
-      var allFx=data.response||[];
-      var ms;
-      if(isToday){
-        ms=allFx.map(function(f){return parseFix(f,tz)});
-      } else {
-        ms=allFx.filter(function(f){return TERM.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).map(function(f){return parseFix(f,tz)});
-      }
+    r++;var data=await apiCall('/fixtures',{date:date});
+    if(!data){e++;addLog('Erreur API: '+date,'var(--r)')}
+    else{
+      var allFx=data.response||[],ms;
+      if(isToday){ms=allFx.map(function(f){return parseFix(f,tz)});addLog(date+' - '+ms.length+' matchs','var(--g)')}
+      else{ms=allFx.filter(function(f){return TERM.indexOf(f.fixture&&f.fixture.status?f.fixture.status.short:'')>=0}).map(function(f){return parseFix(f,tz)});addLog(date+' - '+ms.length+' termines','var(--g)')}
       if(ms.length>0){db[date]=ms;setDB(db)}
       j++;m+=ms.length;
-      addLog(date+' - '+ms.length+' matchs','var(--g)');
     }
     setS();if(i<dates.length-1&&!stopFlag)await sleep(500);
   }
-  document.getElementById('colFill').style.width='100%';
-  document.getElementById('colMsg').textContent=stopFlag?'Arrete':'Termine!';
-  document.getElementById('colSub').textContent=m+' matchs sur '+j+' jours';
-  document.getElementById('btnCol').disabled=false;document.getElementById('btnStop').style.display='none';
-  document.getElementById('colLd').classList.remove('on');
-  if(e>0){showAl('colAl','er',e+' erreur(s). Collecte: '+m+' matchs sur '+j+' jours.')}
-  else{showAl('colAl','ok',m+' matchs collectes sur '+j+' jours')}
-  majDB();
-  if(m>0){setTimeout(function(){exportDB()},600)}
+  document.getElementById('colFill').style.width='100%';document.getElementById('colMsg').textContent=stopFlag?'Arrete':'Termine!';document.getElementById('colSub').textContent=m+' matchs sur '+j+' jours';
+  document.getElementById('btnCol').disabled=false;document.getElementById('btnStop').style.display='none';document.getElementById('colLd').classList.remove('on');
+  if(e>0)showAl('colAl','er',e+' erreur(s). '+m+' matchs sur '+j+' jours.');else showAl('colAl','ok',m+' matchs collectes sur '+j+' jours');
+  majDB();if(m>0)setTimeout(function(){exportDB()},600);
 }
 function stopCol(){stopFlag=true;document.getElementById('btnStop').style.display='none'}
 
 // ---- PREDICTION ENGINE ----
 function buildCache(){
   var db=getDB(),tz=getTz();
-  var all=Object.values(db).reduce(function(a,v){return a.concat(v)},[])
-    .filter(function(m){return m.total!==null&&TERM.indexOf(m.status)>=0});
-  function emptySlot(){return{p15:0,p25:0,p35:0,p45:0,v1:0,x:0,v2:0,bO:0,bN:0,
-    csH:0,csA:0,hmsc:0,amsc:0,total:0,buts:0,butsH:0,butsA:0}}
-  var byL={},byH={},byD=[0,1,2,3,4,5,6].map(emptySlot);
+  var all=Object.values(db).reduce(function(a,v){return a.concat(v)},[]).filter(function(m){return m.total!==null&&TERM.indexOf(m.status)>=0});
+  function es(){return{p15:0,p25:0,p35:0,p45:0,v1:0,x:0,v2:0,bO:0,bN:0,csH:0,csA:0,hmsc:0,amsc:0,total:0,buts:0,butsH:0,butsA:0}}
+  var byL={},byH={},byD=[0,1,2,3,4,5,6].map(es);
   all.forEach(function(m){
-    var k=m.league+'|'+m.country;
-    if(!byL[k])byL[k]=emptySlot();
-    var e=byL[k];
-    e.total++;e.buts+=m.total;e.butsH+=(m.h||0);e.butsA+=(m.a||0);
-    if(m.total>1.5)e.p15++;if(m.total>2.5)e.p25++;if(m.total>3.5)e.p35++;if(m.total>4.5)e.p45++;
-    if(m.v1x2==='V1')e.v1++;if(m.v1x2==='X')e.x++;if(m.v1x2==='V2')e.v2++;
-    if(m.btts)e.bO++;else e.bN++;
-    if(m.a===0)e.csH++;if(m.h===0)e.csA++;if(m.h>0)e.hmsc++;if(m.a>0)e.amsc++;
-
-    var hk=m.heure?m.heure.split(':')[0]:'??';
-    if(!byH[hk])byH[hk]=emptySlot();
-    var eh=byH[hk];eh.total++;eh.buts+=m.total;eh.butsH+=(m.h||0);eh.butsA+=(m.a||0);
-    if(m.total>1.5)eh.p15++;if(m.total>2.5)eh.p25++;if(m.total>3.5)eh.p35++;if(m.total>4.5)eh.p45++;
-    if(m.v1x2==='V1')eh.v1++;if(m.v1x2==='X')eh.x++;if(m.v1x2==='V2')eh.v2++;
-    if(m.btts)eh.bO++;else eh.bN++;
-    if(m.a===0)eh.csH++;if(m.h===0)eh.csA++;if(m.h>0)eh.hmsc++;if(m.a>0)eh.amsc++;
-
-    if(m.ts){
-      var d2=new Date((m.ts+tz*3600)*1000),dw=d2.getUTCDay(),ed=byD[dw];
-      ed.total++;ed.buts+=m.total;ed.butsH+=(m.h||0);ed.butsA+=(m.a||0);
-      if(m.total>1.5)ed.p15++;if(m.total>2.5)ed.p25++;if(m.total>3.5)ed.p35++;if(m.total>4.5)ed.p45++;
-      if(m.v1x2==='V1')ed.v1++;if(m.v1x2==='X')ed.x++;if(m.v1x2==='V2')ed.v2++;
-      if(m.btts)ed.bO++;else ed.bN++;
-      if(m.a===0)ed.csH++;if(m.h===0)ed.csA++;if(m.h>0)ed.hmsc++;if(m.a>0)ed.amsc++;
+    function fill(e){
+      e.total++;e.buts+=m.total;e.butsH+=(m.h||0);e.butsA+=(m.a||0);
+      if(m.total>1.5)e.p15++;if(m.total>2.5)e.p25++;if(m.total>3.5)e.p35++;if(m.total>4.5)e.p45++;
+      if(m.v1x2==='V1')e.v1++;if(m.v1x2==='X')e.x++;if(m.v1x2==='V2')e.v2++;
+      if(m.btts)e.bO++;else e.bN++;
+      if(m.a===0)e.csH++;if(m.h===0)e.csA++;if(m.h>0)e.hmsc++;if(m.a>0)e.amsc++;
     }
+    var k=m.league+'|'+m.country;if(!byL[k])byL[k]=es();fill(byL[k]);
+    var hk=m.heure?m.heure.split(':')[0]:'??';if(!byH[hk])byH[hk]=es();fill(byH[hk]);
+    if(m.ts){var dw=new Date((m.ts+tz*3600)*1000).getUTCDay();fill(byD[dw])}
   });
   return{byL:byL,byH:byH,byD:byD,total:all.length};
 }
-
 function pkKey(s){if(s<=1.5)return'p15';if(s<=2.5)return'p25';if(s<=3.5)return'p35';return'p45'}
-
-function seuilAdaptatif(lig){
-  if(!lig||lig.total<10)return null;
-  return(lig.buts/lig.total)>=2.5?2.5:1.5;
-}
-
-// Applique le facteur de calibration (clamp [0,1])
-function applyCalib(val,market){
-  if(val===null)return null;
-  var f=getCalibFactor(market);
-  return Math.min(1,Math.max(0,val*f));
-}
-
+function seuilAdaptatif(lig){if(!lig||lig.total<10)return null;return(lig.buts/lig.total)>=2.5?2.5:1.5}
 function predict(match,cache,s){
   var tz=getTz(),lk=match.league+'|'+match.country,hk=match.heure?match.heure.split(':')[0]:'??';
   var dow=match.ts?new Date((match.ts+tz*3600)*1000).getUTCDay():null;
   var lig=cache.byL[lk]||null,h=cache.byH[hk]||null,dw=dow!==null?cache.byD[dow]:null;
   var pk=pkKey(s);
-
-  function pct(stat,key){return stat&&stat.total>=3?stat[key]/stat.total:null}
-
-  function weighted(keyFn){
-    var vals=[];
-    var vL=keyFn(lig),vH=keyFn(h),vD=keyFn(dw);
-    if(vL!==null)vals.push([vL,0.55]);
-    if(vH!==null)vals.push([vH,0.25]);
-    if(vD!==null)vals.push([vD,0.20]);
+  function pct(st,key){return st&&st.total>=3?st[key]/st.total:null}
+  function weighted(fn){
+    var vals=[];var vL=fn(lig),vH=fn(h),vD=fn(dw);
+    if(vL!==null)vals.push([vL,.55]);if(vH!==null)vals.push([vH,.25]);if(vD!==null)vals.push([vD,.20]);
     if(!vals.length)return null;
     var sw=vals.reduce(function(a,v){return a+v[1]},0);
     return vals.reduce(function(a,v){return a+v[0]*v[1]/sw},0);
   }
-
   var sigL=pct(lig,pk),sigH=pct(h,pk),sigD=pct(dw,pk);
-  var plusPredRaw=weighted(function(st){return pct(st,pk)});
-  var plusPred=applyCalib(plusPredRaw,'over');
+  var plusPred=applyCalib(weighted(function(st){return pct(st,pk)}),'over');
   var underPred=plusPred!==null?1-plusPred:null;
-
-  var convergence=0,nbSig=0,thresh=0.5;
-  if(sigL!==null){nbSig++;if(sigL>thresh)convergence++}
-  if(sigH!==null){nbSig++;if(sigH>thresh)convergence++}
-  if(sigD!==null){nbSig++;if(sigD>thresh)convergence++}
-
-  function calcV(key){return weighted(function(st){return pct(st,key)})}
-  var rv1Raw=calcV('v1'),rxRaw=calcV('x'),rv2Raw=calcV('v2');
-  var rs=(rv1Raw||0)+(rxRaw||0)+(rv2Raw||0);
-  var rv1,rx,rv2;
-  if(rs>0){rv1=(rv1Raw||0)/rs;rx=(rxRaw||0)/rs;rv2=(rv2Raw||0)/rs}
-  else{rv1=rv1Raw;rx=rxRaw;rv2=rv2Raw}
+  var conv=0,nbSig=0;
+  if(sigL!==null){nbSig++;if(sigL>0.5)conv++}if(sigH!==null){nbSig++;if(sigH>0.5)conv++}if(sigD!==null){nbSig++;if(sigD>0.5)conv++}
+  function cV(key){return weighted(function(st){return pct(st,key)})}
+  var rv1=cV('v1'),rx=cV('x'),rv2=cV('v2');
+  var rs=(rv1||0)+(rx||0)+(rv2||0);
+  if(rs>0){rv1=(rv1||0)/rs;rx=(rx||0)/rs;rv2=(rv2||0)/rs}
   rv1=applyCalib(rv1,'v1');rx=applyCalib(rx,'x');rv2=applyCalib(rv2,'v2');
-
   var dc1x=(rv1!==null&&rx!==null)?Math.min(1,rv1+rx):null;
   var dcx2=(rx!==null&&rv2!==null)?Math.min(1,rx+rv2):null;
   var dc12=(rv1!==null&&rv2!==null)?Math.min(1,rv1+rv2):null;
-
-  var bttsOuiRaw=weighted(function(st){return pct(st,'bO')});
-  var bttsOui=applyCalib(bttsOuiRaw,'btts');
-  var bttsNon=bttsOui!==null?1-bttsOui:null;
-
+  var bttsO=applyCalib(weighted(function(st){return pct(st,'bO')}),'btts');
+  var bttsN=bttsO!==null?1-bttsO:null;
   var csH=applyCalib(weighted(function(st){return pct(st,'csH')}),'csH');
   var csA=applyCalib(weighted(function(st){return pct(st,'csA')}),'csA');
   var hmsc=applyCalib(weighted(function(st){return pct(st,'hmsc')}),'hmsc');
   var amsc=applyCalib(weighted(function(st){return pct(st,'amsc')}),'amsc');
-
   var moyBH=weighted(function(st){return st&&st.total>=3?st.butsH/st.total:null});
   var moyBA=weighted(function(st){return st&&st.total>=3?st.butsA/st.total:null});
-
-  var allMarkets=[
-    {id:'over',label:'+'+s+' buts',prob:plusPred,inverse:false},
-    {id:'under',label:'-'+s+' buts',prob:underPred,inverse:true},
-    {id:'bttsO',label:'BTTS Oui',prob:bttsOui,inverse:false},
-    {id:'bttsN',label:'BTTS Non',prob:bttsNon,inverse:true},
-    {id:'v1',label:'Victoire Dom',prob:rv1,inverse:false},
-    {id:'x',label:'Match Nul',prob:rx,inverse:false},
-    {id:'v2',label:'Victoire Ext',prob:rv2,inverse:false},
-    {id:'dc1x',label:'DC 1X',prob:dc1x,inverse:false},
-    {id:'dcx2',label:'DC X2',prob:dcx2,inverse:false},
-    {id:'dc12',label:'DC 12',prob:dc12,inverse:false},
-    {id:'csH',label:'CS Domicile',prob:csH,inverse:false},
-    {id:'csA',label:'CS Exterieur',prob:csA,inverse:false},
-    {id:'hmsc',label:'Dom Marque',prob:hmsc,inverse:false},
-    {id:'amsc',label:'Ext Marque',prob:amsc,inverse:false},
+  var allM=[
+    {id:'over',label:'+'+s+' buts',prob:plusPred},{id:'under',label:'-'+s+' buts',prob:underPred},
+    {id:'bttsO',label:'BTTS Oui',prob:bttsO},{id:'bttsN',label:'BTTS Non',prob:bttsN},
+    {id:'v1',label:'Victoire Dom',prob:rv1},{id:'x',label:'Match Nul',prob:rx},{id:'v2',label:'Victoire Ext',prob:rv2},
+    {id:'dc1x',label:'DC 1X',prob:dc1x},{id:'dcx2',label:'DC X2',prob:dcx2},{id:'dc12',label:'DC 12',prob:dc12},
+    {id:'csH',label:'CS Domicile',prob:csH},{id:'csA',label:'CS Exterieur',prob:csA},
+    {id:'hmsc',label:'Dom Marque',prob:hmsc},{id:'amsc',label:'Ext Marque',prob:amsc}
   ].filter(function(m){return m.prob!==null});
-  allMarkets.sort(function(a,b){return b.prob-a.prob});
-  var bestMarket=allMarkets.length?allMarkets[0]:null;
-
-  return{
-    plus:plusPred,under:underPred,
-    v1:rv1,x:rx,v2:rv2,
-    dc1x:dc1x,dcx2:dcx2,dc12:dc12,
-    btts:bttsOui,bttsNon:bttsNon,
-    csH:csH,csA:csA,hmsc:hmsc,amsc:amsc,
+  allM.sort(function(a,b){return b.prob-a.prob});
+  return{plus:plusPred,under:underPred,v1:rv1,x:rx,v2:rv2,dc1x:dc1x,dcx2:dcx2,dc12:dc12,
+    btts:bttsO,bttsNon:bttsN,csH:csH,csA:csA,hmsc:hmsc,amsc:amsc,
     moyBH:moyBH?moyBH.toFixed(2):null,moyBA:moyBA?moyBA.toFixed(2):null,
-    conf:lig?Math.min(100,Math.round(lig.total/50*100)):0,
-    ligTotal:lig?lig.total:0,
+    conf:lig?Math.min(100,Math.round(lig.total/50*100)):0,ligTotal:lig?lig.total:0,
     moyButs:lig&&lig.total?(lig.buts/lig.total).toFixed(2):null,
-    sigL:sigL,sigH:sigH,sigD:sigD,
-    convergence:convergence,nbSig:nbSig,
-    seuilAdapte:seuilAdaptatif(lig),
-    allMarkets:allMarkets,
-    bestMarket:bestMarket
-  };
+    sigL:sigL,sigH:sigH,sigD:sigD,convergence:conv,nbSig:nbSig,
+    seuilAdapte:seuilAdaptatif(lig),allMarkets:allM,bestMarket:allM.length?allM[0]:null}
 }
+
+// ---- TRACKING ENRICHI (14 marches) ----
 
 // ---- MATCHS DU JOUR ----
 async function loadMatchs(source){
   if(!source)source='local';
-  var date=document.getElementById('tdDate').value;
-  if(!date){showAl('tdAl','er','Selectionne une date');return}
-  hideAl('tdAl');
-  document.getElementById('tdLd').classList.add('on');
-  document.getElementById('tdSum').style.display='none';
-  document.getElementById('tdList').innerHTML='';
+  var date=document.getElementById('tdDate').value;if(!date){showAl('tdAl','er','Selectionne une date');return}
+  hideAl('tdAl');document.getElementById('tdLd').classList.add('on');document.getElementById('tdSum').style.display='none';document.getElementById('tdList').innerHTML='';
   var tz=getTz(),cache=buildCache(),fx=[];
   if(source==='local'){
     var db=getDB();
-    if(db[date]&&db[date].length>0){
-      fx=db[date].slice();
-      document.getElementById('tdLd').classList.remove('on');
-      showAl('tdAl','in','Donnees depuis la base locale ('+fx.length+' matchs).');
-    } else {
-      document.getElementById('tdLd').classList.remove('on');
-      showAl('tdAl','er','Aucun match en base pour le '+date+'. Lance d\'abord la Collecte.');
-      return;
-    }
-  } else {
+    if(db[date]&&db[date].length>0){fx=db[date].slice();document.getElementById('tdLd').classList.remove('on');showAl('tdAl','in','Donnees depuis la base locale ('+fx.length+' matchs). Clique "API" pour actualiser.')}
+    else{document.getElementById('tdLd').classList.remove('on');showAl('tdAl','er','Aucun match en base pour le '+date+'. Lance d\'abord la Collecte, ou charge depuis l\'API.');return}
+  }else{
     if(!cfg.apiKey){document.getElementById('tdLd').classList.remove('on');showAl('tdAl','er','Entre ta cle API dans Config');return}
-    var data=await apiCall('/fixtures',{date:date});
-    document.getElementById('tdLd').classList.remove('on');
-    if(!data){showAl('tdAl','er','Erreur API. Verifie ta cle et ton quota.');return}
-    var allFx=data.response||[];
-    fx=allFx.map(function(f){return parseFix(f,tz)});
+    var data=await apiCall('/fixtures',{date:date});document.getElementById('tdLd').classList.remove('on');
+    if(!data){showAl('tdAl','er','Erreur API. Verifie ta cle dans Config et ton quota.');return}
+    fx=data.response.map(function(f){return parseFix(f,tz)});
     if(fx.length>0){var db2=getDB();db2[date]=fx;setDB(db2);majDB()}
     showAl('tdAl','ok',fx.length+' matchs charges depuis l\'API et sauvegardes.');
   }
-  var mode=document.getElementById('tdMode').value;
-  var fxFiltered;
-  if(mode==='soon'){fxFiltered=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0})}
-  else if(mode==='done'){fxFiltered=fx.filter(function(f){return TERM.indexOf(f.status)>=0})}
-  else if(mode==='live'){fxFiltered=fx.filter(function(f){return LIVE.indexOf(f.status)>=0})}
-  else{fxFiltered=fx.slice()}
-  fxFiltered.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd):null});
-  fxFiltered.sort(function(a,b){
-    var ca=a._pred?a._pred.convergence:-1,cb=b._pred?b._pred.convergence:-1;
-    if(cb!==ca)return cb-ca;
-    return(a.heure||'').localeCompare(b.heure||'');
-  });
-  allMatchsCache=fxFiltered;
+  var mode=document.getElementById('tdMode').value,fxF;
+  if(mode==='soon')fxF=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0});
+  else if(mode==='done')fxF=fx.filter(function(f){return TERM.indexOf(f.status)>=0});
+  else if(mode==='live')fxF=fx.filter(function(f){return LIVE.indexOf(f.status)>=0});
+  else fxF=fx.slice();
+  fxF.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd):null});
+  fxF.sort(function(a,b){var ca=a._pred?a._pred.convergence:-1,cb=b._pred?b._pred.convergence:-1;if(cb!==ca)return cb-ca;return(a.heure||'').localeCompare(b.heure||'')});
+  allMatchsCache=fxF;
   document.getElementById('tTot').textContent=fx.length;
   document.getElementById('tLiv').textContent=fx.filter(function(f){return LIVE.indexOf(f.status)>=0}).length;
   document.getElementById('tSoo').textContent=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0}).length;
   document.getElementById('tDon').textContent=fx.filter(function(f){return TERM.indexOf(f.status)>=0}).length;
-  document.getElementById('tdSum').style.display='block';
-  renderMatchsList();
+  document.getElementById('tdSum').style.display='block';renderMatchsList();
 }
 
 function renderMatchsList(){
-  window._matchRefs=[];
-  var list=document.getElementById('tdList');
-  list.innerHTML='';
-  var fx=allMatchsCache.filter(function(m){
-    if(convFilterVal===0)return true;
-    var c=m._pred?m._pred.convergence:0;
-    return c>=convFilterVal;
-  });
-  if(!fx.length){
-    list.innerHTML='<div style="text-align:center;color:var(--dm);padding:30px;font-size:.84rem">Aucun match pour ce filtre.</div>';
-    return;
-  }
+  window._matchRefs=[];var list=document.getElementById('tdList');list.innerHTML='';
+  var fx=allMatchsCache.filter(function(m){if(convFilterVal===0)return true;return(m._pred?m._pred.convergence:0)>=convFilterVal});
+  if(!fx.length){list.innerHTML='<div style="text-align:center;color:var(--dm);padding:30px;font-size:.84rem">Aucun match pour ce filtre.<br>Baisse la convergence minimum.</div>';return}
   var results=getRes(),track=getTrack();
   fx.forEach(function(m){
-    var pred=m._pred;
-    var isLv=LIVE.indexOf(m.status)>=0,isDn=TERM.indexOf(m.status)>=0;
+    var pred=m._pred,isLv=LIVE.indexOf(m.status)>=0,isDn=TERM.indexOf(m.status)>=0;
     var cls=isLv?'live':isDn?'done':'soon';
     var stxt=isLv?'LIVE '+m.elapsed+"'":isDn?'FT':m.heure;
     var scls=isLv?'slv':isDn?'sdn':'ssn';
     var score=(m.h!==null&&m.a!==null)?m.h+' - '+m.a:m.heure;
     var res=results[m.id];
-    if(isDn&&m.h!==null&&m.a!==null&&pred&&!track.find(function(t){return t.id===m.id})){
-      track.push(buildTrackEntry(m,pred,seuilTd,m.h,m.a));
-      setTrack(track);
-    }
+    if(isDn&&m.h!==null&&m.a!==null&&pred&&!track.find(function(t){return t.id===m.id})){track.push(buildTrackEntry(m,pred,seuilTd,m.h,m.a));setTrack(track)}
     var pHTML='';
     if(pred){
       function col(v){return v===null?'var(--dm)':v>=65?'var(--g)':v>=50?'#90ee90':v>=40?'var(--y)':'var(--r)'}
       function bcl(v){return v===null?'':v>=65?'best':v>=50?'good':''}
       function barcol(v){return v===null?'var(--bd)':v>=65?'var(--g)':v>=50?'#90ee90':v>=40?'var(--y)':'var(--r)'}
-      function sigBadge(lbl,val){
-        if(val===null)return'<span class="sig sig-d">'+lbl+': ?</span>';
-        var v=Math.round(val*100);var cl=v>=60?'sig-g':v>=45?'sig-y':'sig-r';
-        return'<span class="sig '+cl+'">'+lbl+': '+v+'%</span>';
-      }
-      function mpd(val,lbl){
-        var v=val!==null?Math.round(val*100):null;
-        return'<div class="pd '+bcl(v)+'" style="min-width:0">'
-          +'<div class="pp" style="color:'+col(v)+';font-size:.82rem">'+(v!==null?v+'%':'?')+'</div>'
-          +'<div class="pl" style="font-size:.5rem;word-break:break-all">'+lbl+'</div>'
-          +'<div class="pb" style="background:'+barcol(v)+';width:'+(v||0)+'%"></div></div>';
-      }
+      function sigBadge(lbl,val){if(val===null)return'<span class="sig sig-d">'+lbl+': ?</span>';var v=Math.round(val*100);var cl=v>=60?'sig-g':v>=45?'sig-y':'sig-r';return'<span class="sig '+cl+'">'+lbl+': '+v+'%</span>'}
+      function mpd(val,lbl){var v=val!==null?Math.round(val*100):null;return'<div class="pd '+bcl(v)+'" style="min-width:0"><div class="pp" style="color:'+col(v)+';font-size:.82rem">'+(v!==null?v+'%':'?')+'</div><div class="pl" style="font-size:.5rem;word-break:break-all">'+lbl+'</div><div class="pb" style="background:'+barcol(v)+';width:'+(v||0)+'%"></div></div>'}
       var convCls='conv-'+pred.convergence;
       var saHTML='';
-      if(pred.seuilAdapte!==null&&pred.seuilAdapte!==seuilTd)
-        saHTML='<div style="font-size:.64rem;background:rgba(255,214,0,.07);border:1px solid rgba(255,214,0,.2);border-radius:6px;padding:4px 8px;margin-bottom:7px;color:var(--y)">Seuil adapte: +'+pred.seuilAdapte+' (moy '+pred.moyButs+' buts)</div>';
+      if(pred.seuilAdapte!==null&&pred.seuilAdapte!==seuilTd)saHTML='<div style="font-size:.64rem;background:rgba(255,214,0,.07);border:1px solid rgba(255,214,0,.2);border-radius:6px;padding:4px 8px;margin-bottom:7px;color:var(--y)">Seuil adapte: +'+pred.seuilAdapte+' (moy '+pred.moyButs+' buts)</div>';
       var bestHTML='';
-      if(pred.bestMarket){
-        var bv=Math.round(pred.bestMarket.prob*100);
-        var bc=bv>=65?'var(--g)':bv>=50?'var(--y)':'var(--r)';
-        bestHTML='<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2);border-radius:8px;margin-bottom:8px">'
-          +'<span style="font-size:.62rem;color:var(--dm)">⭐ Meilleur marche</span>'
-          +'<span style="font-weight:900;font-size:.82rem;color:'+bc+'">'+pred.bestMarket.label+'</span>'
-          +'<span style="font-weight:900;font-size:.88rem;color:'+bc+'">'+bv+'%</span>'
-          +'</div>';
-      }
-      // Calibration badge
-      var calibBadge='';
-      var calib=getCalib();
-      var hasCalib=Object.keys(calib).length>0;
-      if(hasCalib){
-        calibBadge='<span style="font-size:.58rem;padding:2px 6px;background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);border-radius:4px;color:var(--g);margin-left:6px">AUTO-CALIBRE</span>';
-      }
-      pHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
-        +'<div class="sig-row" style="margin:0;flex:1">'+sigBadge('Ligue',pred.sigL)+sigBadge('Heure',pred.sigH)+sigBadge('Jour',pred.sigD)+calibBadge+'</div>'
-        +'<span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span>'
-        +'</div>'
+      if(pred.bestMarket){var bv=Math.round(pred.bestMarket.prob*100);var bc=bv>=65?'var(--g)':bv>=50?'var(--y)':'var(--r)';bestHTML='<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2);border-radius:8px;margin-bottom:8px"><span style="font-size:.62rem;color:var(--dm)">⭐ Meilleur marche</span><span style="font-weight:900;font-size:.82rem;color:'+bc+'">'+pred.bestMarket.label+'</span><span style="font-weight:900;font-size:.88rem;color:'+bc+'">'+bv+'%</span></div>'}
+      var hasCalib=Object.keys(getCalib()).length>0;
+      var calibBadge=hasCalib?'<span class="calib-badge cb-ok" style="margin-left:6px">CALIBRE</span>':'';
+      pHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="sig-row" style="margin:0;flex:1">'+sigBadge('Ligue',pred.sigL)+sigBadge('Heure',pred.sigH)+sigBadge('Jour',pred.sigD)+calibBadge+'</div><span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span></div>'
         +saHTML+bestHTML
         +'<div style="font-size:.6rem;letter-spacing:1.5px;color:var(--dm);text-transform:uppercase;margin-bottom:4px">Buts</div>'
-        +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px">'
-        +mpd(pred.plus,'+'+seuilTd)+mpd(pred.under,'-'+seuilTd)+mpd(pred.btts,'BTTS Oui')+mpd(pred.bttsNon,'BTTS Non')
-        +'</div>'
+        +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px">'+mpd(pred.plus,'+'+seuilTd)+mpd(pred.under,'-'+seuilTd)+mpd(pred.btts,'BTTS Oui')+mpd(pred.bttsNon,'BTTS Non')+'</div>'
         +'<div style="font-size:.6rem;letter-spacing:1.5px;color:var(--dm);text-transform:uppercase;margin-bottom:4px">1X2 · Double Chance</div>'
-        +'<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:8px">'
-        +mpd(pred.v1,'V1')+mpd(pred.x,'Nul')+mpd(pred.v2,'V2')+mpd(pred.dc1x,'DC 1X')+mpd(pred.dcx2,'DC X2')+mpd(pred.dc12,'DC 12')
-        +'</div>'
+        +'<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:8px">'+mpd(pred.v1,'V1')+mpd(pred.x,'Nul')+mpd(pred.v2,'V2')+mpd(pred.dc1x,'DC 1X')+mpd(pred.dcx2,'DC X2')+mpd(pred.dc12,'DC 12')+'</div>'
         +'<div style="font-size:.6rem;letter-spacing:1.5px;color:var(--dm);text-transform:uppercase;margin-bottom:4px">CS · Equipe marque</div>'
-        +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px">'
-        +mpd(pred.csH,'CS Dom')+mpd(pred.csA,'CS Ext')+mpd(pred.hmsc,'Dom Mq')+mpd(pred.amsc,'Ext Mq')
-        +'</div>'
-        +'<div class="conf-bar"><div class="conf-track"><div class="conf-fill" style="width:'+pred.conf+'%;background:var(--g)"></div></div>'
-        +'<span class="conf-lbl">Conf. '+pred.conf+'% · '+pred.ligTotal+' hist.'+(pred.moyButs?' · moy '+pred.moyButs:'')+'</span></div>';
-    } else {
-      pHTML='<div style="font-size:.75rem;color:var(--dm);margin-bottom:10px;padding:8px;background:var(--s2);border-radius:8px">Pas assez de donnees - Lance la collecte!</div>';
-    }
+        +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px">'+mpd(pred.csH,'CS Dom')+mpd(pred.csA,'CS Ext')+mpd(pred.hmsc,'Dom Mq')+mpd(pred.amsc,'Ext Mq')+'</div>'
+        +'<div class="conf-bar"><div class="conf-track"><div class="conf-fill" style="width:'+pred.conf+'%;background:var(--g)"></div></div><span class="conf-lbl">Conf. '+pred.conf+'% · '+pred.ligTotal+' hist.'+(pred.moyButs?' · moy '+pred.moyButs:'')+(pred.moyBH&&pred.moyBA?' ('+pred.moyBH+'/'+pred.moyBA+')':'')+'</span></div>';
+    }else{pHTML='<div style="font-size:.75rem;color:var(--dm);margin-bottom:10px;padding:8px;background:var(--s2);border-radius:8px">Pas assez de donnees - Lance la collecte!</div>'}
     var resHTML='';
-    if(res){
-      var tot=res.h+res.a,v1x2=res.h>res.a?'V1':res.h<res.a?'V2':'X',ok=tot>seuilTd;
-      resHTML='<div class="mr"><div class="rr"><span style="color:var(--dm)">Resultat</span><span style="font-weight:700">'+res.h+' - '+res.a+' ('+v1x2+')</span></div>'
-        +'<div class="rr"><span style="color:var(--dm)">+'+seuilTd+'</span><span style="color:'+(ok?'var(--g)':'var(--r)')+'">'+( ok?'OUI':'NON')+'</span></div>'
-        +'<div class="rr"><span style="color:var(--dm)">BTTS</span><span style="color:'+(res.h>0&&res.a>0?'var(--g)':'var(--r)')+'">'+( res.h>0&&res.a>0?'OUI':'NON')+'</span></div></div>';
-    }
+    if(res){var tot=res.h+res.a,v1x2=res.h>res.a?'V1':res.h<res.a?'V2':'X',ok=tot>seuilTd;resHTML='<div class="mr"><div class="rr"><span style="color:var(--dm)">Resultat</span><span style="font-weight:700">'+res.h+' - '+res.a+' ('+v1x2+')</span></div><div class="rr"><span style="color:var(--dm)">+'+seuilTd+'</span><span style="color:'+(ok?'var(--g)':'var(--r)')+'">'+( ok?'OUI':'NON')+'</span></div><div class="rr"><span style="color:var(--dm)">BTTS</span><span style="color:'+(res.h>0&&res.a>0?'var(--g)':'var(--r)')+'">'+( res.h>0&&res.a>0?'OUI':'NON')+'</span></div></div>'}
     var midx=window._matchRefs.length;
-    window._matchRefs[midx]={id:m.id,home:m.home,away:m.away,league:m.league,country:m.country,
-      _seuil:seuilTd,_pred:pred?{plus:pred.plus,v1:pred.v1,x:pred.x,v2:pred.v2,btts:pred.btts,
-      bttsNon:pred.bttsNon,csH:pred.csH,csA:pred.csA,hmsc:pred.hmsc,amsc:pred.amsc,
-      dc1x:pred.dc1x,dcx2:pred.dcx2,dc12:pred.dc12,under:pred.under,
-      conf:pred.conf,convergence:pred.convergence,nbSig:pred.nbSig}:null};
+    window._matchRefs[midx]={id:m.id,home:m.home,away:m.away,league:m.league,country:m.country,_seuil:seuilTd,
+      _pred:pred?{plus:pred.plus,under:pred.under,v1:pred.v1,x:pred.x,v2:pred.v2,btts:pred.btts,bttsNon:pred.bttsNon,csH:pred.csH,csA:pred.csA,hmsc:pred.hmsc,amsc:pred.amsc,dc1x:pred.dc1x,dcx2:pred.dcx2,dc12:pred.dc12,conf:pred.conf,convergence:pred.convergence,nbSig:pred.nbSig}:null};
     var card=document.createElement('div');card.className='mc '+cls;
     card.innerHTML='<div class="mt"><div class="ml">'+m.league+' · '+m.country+'</div><div class="ms '+scls+'">'+stxt+'</div></div>'
       +'<div class="mte"><div class="tn th">'+m.home+'</div><div class="msc">'+score+'</div><div class="tn ta">'+m.away+'</div></div>'
-      +pHTML+resHTML
-      +(!res?'<button class="bsm" onclick="openModal('+midx+')" style="width:100%;padding:9px;text-align:center;margin-top:4px">Saisir le resultat</button>':'');
+      +pHTML+resHTML+(!res?'<button class="bsm" onclick="openModal('+midx+')" style="width:100%;padding:9px;text-align:center;margin-top:4px">Saisir le resultat</button>':'');
     list.appendChild(card);
   });
 }
 
-// ---- TRACKING ENTRY (enrichi avec tous les marches) ----
-function buildTrackEntry(m,pred,s,h,a){
-  var tot=h+a;
-  return{
-    id:m.id,date:today(),home:m.home,away:m.away,league:m.league||'?',country:m.country||'?',seuil:s,
-    // Resultats reels
-    rH:h,rA:a,rTotal:tot,
-    rV1x2:h>a?'V1':h<a?'V2':'X',
-    rBtts:h>0&&a>0,
-    rPlus:tot>s,rUnder:tot<=s,
-    rCsH:a===0,rCsA:h===0,
-    rHmsc:h>0,rAmsc:a>0,
-    rDc1x:h>=a,rDcx2:a>=h,rDc12:h!==a,
-    // Predictions (%)
-    pPlus:pred.plus!==null?Math.round(pred.plus*100):null,
-    pUnder:pred.under!==null?Math.round(pred.under*100):null,
-    pV1:pred.v1!==null?Math.round(pred.v1*100):null,
-    pX:pred.x!==null?Math.round(pred.x*100):null,
-    pV2:pred.v2!==null?Math.round(pred.v2*100):null,
-    pBtts:pred.btts!==null?Math.round(pred.btts*100):null,
-    pBttsNon:pred.bttsNon!==null?Math.round(pred.bttsNon*100):null,
-    pCsH:pred.csH!==null?Math.round(pred.csH*100):null,
-    pCsA:pred.csA!==null?Math.round(pred.csA*100):null,
-    pHmsc:pred.hmsc!==null?Math.round(pred.hmsc*100):null,
-    pAmsc:pred.amsc!==null?Math.round(pred.amsc*100):null,
-    pDc1x:pred.dc1x!==null?Math.round(pred.dc1x*100):null,
-    pDcx2:pred.dcx2!==null?Math.round(pred.dcx2*100):null,
-    pDc12:pred.dc12!==null?Math.round(pred.dc12*100):null,
-    pConf:pred.conf||0,pConv:pred.convergence||0,pNbSig:pred.nbSig||0,
-    auto:true
-  };
-}
-
 function openModal(idx){
-  var match=typeof idx==='number'?window._matchRefs[idx]:idx;
-  if(!match)return;
-  modalMatch=match;
-  document.getElementById('moName').textContent=match.home+' vs '+match.away;
-  document.getElementById('moH').textContent=match.home;
-  document.getElementById('moA').textContent=match.away;
-  document.getElementById('moSH').value='';document.getElementById('moSA').value='';
-  document.getElementById('modal').classList.add('on');
+  var match=typeof idx==='number'?window._matchRefs[idx]:idx;if(!match)return;
+  modalMatch=match;document.getElementById('moName').textContent=match.home+' vs '+match.away;
+  document.getElementById('moH').textContent=match.home;document.getElementById('moA').textContent=match.away;
+  document.getElementById('moSH').value='';document.getElementById('moSA').value='';document.getElementById('modal').classList.add('on');
 }
 function closeModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('on')}
 function saveResult(){
   var h=parseInt(document.getElementById('moSH').value,10),a=parseInt(document.getElementById('moSA').value,10);
   if(isNaN(h)||isNaN(a)){alert('Entre les deux scores');return}
   var r=getRes();r[modalMatch.id]={h:h,a:a};setRes(r);
-  if(modalMatch._pred){
-    var track=getTrack();
-    if(!track.find(function(t){return t.id===modalMatch.id})){
-      track.push(buildTrackEntry(
-        {id:modalMatch.id,home:modalMatch.home,away:modalMatch.away,league:modalMatch.league||'?',country:modalMatch.country||'?'},
-        modalMatch._pred,modalMatch._seuil||seuilTd,h,a
-      ));
-      setTrack(track);
-    }
-  }
-  document.getElementById('modal').classList.remove('on');
-  renderMatchsList();
+  if(modalMatch._pred){var track=getTrack();if(!track.find(function(t){return t.id===modalMatch.id})){track.push(buildTrackEntry({id:modalMatch.id,home:modalMatch.home,away:modalMatch.away,league:modalMatch.league||'?',country:modalMatch.country||'?'},modalMatch._pred,modalMatch._seuil||seuilTd,h,a));setTrack(track)}}
+  document.getElementById('modal').classList.remove('on');renderMatchsList();
 }
 
 // ---- STATS ----
@@ -1183,42 +873,26 @@ function calcStats(){
   hideAl('stAl');document.getElementById('stLd').classList.add('on');document.getElementById('stOut').style.display='none';
   setTimeout(function(){
     var matchs=[];
-    dates.forEach(function(d){
-      var ms=(db[d]||[]).filter(function(m){return TERM.indexOf(m.status)>=0});
-      if(lf)ms=ms.filter(function(m){return m.league.toLowerCase().indexOf(lf)>=0});
-      matchs=matchs.concat(ms);
-    });
+    dates.forEach(function(d){var ms=(db[d]||[]).filter(function(m){return TERM.indexOf(m.status)>=0});if(lf)ms=ms.filter(function(m){return m.league.toLowerCase().indexOf(lf)>=0});matchs=matchs.concat(ms)});
     var av=matchs.filter(function(m){return m.total!==null}),n=av.length;
     if(!n){document.getElementById('stLd').classList.remove('on');showAl('stAl','er','Aucun match termine avec score');return}
-    var plus=av.filter(function(m){return m.total>s}).length;
-    var under=av.filter(function(m){return m.total<=s}).length;
-    var v1=av.filter(function(m){return m.v1x2==='V1'}).length;
-    var xr=av.filter(function(m){return m.v1x2==='X'}).length;
-    var v2=av.filter(function(m){return m.v1x2==='V2'}).length;
-    var bO=av.filter(function(m){return m.btts===true}).length;
-    var bN=av.filter(function(m){return m.btts===false}).length;
-    var csH=av.filter(function(m){return m.a===0}).length;
-    var csA=av.filter(function(m){return m.h===0}).length;
-    var hmsc=av.filter(function(m){return m.h>0}).length;
-    var amsc=av.filter(function(m){return m.a>0}).length;
+    var plus=av.filter(function(m){return m.total>s}).length,under=av.filter(function(m){return m.total<=s}).length;
+    var v1=av.filter(function(m){return m.v1x2==='V1'}).length,xr=av.filter(function(m){return m.v1x2==='X'}).length,v2=av.filter(function(m){return m.v1x2==='V2'}).length;
+    var bO=av.filter(function(m){return m.btts===true}).length,bN=av.filter(function(m){return m.btts===false}).length;
+    var csH=av.filter(function(m){return m.a===0}).length,csA=av.filter(function(m){return m.h===0}).length;
+    var hmsc=av.filter(function(m){return m.h>0}).length,amsc=av.filter(function(m){return m.a>0}).length;
     var dc1x=av.filter(function(m){return m.v1x2==='V1'||m.v1x2==='X'}).length;
     var dcx2=av.filter(function(m){return m.v1x2==='X'||m.v1x2==='V2'}).length;
     var dc12=av.filter(function(m){return m.v1x2==='V1'||m.v1x2==='V2'}).length;
     var ligs=new Set(matchs.map(function(m){return m.league})).size;
     var lm={};
-    av.forEach(function(m){
-      var k=m.league+'|||'+m.country;if(!lm[k])lm[k]={plus:0,v1:0,x:0,v2:0,bO:0,total:0,buts:0};
-      var e=lm[k];e.total++;e.buts+=m.total;if(m.total>s)e.plus++;
-      if(m.v1x2==='V1')e.v1++;if(m.v1x2==='X')e.x++;if(m.v1x2==='V2')e.v2++;if(m.btts)e.bO++;
-    });
+    av.forEach(function(m){var k=m.league+'|||'+m.country;if(!lm[k])lm[k]={plus:0,v1:0,x:0,v2:0,bO:0,total:0,buts:0};var e=lm[k];e.total++;e.buts+=m.total;if(m.total>s)e.plus++;if(m.v1x2==='V1')e.v1++;if(m.v1x2==='X')e.x++;if(m.v1x2==='V2')e.v2++;if(m.btts)e.bO++});
     var jm=[{n:'Dim'},{n:'Lun'},{n:'Mar'},{n:'Mer'},{n:'Jeu'},{n:'Ven'},{n:'Sam'}].map(function(j){return Object.assign({plus:0,v1:0,x:0,v2:0,total:0},j)});
-    av.forEach(function(m){if(!m.ts)return;var d=new Date((m.ts+tz*3600)*1000),dw=d.getUTCDay();jm[dw].total++;if(m.total>s)jm[dw].plus++;if(m.v1x2==='V1')jm[dw].v1++;if(m.v1x2==='X')jm[dw].x++;if(m.v1x2==='V2')jm[dw].v2++});
+    av.forEach(function(m){if(!m.ts)return;var dw=new Date((m.ts+tz*3600)*1000).getUTCDay();jm[dw].total++;if(m.total>s)jm[dw].plus++;if(m.v1x2==='V1')jm[dw].v1++;if(m.v1x2==='X')jm[dw].x++;if(m.v1x2==='V2')jm[dw].v2++});
     var hm={};
     av.forEach(function(m){var hk=(m.heure?m.heure.split(':')[0]:'??')+'h';if(!hm[hk])hm[hk]={plus:0,v1:0,x:0,v2:0,total:0};hm[hk].total++;if(m.total>s)hm[hk].plus++;if(m.v1x2==='V1')hm[hk].v1++;if(m.v1x2==='X')hm[hk].x++;if(m.v1x2==='V2')hm[hk].v2++});
     var hrs=Object.keys(hm).sort();
-    var mB=(av.reduce(function(a,m){return a+(m.total||0)},0)/n).toFixed(2);
-    var mD=(av.reduce(function(a,m){return a+(m.h||0)},0)/n).toFixed(2);
-    var mE=(av.reduce(function(a,m){return a+(m.a||0)},0)/n).toFixed(2);
+    var mD=(av.reduce(function(a,m){return a+(m.h||0)},0)/n).toFixed(2),mE=(av.reduce(function(a,m){return a+(m.a||0)},0)/n).toFixed(2);
     var out=document.getElementById('stOut');
     if(vue==='ligue'){
       var sorted=Object.keys(lm).map(function(k){var v=lm[k];return{k:k,v:v,p:v.total?Math.round(v.plus/v.total*100):0}}).sort(function(a,b){return b.p-a.p||b.v.total-a.v.total});
@@ -1228,25 +902,18 @@ function calcStats(){
         var col=p>=60?'var(--g)':p>=45?'var(--y)':'var(--r)';var bgc=p>=60?'bgG':p>=45?'bgY':'bgR';
         var pv1=v.total?Math.round(v.v1/v.total*100):0,px=v.total?Math.round(v.x/v.total*100):0,pv2=v.total?Math.round(v.v2/v.total*100):0;
         var moy=v.total?(v.buts/v.total).toFixed(2):0,btts=v.total?Math.round(v.bO/v.total*100):0;
-        html+='<div class="lc"><div class="lh"><div><div class="ln">'+nm+'</div><div class="lsu">'+ct+' - '+v.total+' matchs - '+moy+' buts/match</div></div><div class="lbg '+bgc+'">+'+s+': '+p+'%</div></div>'
-          +'<div class="lpb"><div class="lpf" style="width:'+p+'%;background:'+col+'"></div></div>'
-          +'<div class="ls3"><div class="ls"><div class="v" style="color:var(--g)">'+pv1+'%</div><div class="l">V1 ('+v.v1+')</div></div><div class="ls"><div class="v" style="color:var(--y)">'+px+'%</div><div class="l">X ('+v.x+')</div></div><div class="ls"><div class="v" style="color:var(--b)">'+pv2+'%</div><div class="l">V2 ('+v.v2+')</div></div></div>'
-          +'<div style="margin-top:8px;font-size:.68rem;color:var(--dm)">BTTS: '+btts+'%</div></div>';
+        html+='<div class="lc"><div class="lh"><div><div class="ln">'+nm+'</div><div class="lsu">'+ct+' - '+v.total+' matchs - '+moy+' buts/match</div></div><div class="lbg '+bgc+'">+'+s+': '+p+'%</div></div><div class="lpb"><div class="lpf" style="width:'+p+'%;background:'+col+'"></div></div><div class="ls3"><div class="ls"><div class="v" style="color:var(--g)">'+pv1+'%</div><div class="l">V1 ('+v.v1+')</div></div><div class="ls"><div class="v" style="color:var(--y)">'+px+'%</div><div class="l">X ('+v.x+')</div></div><div class="ls"><div class="v" style="color:var(--b)">'+pv2+'%</div><div class="l">V2 ('+v.v2+')</div></div></div><div style="margin-top:8px;font-size:.68rem;color:var(--dm)">BTTS: '+btts+'%</div></div>';
       });
       out.innerHTML=html;
-    } else {
+    }else{
       var bars=Object.keys(lm).filter(function(k){return lm[k].total>=10}).map(function(k){var v=lm[k];return{name:k.split('|||')[0],p:Math.round(v.plus/v.total*100),plus:v.plus,total:v.total}}).sort(function(a,b){return b.p-a.p}).slice(0,15);
       var mx=bars.length?bars[0].p:100;
-      out.innerHTML='<div class="st">RESUME</div>'
-        +'<div class="sg g4"><div class="sb"><div class="sv" style="color:var(--b)">'+matchs.length+'</div><div class="sl">Total</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+dates.length+'</div><div class="sl">Jours</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+ligs+'</div><div class="sl">Ligues</div></div><div class="sb"><div class="sv">'+(n/dates.length).toFixed(1)+'</div><div class="sl">Moy/Jour</div></div></div>'
-        +'<div class="st">OVER / UNDER '+s+'</div>'
-        +'<div class="sg g4" style="margin-bottom:8px"><div class="sb"><div class="sv" style="color:var(--g)">'+plus+'</div><div class="sl">Over +'+s+'</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+under+'</div><div class="sl">Under -'+s+'</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(plus/n*100)+'%</div><div class="sl">% Over</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+Math.round(under/n*100)+'%</div><div class="sl">% Under</div></div></div>'
+      out.innerHTML='<div class="st">RESUME</div><div class="sg g4"><div class="sb"><div class="sv" style="color:var(--b)">'+matchs.length+'</div><div class="sl">Total</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+dates.length+'</div><div class="sl">Jours</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+ligs+'</div><div class="sl">Ligues</div></div><div class="sb"><div class="sv">'+(n/dates.length).toFixed(1)+'</div><div class="sl">Moy/Jour</div></div></div>'
+        +'<div class="st">OVER / UNDER '+s+'</div><div class="sg g4" style="margin-bottom:8px"><div class="sb"><div class="sv" style="color:var(--g)">'+plus+'</div><div class="sl">Over +'+s+'</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+under+'</div><div class="sl">Under -'+s+'</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(plus/n*100)+'%</div><div class="sl">% Over</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+Math.round(under/n*100)+'%</div><div class="sl">% Under</div></div></div>'
         +'<div class="pr"><div class="pr-l"><span style="color:var(--dm)">Taux Over +'+s+'</span><span class="pr-p">'+Math.round(plus/n*100)+'%</span></div><div class="pr-t"><div class="pr-f" style="width:'+Math.round(plus/n*100)+'%"></div></div></div>'
-        +'<div class="st">1X2 + DOUBLE CHANCE</div>'
-        +'<div class="sg g3" style="margin-bottom:8px"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(v1/n*100)+'%</div><div class="sl">V1 ('+v1+')</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(xr/n*100)+'%</div><div class="sl">Nul ('+xr+')</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(v2/n*100)+'%</div><div class="sl">V2 ('+v2+')</div></div></div>'
+        +'<div class="st">1X2 + DOUBLE CHANCE</div><div class="sg g3" style="margin-bottom:8px"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(v1/n*100)+'%</div><div class="sl">V1 ('+v1+')</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(xr/n*100)+'%</div><div class="sl">Nul ('+xr+')</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(v2/n*100)+'%</div><div class="sl">V2 ('+v2+')</div></div></div>'
         +'<div class="sg g3" style="margin-bottom:8px"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(dc1x/n*100)+'%</div><div class="sl">DC 1X</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(dcx2/n*100)+'%</div><div class="sl">DC X2</div></div><div class="sb"><div class="sv" style="color:var(--o)">'+Math.round(dc12/n*100)+'%</div><div class="sl">DC 12</div></div></div>'
-        +'<div class="st">BTTS / CLEAN SHEET / EQUIPE MARQUE</div>'
-        +'<div class="sg g4" style="margin-bottom:8px"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(bO/(bO+bN||1)*100)+'%</div><div class="sl">BTTS Oui</div></div><div class="sb"><div class="sv" style="color:var(--r)">'+Math.round(bN/(bO+bN||1)*100)+'%</div><div class="sl">BTTS Non</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(csH/n*100)+'%</div><div class="sl">CS Dom</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+Math.round(csA/n*100)+'%</div><div class="sl">CS Ext</div></div></div>'
+        +'<div class="st">BTTS / CLEAN SHEET / EQUIPE MARQUE</div><div class="sg g4" style="margin-bottom:8px"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(bO/(bO+bN||1)*100)+'%</div><div class="sl">BTTS Oui</div></div><div class="sb"><div class="sv" style="color:var(--r)">'+Math.round(bN/(bO+bN||1)*100)+'%</div><div class="sl">BTTS Non</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(csH/n*100)+'%</div><div class="sl">CS Dom</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+Math.round(csA/n*100)+'%</div><div class="sl">CS Ext</div></div></div>'
         +'<div class="sg g4" style="margin-bottom:8px"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(hmsc/n*100)+'%</div><div class="sl">Dom Mq</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(amsc/n*100)+'%</div><div class="sl">Ext Mq</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+mD+'</div><div class="sl">Moy Dom</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+mE+'</div><div class="sl">Moy Ext</div></div></div>'
         +'<div class="st">TOP LIGUES +'+s+'</div><div class="bars">'+(bars.length?bars.map(function(l){var c=l.p>=60?'var(--g)':l.p>=45?'var(--y)':'var(--r)';return'<div class="br2"><div class="bn" title="'+l.name+'">'+l.name+'</div><div class="bb2"><div class="bf" style="width:'+(l.p/mx*100)+'%;background:'+c+'">'+(l.p>=20?l.p+'%':'')+'</div><div class="bv">'+l.plus+'/'+l.total+'</div></div></div>'}).join(''):'<div style="color:var(--dm);font-size:.8rem;padding:10px">Min 10 matchs/ligue</div>')+'</div>'
         +'<div class="st">PAR JOUR</div><div class="tbl"><table><tr><th>Jour</th><th>Matchs</th><th>+'+s+'</th><th>Taux</th><th>V1%</th><th>X%</th><th>V2%</th></tr>'+[1,2,3,4,5,6,0].map(function(i){var j=jm[i],t=j.total||1,p=j.total?Math.round(j.plus/j.total*100):0;var cl=p>=60?'tg':p>=45?'ty':'tr';return'<tr><td><b>'+j.n+'</b></td><td>'+j.total+'</td><td class="'+cl+'">'+j.plus+'</td><td class="'+cl+'">'+p+'%</td><td>'+Math.round(j.v1/t*100)+'%</td><td>'+Math.round(j.x/t*100)+'%</td><td>'+Math.round(j.v2/t*100)+'%</td></tr>'}).join('')+'</table></div>'
@@ -1264,17 +931,11 @@ function buildComps(){
   if(!av.length){showAl('compAl','er','Aucune donnee - Lance la collecte');return}
   hideAl('compAl');
   var lm={};
-  av.forEach(function(m){
-    var k=m.league+'|||'+m.country;
-    if(!lm[k])lm[k]={name:m.league,country:m.country,plus:0,v1:0,x:0,v2:0,bO:0,total:0,buts:0};
-    var e=lm[k];e.total++;e.buts+=m.total;if(m.total>s)e.plus++;
-    if(m.v1x2==='V1')e.v1++;if(m.v1x2==='X')e.x++;if(m.v1x2==='V2')e.v2++;if(m.btts)e.bO++;
-  });
+  av.forEach(function(m){var k=m.league+'|||'+m.country;if(!lm[k])lm[k]={name:m.league,country:m.country,plus:0,v1:0,x:0,v2:0,bO:0,total:0,buts:0};var e=lm[k];e.total++;e.buts+=m.total;if(m.total>s)e.plus++;if(m.v1x2==='V1')e.v1++;if(m.v1x2==='X')e.x++;if(m.v1x2==='V2')e.v2++;if(m.btts)e.bO++});
   compData=Object.values(lm);
   var totalM=av.length,totalPlus=av.filter(function(m){return m.total>s}).length;
   document.getElementById('compSummary').innerHTML='<div class="sg g3"><div class="sb"><div class="sv" style="color:var(--p)">'+compData.length+'</div><div class="sl">Compet.</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+totalM+'</div><div class="sl">Matchs</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(totalPlus/totalM*100)+'%</div><div class="sl">Taux +'+s+'</div></div></div>';
-  document.getElementById('compSummary').style.display='block';
-  renderComps();
+  document.getElementById('compSummary').style.display='block';renderComps();
 }
 function renderComps(){
   var s=seuilComp,search=(document.getElementById('compSearch').value||'').trim().toLowerCase();
@@ -1282,19 +943,16 @@ function renderComps(){
   data=data.slice().sort(function(a,b){
     if(compSort==='plus')return(b.total?b.plus/b.total:0)-(a.total?a.plus/a.total:0);
     if(compSort==='moy')return(b.total?b.buts/b.total:0)-(a.total?a.buts/a.total:0);
-    if(compSort==='total')return b.total-a.total;
-    return a.name.localeCompare(b.name);
+    if(compSort==='total')return b.total-a.total;return a.name.localeCompare(b.name);
   });
   var list=document.getElementById('compList');
   if(!data.length){list.innerHTML='<div style="text-align:center;color:var(--dm);padding:30px">Aucune competition</div>';return}
   list.innerHTML='';
   data.forEach(function(c){
-    var p=c.total?Math.round(c.plus/c.total*100):0;
-    var moy=c.total?(c.buts/c.total).toFixed(2):0;
+    var p=c.total?Math.round(c.plus/c.total*100):0,moy=c.total?(c.buts/c.total).toFixed(2):0;
     var pv1=c.total?Math.round(c.v1/c.total*100):0,px=c.total?Math.round(c.x/c.total*100):0,pv2=c.total?Math.round(c.v2/c.total*100):0;
-    var btts=c.total?Math.round(c.bO/c.total*100):0;
-    var col=p>=60?'var(--g)':p>=45?'var(--y)':'var(--r)';var bgc=p>=60?'bgG':p>=45?'bgY':'bgR';
-    var sa=seuilAdaptatif(c);
+    var btts=c.total?Math.round(c.bO/c.total*100):0,col=p>=60?'var(--g)':p>=45?'var(--y)':'var(--r)';
+    var bgc=p>=60?'bgG':p>=45?'bgY':'bgR',sa=seuilAdaptatif(c);
     var div=document.createElement('div');div.className='comp-card';
     div.innerHTML='<div class="comp-head" onclick="toggleComp(this)"><div><div class="comp-name">'+c.name+'</div><div class="comp-country">'+c.country+'</div></div><div class="comp-badge"><span class="comp-n">'+c.total+' matchs</span><span class="lbg '+bgc+'" style="font-size:.78rem">+'+s+': '+p+'%</span></div></div>'
       +'<div class="comp-body"><div class="lpb"><div class="lpf" style="width:'+p+'%;background:'+col+'"></div></div>'
@@ -1308,644 +966,541 @@ function toggleComp(head){head.parentElement.querySelector('.comp-body').classLi
 function filterComps(){renderComps()}
 
 // ---- TICKETS ----
-function estCote(prob){
-  if(!prob||prob<=0)return 1.5;
-  var cote=1/prob*0.9;
-  return Math.max(1.10,Math.round(cote*100)/100);
-}
+function estCote(prob){if(!prob||prob<=0)return 1.5;return Math.max(1.10,Math.round(1/prob*0.9*100)/100)}
 function selectPari(pred,type){
-  if(!pred)return null;
-  var s=seuilTk;
+  if(!pred)return null;var s=seuilTk;
   if(type==='plus'){if(pred.plus===null)return null;return{label:'+'+s+' buts',prob:pred.plus,coteEst:estCote(pred.plus)}}
   if(type==='btts'){if(pred.btts===null)return null;return{label:'BTTS Oui',prob:pred.btts,coteEst:estCote(pred.btts)}}
   if(type==='bttsN'){if(pred.bttsNon===null)return null;return{label:'BTTS Non',prob:pred.bttsNon,coteEst:estCote(pred.bttsNon)}}
   if(type==='under'){if(pred.under===null)return null;return{label:'-'+s+' buts',prob:pred.under,coteEst:estCote(pred.under)}}
-  if(type==='v1x2'){
-    var best=null,bestProb=0;
-    if(pred.v1!==null&&pred.v1>bestProb){best='V1';bestProb=pred.v1}
-    if(pred.x!==null&&pred.x>bestProb){best='X';bestProb=pred.x}
-    if(pred.v2!==null&&pred.v2>bestProb){best='V2';bestProb=pred.v2}
-    if(!best||bestProb<0.35)return null;
-    return{label:best,prob:bestProb,coteEst:estCote(bestProb)};
-  }
-  if(type==='dc'){
-    var bestDC=null,bestDCP=0;
-    if(pred.dc1x!==null&&pred.dc1x>bestDCP){bestDC='DC 1X';bestDCP=pred.dc1x}
-    if(pred.dcx2!==null&&pred.dcx2>bestDCP){bestDC='DC X2';bestDCP=pred.dcx2}
-    if(pred.dc12!==null&&pred.dc12>bestDCP){bestDC='DC 12';bestDCP=pred.dc12}
-    if(!bestDC||bestDCP<0.55)return null;
-    return{label:bestDC,prob:bestDCP,coteEst:estCote(bestDCP)};
-  }
+  if(type==='v1x2'){var best=null,bestP=0;if(pred.v1!==null&&pred.v1>bestP){best='V1';bestP=pred.v1}if(pred.x!==null&&pred.x>bestP){best='X';bestP=pred.x}if(pred.v2!==null&&pred.v2>bestP){best='V2';bestP=pred.v2}if(!best||bestP<0.35)return null;return{label:best,prob:bestP,coteEst:estCote(bestP)}}
+  if(type==='dc'){var bDC=null,bDCP=0;if(pred.dc1x!==null&&pred.dc1x>bDCP){bDC='DC 1X';bDCP=pred.dc1x}if(pred.dcx2!==null&&pred.dcx2>bDCP){bDC='DC X2';bDCP=pred.dcx2}if(pred.dc12!==null&&pred.dc12>bDCP){bDC='DC 12';bDCP=pred.dc12}if(!bDC||bDCP<0.55)return null;return{label:bDC,prob:bDCP,coteEst:estCote(bDCP)}}
   if(type==='best'){if(!pred.bestMarket||pred.bestMarket.prob<0.50)return null;return{label:pred.bestMarket.label,prob:pred.bestMarket.prob,coteEst:estCote(pred.bestMarket.prob)}}
-  if(type==='mix'){
-    var allM=pred.allMarkets||[];
-    var top=allM.filter(function(m){return m.prob>=0.55});
-    if(top.length)return{label:top[0].label,prob:top[0].prob,coteEst:estCote(top[0].prob)};
-    var options=[];
-    if(pred.plus!==null)options.push({label:'+'+s+' buts',prob:pred.plus,coteEst:estCote(pred.plus)});
-    if(pred.btts!==null)options.push({label:'BTTS Oui',prob:pred.btts,coteEst:estCote(pred.btts)});
-    if(pred.v1!==null&&pred.v1>0.5)options.push({label:'V1',prob:pred.v1,coteEst:estCote(pred.v1)});
-    if(!options.length)return null;
-    options.sort(function(a,b){return b.prob-a.prob});
-    return options[0];
-  }
+  if(type==='mix'){var allM=pred.allMarkets||[];var top=allM.filter(function(m){return m.prob>=0.55});if(top.length)return{label:top[0].label,prob:top[0].prob,coteEst:estCote(top[0].prob)};var opts=[];if(pred.plus!==null)opts.push({label:'+'+s+' buts',prob:pred.plus,coteEst:estCote(pred.plus)});if(pred.btts!==null)opts.push({label:'BTTS Oui',prob:pred.btts,coteEst:estCote(pred.btts)});if(pred.v1!==null&&pred.v1>0.5)opts.push({label:'V1',prob:pred.v1,coteEst:estCote(pred.v1)});if(!opts.length)return null;opts.sort(function(a,b){return b.prob-a.prob});return opts[0]}
   return null;
 }
-
 async function genTickets(){
   if(!cfg.apiKey){showAl('tkAl','er','Entre ta cle dans Config');return}
-  var date=document.getElementById('tkDate').value;
-  if(!date){showAl('tkAl','er','Selectionne une date');return}
-  var coteMin=parseFloat(document.getElementById('tkCoteMin').value)||2;
-  var coteMax=parseFloat(document.getElementById('tkCoteMax').value)||10;
-  var nbTickets=parseInt(document.getElementById('tkNb').value)||4;
-  var tkType=document.getElementById('tkType').value;
-  hideAl('tkAl');
-  document.getElementById('tkLd').classList.add('on');
-  document.getElementById('tkOut').style.display='none';
-  document.getElementById('tkCotesSection').style.display='none';
-  var tz=getTz(),cache=buildCache();
-  var fx=[];
-  var db=getDB();
-  if(db[date]&&db[date].length>0){
-    fx=db[date].filter(function(f){return TERM.indexOf(f.status)<0});
-  } else {
-    var data=await apiCall('/fixtures',{date:date});
-    if(!data){document.getElementById('tkLd').classList.remove('on');showAl('tkAl','er','Erreur API');return}
-    var allFx=data.response||[];
-    fx=allFx.map(function(f){return parseFix(f,tz)}).filter(function(f){return TERM.indexOf(f.status)<0});
-  }
+  var date=document.getElementById('tkDate').value;if(!date){showAl('tkAl','er','Selectionne une date');return}
+  var coteMin=parseFloat(document.getElementById('tkCoteMin').value)||2,coteMax=parseFloat(document.getElementById('tkCoteMax').value)||10;
+  var nbTickets=parseInt(document.getElementById('tkNb').value)||4,tkType=document.getElementById('tkType').value;
+  hideAl('tkAl');document.getElementById('tkLd').classList.add('on');document.getElementById('tkOut').style.display='none';document.getElementById('tkCotesSection').style.display='none';
+  var tz=getTz(),cache=buildCache(),fx=[],db=getDB();
+  if(db[date]&&db[date].length>0){fx=db[date].filter(function(f){return TERM.indexOf(f.status)<0})}
+  else{var data=await apiCall('/fixtures',{date:date});if(!data){document.getElementById('tkLd').classList.remove('on');showAl('tkAl','er','Erreur API');return}fx=data.response.map(function(f){return parseFix(f,tz)}).filter(function(f){return TERM.indexOf(f.status)<0})}
   document.getElementById('tkLd').classList.remove('on');
   if(!fx.length){showAl('tkAl','in','Aucun match a venir pour cette date.');return}
   var candidates=[];
   fx.forEach(function(m){
-    var pred=cache.total>0?predict(m,cache,seuilTk):null;
-    if(!pred)return;
-    if(pred.convergence<convTkVal)return;
-    var pari=selectPari(pred,tkType);
-    if(!pari||pari.prob<0.45)return;
-    var convBoost=pred.nbSig>0?1+pred.convergence/pred.nbSig*0.3:1;
-    var confBoost=1+pred.conf/200;
-    var score=pari.prob*convBoost*confBoost;
-    candidates.push({m:m,pred:pred,pari:pari,score:score});
+    var pred=cache.total>0?predict(m,cache,seuilTk):null;if(!pred)return;if(pred.convergence<convTkVal)return;
+    var pari=selectPari(pred,tkType);if(!pari||pari.prob<0.45)return;
+    var convBoost=pred.nbSig>0?1+pred.convergence/pred.nbSig*0.3:1,confBoost=1+pred.conf/200;
+    candidates.push({m:m,pred:pred,pari:pari,score:pari.prob*convBoost*confBoost});
   });
-  if(candidates.length<2){showAl('tkAl','er','Pas assez de matchs eligibles ('+candidates.length+'). Baisse la convergence minimum ou collecte plus de donnees.');return}
+  if(candidates.length<2){showAl('tkAl','er','Pas assez de matchs eligibles ('+candidates.length+'). Baisse la convergence ou collecte plus.');return}
   candidates.sort(function(a,b){return b.score-a.score});
-  var tickets=[];
-  var pool=candidates.slice(0,Math.min(candidates.length,12));
+  var tickets=[],pool=candidates.slice(0,Math.min(candidates.length,12));
   for(var t=0;t<nbTickets;t++){
-    var tkMatchs=[];
-    var coteCumul=1.0;
-    var shuffled=pool.slice().sort(function(){return Math.random()-0.5});
+    var tkMatchs=[],coteCumul=1.0,shuffled=pool.slice().sort(function(){return Math.random()-0.5});
     for(var i=0;i<shuffled.length&&tkMatchs.length<5;i++){
-      var cand=shuffled[i];
-      if(tkMatchs.find(function(x){return x.m.id===cand.m.id}))continue;
-      var newCote=coteCumul*cand.pari.coteEst;
-      if(newCote<=coteMax){tkMatchs.push(cand);coteCumul=newCote}
+      var cand=shuffled[i];if(tkMatchs.find(function(x){return x.m.id===cand.m.id}))continue;
+      var newCote=coteCumul*cand.pari.coteEst;if(newCote<=coteMax){tkMatchs.push(cand);coteCumul=newCote}
       if(coteCumul>=coteMin&&tkMatchs.length>=3)break;
     }
-    if(tkMatchs.length>=2){tickets.push({id:t+1,matchs:tkMatchs,coteTotal:Math.round(coteCumul*100)/100,date:date,status:'pending',result:null})}
+    if(tkMatchs.length>=2)tickets.push({id:t+1,matchs:tkMatchs,coteTotal:Math.round(coteCumul*100)/100,date:date,result:null});
   }
   if(!tickets.length){showAl('tkAl','er','Impossible de construire des tickets dans cette plage de cotes.');return}
-  currentTickets=tickets;
-  renderTickets(tickets);
-  buildCotesForm(tickets);
+  currentTickets=tickets;renderTickets(tickets);buildCotesForm(tickets);
 }
-
 function renderTickets(tickets){
-  var out=document.getElementById('tkOut');
-  out.innerHTML='';
-  var savedTk=getTickets();
+  var out=document.getElementById('tkOut');out.innerHTML='';var savedTk=getTickets();
   tickets.forEach(function(tk,idx){
-    var coteColor=tk.coteTotal>=5?'var(--r)':tk.coteTotal>=3?'var(--y)':'var(--g)';
-    var cls=idx===0?'best':idx===1?'good':'';
+    var coteColor=tk.coteTotal>=5?'var(--r)':tk.coteTotal>=3?'var(--y)':'var(--g)';var cls=idx===0?'best':idx===1?'good':'';
     var html='<div class="tk-card '+cls+'"><div class="tk-head"><div class="tk-title">Ticket '+(idx+1)+(idx===0?' ⭐':'')+'</div><div class="tk-cote" style="color:'+coteColor+'">x'+tk.coteTotal+'</div></div>';
     tk.matchs.forEach(function(cand){
-      var pred=cand.pred;
-      var convCls='conv-'+pred.convergence;
-      var probP=Math.round(cand.pari.prob*100);
-      html+='<div class="tk-row"><div class="tk-match-name">'+cand.m.home+' vs '+cand.m.away+'</div>'
-        +'<div class="tk-pred-row"><span style="font-size:.68rem;color:var(--dm)">'+cand.m.league+'</span>'
-        +'<div style="display:flex;gap:5px;align-items:center"><span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span>'
-        +'<span class="tk-p tk-pend">'+cand.pari.label+' '+probP+'%</span>'
-        +'<span style="font-size:.7rem;color:var(--y);font-weight:700">x'+cand.pari.coteEst+'</span></div></div>'
-        +'<div style="font-size:.62rem;color:var(--dm);margin-top:3px">'+cand.m.heure+' · Conf. '+pred.conf+'% · '+pred.ligTotal+' matchs hist.</div></div>';
+      var pred=cand.pred,convCls='conv-'+pred.convergence,probP=Math.round(cand.pari.prob*100);
+      html+='<div class="tk-row"><div class="tk-match-name">'+cand.m.home+' vs '+cand.m.away+'</div><div class="tk-pred-row"><span style="font-size:.68rem;color:var(--dm)">'+cand.m.league+'</span><div style="display:flex;gap:5px;align-items:center"><span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span><span class="tk-p tk-pend">'+cand.pari.label+' '+probP+'%</span><span style="font-size:.7rem;color:var(--y);font-weight:700">x'+cand.pari.coteEst+'</span></div></div><div style="font-size:.62rem;color:var(--dm);margin-top:3px">'+cand.m.heure+' · Conf. '+pred.conf+'% · '+pred.ligTotal+' matchs hist.</div></div>';
     });
     var avgProb=Math.round(tk.matchs.reduce(function(s,c){return s+c.pari.prob},0)/tk.matchs.length*100);
     var avgConv=Math.round(tk.matchs.reduce(function(s,c){return s+c.pred.convergence},0)/tk.matchs.length*10)/10;
     html+='<div class="tk-result-row"><div class="tk-stat"><div class="v" style="color:var(--g)">'+avgProb+'%</div><div class="sl">Moy prob</div></div><div class="tk-stat"><div class="v" style="color:var(--b)">'+avgConv+'/3</div><div class="sl">Moy sig</div></div><div class="tk-stat"><div class="v" style="color:var(--y)">x'+tk.coteTotal+'</div><div class="sl">Cote tot</div></div></div>';
     var saved=savedTk.find(function(s){return s.id===tk.id&&s.date===tk.date});
-    if(saved){
-      var resCol=saved.result==='won'?'var(--g)':'var(--r)';
-      var resTxt=saved.result==='won'?'GAGNE ✓':'PERDU ✗';
-      html+='<div style="margin-top:10px;padding:8px;background:rgba(0,0,0,.2);border-radius:8px;text-align:center;font-weight:900;color:'+resCol+'">'+resTxt+'</div>';
-    } else {
-      html+='<button class="bsm" onclick="openTkModal('+idx+')" style="width:100%;padding:9px;text-align:center;margin-top:10px">Marquer le resultat</button>';
-    }
-    html+='</div>';
-    out.innerHTML+=html;
+    if(saved){var rc=saved.result==='won'?'var(--g)':'var(--r)';html+='<div style="margin-top:10px;padding:8px;background:rgba(0,0,0,.2);border-radius:8px;text-align:center;font-weight:900;color:'+rc+'">'+(saved.result==='won'?'GAGNE ✓':'PERDU ✗')+'</div>'}
+    else html+='<button class="bsm" onclick="openTkModal('+idx+')" style="width:100%;padding:9px;text-align:center;margin-top:10px">Marquer le resultat</button>';
+    html+='</div>';out.innerHTML+=html;
   });
   out.style.display='block';
 }
-
 function buildCotesForm(tickets){
-  var seen={},allMatchsTk=[];
-  tickets.forEach(function(tk){tk.matchs.forEach(function(c){if(!seen[c.m.id]){seen[c.m.id]=true;allMatchsTk.push(c)}})});
-  var html='';
-  allMatchsTk.forEach(function(c){
-    html+='<div style="margin-bottom:10px"><div class="lsm">'+c.m.home+' vs '+c.m.away+' ('+c.pari.label+')</div>'
-      +'<input class="inp" type="number" id="cote_'+c.m.id+'" placeholder="Cote (ex: 1.75)" step="0.01" min="1.01" value=""/></div>';
-  });
-  document.getElementById('tkCotesForm').innerHTML=html;
-  document.getElementById('tkCotesSection').style.display='block';
+  var seen={},allM=[];tickets.forEach(function(tk){tk.matchs.forEach(function(c){if(!seen[c.m.id]){seen[c.m.id]=true;allM.push(c)}})});
+  var html='';allM.forEach(function(c){html+='<div style="margin-bottom:10px"><div class="lsm">'+c.m.home+' vs '+c.m.away+' ('+c.pari.label+')</div><input class="inp" type="number" id="cote_'+c.m.id+'" placeholder="Cote (ex: 1.75)" step="0.01" min="1.01" value=""/></div>'});
+  document.getElementById('tkCotesForm').innerHTML=html;document.getElementById('tkCotesSection').style.display='block';
 }
-
 function appliquerCotes(){
   if(!currentTickets.length)return;
-  currentTickets.forEach(function(tk){
-    var newCote=1.0;
-    tk.matchs.forEach(function(c){
-      var input=document.getElementById('cote_'+c.m.id);
-      var val=input?parseFloat(input.value):0;
-      if(val>1){c.pari.coteEst=val;newCote*=val}
-      else{newCote*=c.pari.coteEst}
-    });
-    tk.coteTotal=Math.round(newCote*100)/100;
-  });
-  renderTickets(currentTickets);
-  showAl('tkAl','ok','Cotes mises a jour!');
-  setTimeout(function(){hideAl('tkAl')},2000);
+  currentTickets.forEach(function(tk){var nc=1.0;tk.matchs.forEach(function(c){var inp=document.getElementById('cote_'+c.m.id);var val=inp?parseFloat(inp.value):0;if(val>1){c.pari.coteEst=val;nc*=val}else nc*=c.pari.coteEst});tk.coteTotal=Math.round(nc*100)/100});
+  renderTickets(currentTickets);showAl('tkAl','ok','Cotes mises a jour!');setTimeout(function(){hideAl('tkAl')},2000);
 }
-
 function openTkModal(idx){
-  modalTkIdx=idx;
-  var tk=currentTickets[idx];
-  document.getElementById('tkModalTitle').textContent='Ticket '+(idx+1)+' - x'+tk.coteTotal;
-  var html='';
-  tk.matchs.forEach(function(c){
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px solid var(--bd);font-size:.76rem">'
-      +'<span>'+c.m.home+' vs '+c.m.away+'</span><span class="tk-p tk-pend">'+c.pari.label+'</span></div>';
-  });
-  document.getElementById('tkModalRows').innerHTML=html;
-  document.getElementById('modalTk').classList.add('on');
+  modalTkIdx=idx;var tk=currentTickets[idx];document.getElementById('tkModalTitle').textContent='Ticket '+(idx+1)+' - x'+tk.coteTotal;
+  var html='';tk.matchs.forEach(function(c){html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px solid var(--bd);font-size:.76rem"><span>'+c.m.home+' vs '+c.m.away+'</span><span class="tk-p tk-pend">'+c.pari.label+'</span></div>'});
+  document.getElementById('tkModalRows').innerHTML=html;document.getElementById('modalTk').classList.add('on');
 }
 function closeTkModal(e){if(e.target.id==='modalTk')document.getElementById('modalTk').classList.remove('on')}
 function saveTkResult(result){
-  if(modalTkIdx<0)return;
-  var tk=currentTickets[modalTkIdx];
-  var saved=getTickets();
+  if(modalTkIdx<0)return;var tk=currentTickets[modalTkIdx];var saved=getTickets();
   saved=saved.filter(function(s){return!(s.id===tk.id&&s.date===tk.date)});
-  saved.push({id:tk.id,date:tk.date,result:result,coteTotal:tk.coteTotal,
-    matchs:tk.matchs.map(function(c){return{home:c.m.home,away:c.m.away,pari:c.pari.label,prob:Math.round(c.pari.prob*100),conv:c.pred.convergence,nbSig:c.pred.nbSig,cote:c.pari.coteEst}})});
-  setTickets(saved);
-  document.getElementById('modalTk').classList.remove('on');
-  renderTickets(currentTickets);
+  saved.push({id:tk.id,date:tk.date,result:result,coteTotal:tk.coteTotal,matchs:tk.matchs.map(function(c){return{home:c.m.home,away:c.m.away,pari:c.pari.label,prob:Math.round(c.pari.prob*100),conv:c.pred.convergence,nbSig:c.pred.nbSig,cote:c.pari.coteEst}})});
+  setTickets(saved);document.getElementById('modalTk').classList.remove('on');renderTickets(currentTickets);
 }
 
-// ==============================
-// ---- FIABILITE (REFONTE) ----
-// ==============================
+// ================================================
+// ---- FIABILITE — 14 MARCHES COMPLETS ----
+// ================================================
 
-// Definit tous les marches a analyser
+var fiabView='resume';
+
+// ---- CALIBRATION ----
+function getCalib(){try{return JSON.parse(localStorage.getItem(CALIB_KEY)||'{}')}catch(e){return{}}}
+function setCalib(c){localStorage.setItem(CALIB_KEY,JSON.stringify(c))}
+function resetCalib(){
+  if(!confirm('Reinitialiser tous les facteurs de calibration?'))return;
+  localStorage.removeItem(CALIB_KEY);
+  showAl('fiabAl','ok','Calibration reinitalisee - predictions basees sur donnees brutes.');
+  setTimeout(function(){hideAl('fiabAl')},3000);
+}
+function getCalibFactor(market){var c=getCalib();return c[market]!==undefined?c[market]:1.0}
+function applyCalib(val,market){
+  if(val===null)return null;
+  return Math.min(1,Math.max(0,val*getCalibFactor(market)));
+}
+
 function getAllMarkets(s){
   return[
-    {id:'over',  label:'Over +'+s,   pKey:'pPlus',   rKey:'rPlus',   positive:true},
-    {id:'under', label:'Under -'+s,  pKey:'pUnder',  rKey:'rUnder',  positive:true},
-    {id:'btts',  label:'BTTS Oui',   pKey:'pBtts',   rKey:'rBtts',   positive:true},
-    {id:'bttsN', label:'BTTS Non',   pKey:'pBttsNon',rKey:'rBtts',   positive:false},
-    {id:'v1',    label:'Victoire Dom',pKey:'pV1',     rKey:'rV1x2',   positive:true, rVal:'V1'},
-    {id:'x',     label:'Match Nul',   pKey:'pX',      rKey:'rV1x2',   positive:true, rVal:'X'},
-    {id:'v2',    label:'Victoire Ext',pKey:'pV2',     rKey:'rV1x2',   positive:true, rVal:'V2'},
-    {id:'csH',   label:'CS Domicile', pKey:'pCsH',    rKey:'rCsH',    positive:true},
-    {id:'csA',   label:'CS Exterieur',pKey:'pCsA',    rKey:'rCsA',    positive:true},
-    {id:'hmsc',  label:'Dom Marque',  pKey:'pHmsc',   rKey:'rHmsc',   positive:true},
-    {id:'amsc',  label:'Ext Marque',  pKey:'pAmsc',   rKey:'rAmsc',   positive:true},
-    {id:'dc1x',  label:'DC 1X',       pKey:'pDc1x',   rKey:'rDc1x',   positive:true},
-    {id:'dcx2',  label:'DC X2',       pKey:'pDcx2',   rKey:'rDcx2',   positive:true},
-    {id:'dc12',  label:'DC 12',       pKey:'pDc12',   rKey:'rDc12',   positive:true},
+    {id:'over',  label:'Over +'+s,     pKey:'pPlus',   rKey:'rPlus',   rVal:null, positive:true},
+    {id:'under', label:'Under -'+s,    pKey:'pUnder',  rKey:'rUnder',  rVal:null, positive:true},
+    {id:'btts',  label:'BTTS Oui',     pKey:'pBtts',   rKey:'rBtts',   rVal:null, positive:true},
+    {id:'bttsN', label:'BTTS Non',     pKey:'pBttsNon',rKey:'rBtts',   rVal:null, positive:false},
+    {id:'v1',    label:'Victoire Dom', pKey:'pV1',     rKey:'rV1x2',   rVal:'V1', positive:true},
+    {id:'x',     label:'Match Nul',    pKey:'pX',      rKey:'rV1x2',   rVal:'X',  positive:true},
+    {id:'v2',    label:'Victoire Ext', pKey:'pV2',     rKey:'rV1x2',   rVal:'V2', positive:true},
+    {id:'dc1x',  label:'DC 1X',        pKey:'pDc1x',   rKey:'rDc1x',   rVal:null, positive:true},
+    {id:'dcx2',  label:'DC X2',        pKey:'pDcx2',   rKey:'rDcx2',   rVal:null, positive:true},
+    {id:'dc12',  label:'DC 12',        pKey:'pDc12',   rKey:'rDc12',   rVal:null, positive:true},
+    {id:'csH',   label:'CS Domicile',  pKey:'pCsH',    rKey:'rCsH',    rVal:null, positive:true},
+    {id:'csA',   label:'CS Exterieur', pKey:'pCsA',    rKey:'rCsA',    rVal:null, positive:true},
+    {id:'hmsc',  label:'Dom Marque',   pKey:'pHmsc',   rKey:'rHmsc',   rVal:null, positive:true},
+    {id:'amsc',  label:'Ext Marque',   pKey:'pAmsc',   rKey:'rAmsc',   rVal:null, positive:true}
   ];
 }
 
-// Calcule l'exactitude binaire d'un marche
-// Pour les marches booleen (rKey booleen): pred >= 50 => predit OUI => compare a rKey
-// Pour rVal specifique (V1X2): pred >= 50 => predit cette valeur => compare a rKey===rVal
+function getRealVal(t,mkt){
+  if(mkt.rVal!==null)return t[mkt.rKey]===mkt.rVal?1:0;
+  if(mkt.positive)return t[mkt.rKey]?1:0;
+  return t[mkt.rKey]?0:1;
+}
+
 function mktAccuracy(entries,mkt){
-  var valid=entries.filter(function(t){
-    return t[mkt.pKey]!==null&&t[mkt.pKey]!==undefined;
-  });
+  var valid=entries.filter(function(t){return t[mkt.pKey]!==null&&t[mkt.pKey]!==undefined});
   if(!valid.length)return{n:0,ok:0,acc:null,brier:null,realRate:null,predAvg:null};
   var ok=0,brier=0,realOk=0;
   valid.forEach(function(t){
-    var prob=t[mkt.pKey]/100;
-    var real;
-    if(mkt.rVal!==undefined){real=(t[mkt.rKey]===mkt.rVal)?1:0}
-    else if(mkt.positive){real=t[mkt.rKey]?1:0}
-    else{real=t[mkt.rKey]?0:1} // BTTS Non => reel = NON btts
+    var prob=t[mkt.pKey]/100,real=getRealVal(t,mkt);
     brier+=Math.pow(prob-real,2);
     if(real)realOk++;
-    // Correct si (prob>=50 && real) ou (prob<50 && !real)
     if((prob>=0.5&&real)||(prob<0.5&&!real))ok++;
   });
-  return{
-    n:valid.length,
-    ok:ok,
-    acc:Math.round(ok/valid.length*100),
+  return{n:valid.length,ok:ok,acc:Math.round(ok/valid.length*100),
     brier:Math.round(brier/valid.length*1000)/1000,
     realRate:Math.round(realOk/valid.length*100),
-    predAvg:Math.round(valid.reduce(function(a,t){return a+t[mkt.pKey]},0)/valid.length)
-  };
+    predAvg:Math.round(valid.reduce(function(a,t){return a+t[mkt.pKey]},0)/valid.length)};
 }
 
-// Calcule le biais (pred moyen - realite) => si positif: on surpredit
-// Retourne le facteur de correction a appliquer
-function computeCalibFactor(predAvg,realRate){
-  if(!predAvg||!realRate)return 1;
-  // Si pred = 70 et realite = 60 => biais +10 => on surpredit => facteur < 1
-  var bias=predAvg-realRate;
-  // Facteur de correction: si biais > 0 (surpredit) => facteur = realRate/predAvg
-  // Avec lissage pour eviter corrections trop agressives (min 0.7, max 1.3)
-  var raw=realRate/predAvg;
-  return Math.min(1.3,Math.max(0.7,Math.round(raw*100)/100));
-}
-
-// Calcul de calibration par tranches
 function computeCalibTranches(entries,mkt){
-  var tranches=[
-    {lbl:'0-29%',min:0,max:29},
-    {lbl:'30-39%',min:30,max:39},
-    {lbl:'40-49%',min:40,max:49},
-    {lbl:'50-59%',min:50,max:59},
-    {lbl:'60-69%',min:60,max:69},
-    {lbl:'70%+',min:70,max:100}
+  var tr=[
+    {lbl:'<40%',min:0,max:39},{lbl:'40-49%',min:40,max:49},{lbl:'50-59%',min:50,max:59},
+    {lbl:'60-69%',min:60,max:69},{lbl:'70-79%',min:70,max:79},{lbl:'80%+',min:80,max:100}
   ].map(function(t){return Object.assign({n:0,ok:0},t)});
-
   entries.forEach(function(t){
-    var prob=t[mkt.pKey];
-    if(prob===null||prob===undefined)return;
-    var real;
-    if(mkt.rVal!==undefined){real=(t[mkt.rKey]===mkt.rVal)?1:0}
-    else if(mkt.positive){real=t[mkt.rKey]?1:0}
-    else{real=t[mkt.rKey]?0:1}
-    tranches.forEach(function(tr){if(prob>=tr.min&&prob<=tr.max){tr.n++;if(real)tr.ok++}});
+    var prob=t[mkt.pKey];if(prob===null||prob===undefined)return;
+    var real=getRealVal(t,mkt);
+    tr.forEach(function(x){if(prob>=x.min&&prob<=x.max){x.n++;if(real)x.ok++}});
   });
-  return tranches.filter(function(t){return t.n>0});
+  return tr.filter(function(x){return x.n>0});
 }
 
-// Calcule et sauvegarde les facteurs de calibration pour tous les marches
 function computeAndSaveCalib(entries,s){
-  var mkts=getAllMarkets(s);
-  var newCalib={};
+  var mkts=getAllMarkets(s),newCalib={};
   mkts.forEach(function(mkt){
-    var stats=mktAccuracy(entries,mkt);
-    if(stats.n>=10&&stats.predAvg&&stats.realRate){
-      newCalib[mkt.id]=computeCalibFactor(stats.predAvg,stats.realRate);
+    var st=mktAccuracy(entries,mkt);
+    if(st.n>=10&&st.predAvg&&st.realRate){
+      newCalib[mkt.id]=Math.min(1.3,Math.max(0.7,Math.round(st.realRate/st.predAvg*100)/100));
     }
   });
-  setCalib(newCalib);
-  return newCalib;
+  setCalib(newCalib);return newCalib;
+}
+
+// ---- TRACKING ENRICHI (14 marches) ----
+function buildTrackEntry(m,pred,s,h,a){
+  var tot=h+a;
+  return{id:m.id,date:today(),home:m.home,away:m.away,league:m.league||'?',country:m.country||'?',seuil:s,
+    rH:h,rA:a,rTotal:tot,rV1x2:h>a?'V1':h<a?'V2':'X',rBtts:h>0&&a>0,
+    rPlus:tot>s,rUnder:tot<=s,rCsH:a===0,rCsA:h===0,rHmsc:h>0,rAmsc:a>0,
+    rDc1x:h>=a,rDcx2:a>=h,rDc12:h!==a,
+    pPlus:pred.plus!==null?Math.round(pred.plus*100):null,
+    pUnder:pred.under!==null?Math.round(pred.under*100):null,
+    pV1:pred.v1!==null?Math.round(pred.v1*100):null,
+    pX:pred.x!==null?Math.round(pred.x*100):null,
+    pV2:pred.v2!==null?Math.round(pred.v2*100):null,
+    pBtts:pred.btts!==null?Math.round(pred.btts*100):null,
+    pBttsNon:pred.bttsNon!==null?Math.round(pred.bttsNon*100):null,
+    pCsH:pred.csH!==null?Math.round(pred.csH*100):null,
+    pCsA:pred.csA!==null?Math.round(pred.csA*100):null,
+    pHmsc:pred.hmsc!==null?Math.round(pred.hmsc*100):null,
+    pAmsc:pred.amsc!==null?Math.round(pred.amsc*100):null,
+    pDc1x:pred.dc1x!==null?Math.round(pred.dc1x*100):null,
+    pDcx2:pred.dcx2!==null?Math.round(pred.dcx2*100):null,
+    pDc12:pred.dc12!==null?Math.round(pred.dc12*100):null,
+    pConf:pred.conf||0,pConv:pred.convergence||0,pNbSig:pred.nbSig||0,auto:true};
 }
 
 function setFiabView(v){
   fiabView=v;
-  document.querySelectorAll('.fiab-tab').forEach(function(b){
-    b.classList.toggle('on',b.dataset.v===v);
-  });
-  calcFiabilite();
+  document.querySelectorAll('.fiab-tab').forEach(function(b){b.classList.toggle('on',b.dataset.v===v)});
+  renderFiabOut();
 }
 
 function calcFiabilite(){
   var track=getTrack();
   var s=seuilFiab;
-  // Migrer anciens tracks (sans les nouveaux champs)
-  var entries=track;
-  if(!entries.length){showAl('fiabAl','er','Aucune donnee - Charge des matchs termines dans l\'onglet Matchs');return}
+  if(!track.length){showAl('fiabAl','er','Aucune donnee - Charge des matchs termines dans l\'onglet Matchs');return}
   hideAl('fiabAl');
+  computeAndSaveCalib(track,s);
+  renderFiabOut();
+}
 
-  var mkts=getAllMarkets(s);
-
-  // Auto-calibration silencieuse
-  var newCalib=computeAndSaveCalib(entries,s);
-  var calibApplied=Object.keys(newCalib).length>0;
-
-  var out=document.getElementById('fiabOut');
-
-  // ---- Construire les stats pour tous les marches ----
-  var mktStats={};
-  mkts.forEach(function(mkt){
-    mktStats[mkt.id]=mktAccuracy(entries,mkt);
-  });
-
-  // ---- HTML ----
+function renderFiabOut(){
+  var entries=getTrack(),s=seuilFiab;
+  if(!entries.length)return;
+  var mkts=getAllMarkets(s),newCalib=getCalib(),calibApplied=Object.keys(newCalib).length>0;
+  var mktStats={};mkts.forEach(function(mkt){mktStats[mkt.id]=mktAccuracy(entries,mkt)});
+  var savedTk=getTickets(),tkWon=savedTk.filter(function(t){return t.result==='won'}).length;
+  var tkLost=savedTk.filter(function(t){return t.result==='lost'}).length,tkTotal=tkWon+tkLost;
   var html='';
 
-  // Tabs
+  // Tabs style identique aux .tabs principales
   html+='<div class="fiab-tabs">'
-    +'<button class="fiab-tab'+(fiabView==='overview'?' on':'')+'" data-v="overview" onclick="setFiabView(\'overview\')">Resume</button>'
-    +'<button class="fiab-tab'+(fiabView==='markets'?' on':'')+'" data-v="markets" onclick="setFiabView(\'markets\')">Marches</button>'
+    +'<button class="fiab-tab'+(fiabView==='resume'?' on':'')+'" data-v="resume" onclick="setFiabView(\'resume\')">Resume</button>'
+    +'<button class="fiab-tab'+(fiabView==='marches'?' on':'')+'" data-v="marches" onclick="setFiabView(\'marches\')">Marches</button>'
     +'<button class="fiab-tab'+(fiabView==='calibration'?' on':'')+'" data-v="calibration" onclick="setFiabView(\'calibration\')">Calibration</button>'
     +'<button class="fiab-tab'+(fiabView==='convergence'?' on':'')+'" data-v="convergence" onclick="setFiabView(\'convergence\')">Convergence</button>'
     +'<button class="fiab-tab'+(fiabView==='roi'?' on':'')+'" data-v="roi" onclick="setFiabView(\'roi\')">ROI</button>'
     +'</div>';
 
-  // ---- Bandeau calibration ----
+  // Bandeau calibration
   if(calibApplied){
     var nCalib=Object.keys(newCalib).length;
-    var biasInfo=Object.entries(newCalib).map(function(e){
-      var f=e[1];
-      var mkt=mkts.find(function(m){return m.id===e[0]});
-      var lbl=mkt?mkt.label:e[0];
-      var state=f>1.05?'↑ sous-predit':f<0.95?'↓ sur-predit':'≈ calibre';
-      return lbl+': x'+f+' ('+state+')';
-    }).join(' · ');
-    html+='<div style="background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:.68rem;color:var(--g);line-height:1.7">'
-      +'<div style="font-weight:900;margin-bottom:4px;font-size:.74rem">⚡ Auto-calibration activee ('+nCalib+' marches)</div>'
-      +'<div style="color:var(--dm)">'+biasInfo+'</div>'
-      +'</div>';
+    html+='<div style="background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.25);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:.68rem;line-height:1.7">'
+      +'<div style="font-weight:700;color:var(--g);margin-bottom:3px">⚡ Auto-calibration active ('+nCalib+' marches)</div>'
+      +'<div style="color:var(--dm)">'+Object.entries(newCalib).map(function(e){
+        var f=e[1],mkt=mkts.find(function(m){return m.id===e[0]});
+        return'<span style="margin-right:6px">'+(mkt?mkt.label:e[0])+' '+(f>1.05?'↑':f<0.95?'↓':'≈')+'x'+f+'</span>';
+      }).join('')+'</div></div>';
   }
 
-  // ---- VUE RESUME ----
-  if(fiabView==='overview'){
-    var overSt=mktStats['over'],bttsSt=mktStats['btts'],v1St=mktStats['v1'];
-    var xSt=mktStats['x'],v2St=mktStats['v2'];
-    var savedTk=getTickets();
-    var tkWon=savedTk.filter(function(t){return t.result==='won'}).length;
-    var tkLost=savedTk.filter(function(t){return t.result==='lost'}).length;
-    var tkTotal=tkWon+tkLost;
-    var bestMkt=mkts.map(function(m){return{m:m,s:mktStats[m.id]}}).filter(function(x){return x.s.n>=5&&x.s.acc!==null}).sort(function(a,b){return b.s.acc-a.s.acc});
-    var worstMkt=bestMkt.slice().reverse();
+  // ===== VUE RESUME =====
+  if(fiabView==='resume'){
+    var overSt=mktStats['over'],bttsSt=mktStats['btts'],v1St=mktStats['v1'],xSt=mktStats['x'],v2St=mktStats['v2'];
 
-    function mktBox(st,label,col){
-      if(!st||st.acc===null)return'<div class="sb"><div class="sv" style="color:var(--dm)">?</div><div class="sl">'+label+'</div></div>';
-      var c=st.acc>=65?'var(--g)':st.acc>=50?'var(--y)':'var(--r)';
-      return'<div class="sb"><div class="sv" style="color:'+c+'">'+st.acc+'%</div><div class="sl">'+label+'</div></div>';
+    function col3(v){return v>=60?'var(--g)':v>=45?'var(--y)':'var(--r)'}
+
+    // Grille precision tous marchés — style .sg .sb de l'ancienne version
+    function accBox(id,lbl){
+      var st=mktStats[id];
+      if(!st||st.acc===null)return'<div class="sb"><div class="sv" style="color:var(--dm)">?</div><div class="sl">'+lbl+'</div></div>';
+      return'<div class="sb"><div class="sv" style="color:'+col3(st.acc)+'">'+st.acc+'%</div><div class="sl">'+lbl+'</div></div>';
     }
-
-    html+='<div class="st">PRECISION PAR MARCHE ('+entries.length+' matchs)</div>'
-      +'<div class="mkt-grid">'
-      +[
-        {id:'over',l:'Over +'+s},{id:'under',l:'Under -'+s},
-        {id:'btts',l:'BTTS Oui'},{id:'bttsN',l:'BTTS Non'},
-        {id:'v1',l:'Victoire Dom'},{id:'x',l:'Nul'},
-        {id:'v2',l:'Victoire Ext'},{id:'csH',l:'CS Dom'}
-      ].map(function(x){
-        var st=mktStats[x.id];
-        if(!st||st.acc===null)return'<div class="mkt-card"><div class="mkt-name">'+x.l+'</div><div class="mkt-acc" style="color:var(--dm)">?</div><div class="mkt-sub">Pas assez de data</div></div>';
-        var col=st.acc>=65?'var(--g)':st.acc>=50?'var(--y)':'var(--r)';
-        var cls=st.acc>=65?'mkt-good':st.acc>=50?'mkt-mid':'mkt-bad';
-        var f=newCalib[x.id];
-        var fBadge=f?(f>1.05?'<span class="calib-badge cb-lo">+calibre</span>':f<0.95?'<span class="calib-badge cb-hi">-calibre</span>':'<span class="calib-badge cb-ok">OK</span>'):'';
-        return'<div class="mkt-card '+cls+'">'
-          +'<div class="mkt-name" style="display:flex;justify-content:space-between">'+x.l+fBadge+'</div>'
-          +'<div class="mkt-acc" style="color:'+col+'">'+st.acc+'%</div>'
-          +'<div class="mkt-sub">'+st.ok+'/'+st.n+' · Brier: '+st.brier+'</div>'
-          +'<div class="mkt-bar"><div class="mkt-fill" style="width:'+st.acc+'%;background:'+col+'"></div></div>'
-          +'</div>';
-      }).join('')
+    html+='<div class="st">PRECISION ('+entries.length+' matchs)</div>'
+      +'<div class="sg g4">'
+      +accBox('over','Over +'+s)+accBox('under','Under -'+s)+accBox('btts','BTTS Oui')+accBox('bttsN','BTTS Non')
+      +'</div>'
+      +'<div class="sg g3">'
+      +accBox('v1','V1 Dom')+accBox('x','Nul')+accBox('v2','V2 Ext')
+      +'</div>'
+      +'<div class="sg g4">'
+      +accBox('csH','CS Dom')+accBox('csA','CS Ext')+accBox('hmsc','Dom Mq')+accBox('amsc','Ext Mq')
+      +'</div>'
+      +'<div class="sg g3">'
+      +accBox('dc1x','DC 1X')+accBox('dcx2','DC X2')+accBox('dc12','DC 12')
       +'</div>';
 
-    // Tickets
-    html+='<div class="st">TICKETS</div>'
+    // Brier score Over — style .pr
+    if(overSt&&overSt.brier!==null){
+      html+='<div class="pr"><div class="pr-l"><span style="color:var(--dm)">Score Brier Over +'+s+' (0=parfait)</span><span class="pr-p" style="color:var(--b)">'+overSt.brier+'</span></div>'
+        +'<div class="pr-t"><div class="pr-f" style="width:'+Math.max(0,100-overSt.brier*100)+'%"></div></div></div>';
+    }
+
+    // Tickets — style .sg
+    html+='<div class="st">TICKETS COMBINES</div>'
       +'<div class="sg g3">'
       +'<div class="sb"><div class="sv" style="color:var(--g)">'+tkWon+'</div><div class="sl">Gagnes</div></div>'
       +'<div class="sb"><div class="sv" style="color:var(--r)">'+tkLost+'</div><div class="sl">Perdus</div></div>'
       +'<div class="sb"><div class="sv" style="color:var(--y)">'+(tkTotal?Math.round(tkWon/tkTotal*100)+'%':'?')+'</div><div class="sl">Taux</div></div>'
       +'</div>';
-
-    // Meilleur / pire marche
-    if(bestMkt.length){
-      html+='<div class="st">TOP / FLOP MARCHES</div>'
-        +'<div class="sg g2" style="margin-bottom:8px">';
-      if(bestMkt[0]){
-        var bst=bestMkt[0];
-        html+='<div class="sb" style="border-color:var(--g);background:rgba(0,230,118,.04)">'
-          +'<div style="font-size:.58rem;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🏆 Meilleur</div>'
-          +'<div class="sv" style="color:var(--g)">'+bst.s.acc+'%</div>'
-          +'<div class="sl">'+bst.m.label+'</div>'
-          +'<div style="font-size:.58rem;color:var(--dm);margin-top:3px">'+bst.s.n+' matchs</div>'
-          +'</div>';
-      }
-      if(worstMkt[0]){
-        var wst=worstMkt[0];
-        html+='<div class="sb" style="border-color:var(--r);background:rgba(255,64,96,.03)">'
-          +'<div style="font-size:.58rem;color:var(--r);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚠ A eviter</div>'
-          +'<div class="sv" style="color:var(--r)">'+wst.s.acc+'%</div>'
-          +'<div class="sl">'+wst.m.label+'</div>'
-          +'<div style="font-size:.58rem;color:var(--dm);margin-top:3px">'+wst.s.n+' matchs</div>'
-          +'</div>';
-      }
-      html+='</div>';
+    if(tkTotal>0){
+      html+='<div class="pr"><div class="pr-l"><span style="color:var(--dm)">Taux reussite tickets</span><span class="pr-p">'+Math.round(tkWon/tkTotal*100)+'%</span></div>'
+        +'<div class="pr-t"><div class="pr-f" style="width:'+Math.round(tkWon/tkTotal*100)+'%"></div></div></div>';
     }
 
-    // Derniers matchs (deroulant tous les marches)
-    var recent=entries.slice().reverse().slice(0,10);
-    html+='<div class="st">DERNIERS MATCHS</div>';
-    recent.forEach(function(t){
-      var plusOk=t.pPlus!==null&&((t.pPlus>=50&&t.rPlus)||(t.pPlus<50&&!t.rPlus));
-      var bttsOk=t.pBtts!==null&&((t.pBtts>=50&&t.rBtts)||(t.pBtts<50&&!t.rBtts));
-      var bestV1x2=t.pV1!==null&&t.pX!==null&&t.pV2!==null?(t.pV1>=t.pX&&t.pV1>=t.pV2?'V1':t.pX>=t.pV1&&t.pX>=t.pV2?'X':'V2'):'?';
-      var v1x2Ok=bestV1x2!=='?'&&bestV1x2===t.rV1x2;
-      var csHOk=t.pCsH!==null&&((t.pCsH>=50&&t.rCsH)||(t.pCsH<50&&!t.rCsH));
-      var hmscOk=t.pHmsc!==null&&((t.pHmsc>=50&&t.rHmsc)||(t.pHmsc<50&&!t.rHmsc));
-      function badge(ok,label){
-        return'<span style="padding:2px 5px;border-radius:4px;font-size:.56rem;font-weight:700;background:'+(ok?'rgba(0,230,118,.12)':'rgba(255,64,96,.1)')+';color:'+(ok?'var(--g)':'var(--r)')+';border:1px solid '+(ok?'rgba(0,230,118,.3)':'rgba(255,64,96,.3)')+'">'+label+'</span>';
-      }
-      html+='<div style="background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;margin-bottom:8px">'
-        +'<div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:.74rem;font-weight:700">'+t.home+' vs '+t.away+'</span><span style="font-size:.64rem;font-weight:900;color:var(--y)">'+t.rH+'-'+t.rA+'</span></div>'
-        +'<div style="font-size:.62rem;color:var(--dm);margin-bottom:6px">'+t.league+' · '+t.date+'</div>'
-        +'<div style="display:flex;flex-wrap:wrap;gap:4px">'
-        +(t.pPlus!==null?badge(plusOk,'Over '+t.pPlus+'%'):'')
-        +(t.pUnder!==null?badge(!t.rPlus,'Under '+(t.pUnder||100-t.pPlus)+'%'):'')
-        +(t.pBtts!==null?badge(bttsOk,'BTTS '+t.pBtts+'%'):'')
-        +(bestV1x2!=='?'?badge(v1x2Ok,'1X2 → '+bestV1x2):'')
-        +(t.pCsH!==null?badge(csHOk,'CS Dom '+t.pCsH+'%'):'')
-        +(t.pHmsc!==null?badge(hmscOk,'Dom Mq '+t.pHmsc+'%'):'')
-        +'</div>'
-        +'<div style="font-size:.58rem;color:var(--dm);margin-top:5px">'+t.pConv+'/'+t.pNbSig+' sig · Conf '+t.pConf+'%'+(t.auto?' · auto':'')+'</div>'
-        +'</div>';
-    });
+    // Top / Flop — style .lc (ancienne version)
+    var ranked=mkts.map(function(m){return{m:m,s:mktStats[m.id]}})
+      .filter(function(x){return x.s.n>=5&&x.s.acc!==null})
+      .sort(function(a,b){return b.s.acc-a.s.acc});
+    if(ranked.length>=2){
+      var bst=ranked[0],wst=ranked[ranked.length-1];
+      html+='<div class="st">TOP / FLOP MARCHES</div>'
+        +'<div class="lc" style="border-color:rgba(0,230,118,.3)">'
+        +'<div class="lh"><div><div class="ln" style="color:var(--g)">🏆 Meilleur</div><div class="lsu">'+bst.m.label+'</div></div>'
+        +'<div class="lbg bgG">'+bst.s.acc+'%</div></div>'
+        +'<div class="lpb"><div class="lpf" style="width:'+bst.s.acc+'%;background:var(--g)"></div></div>'
+        +'<div style="font-size:.68rem;color:var(--dm)">'+bst.s.ok+'/'+bst.s.n+' corrects · Brier: '+bst.s.brier+'</div></div>'
+        +'<div class="lc" style="border-color:rgba(255,64,96,.3)">'
+        +'<div class="lh"><div><div class="ln" style="color:var(--r)">⚠ A eviter</div><div class="lsu">'+wst.m.label+'</div></div>'
+        +'<div class="lbg bgR">'+wst.s.acc+'%</div></div>'
+        +'<div class="lpb"><div class="lpf" style="width:'+wst.s.acc+'%;background:var(--r)"></div></div>'
+        +'<div style="font-size:.68rem;color:var(--dm)">'+wst.s.ok+'/'+wst.s.n+' corrects · Brier: '+wst.s.brier+'</div></div>';
+    }
 
-  // ---- VUE MARCHES ----
-  } else if(fiabView==='markets'){
-    html+='<div class="st">TOUS LES MARCHES</div>';
-    mkts.forEach(function(mkt){
-      var st=mktStats[mkt.id];
-      if(!st||st.acc===null||st.n<3){
-        html+='<div style="background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">'
-          +'<span style="font-size:.8rem;font-weight:700">'+mkt.label+'</span>'
-          +'<span style="font-size:.72rem;color:var(--dm)">Pas assez de donnees ('+(st?st.n:0)+')</span></div>';
-        return;
-      }
-      var col=st.acc>=65?'var(--g)':st.acc>=50?'var(--y)':'var(--r)';
-      var cls=st.acc>=65?'mkt-good':st.acc>=50?'mkt-mid':'mkt-bad';
-      var f=newCalib[mkt.id];
-      var biais=st.predAvg-st.realRate;
-      var biaisTxt=(biais>5?'Surpredit (+'+biais+'%)':biais<-5?'Sous-predit ('+biais+'%)':'Calibre ≈');
-      html+='<div style="background:var(--s1);border:1px solid var(--bd);border-left:3px solid '+col+';border-radius:10px;padding:12px 14px;margin-bottom:8px">'
-        +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
-        +'<span style="font-size:.82rem;font-weight:700">'+mkt.label+'</span>'
-        +'<div style="display:flex;gap:6px;align-items:center">'
-        +(f?(f>1.05?'<span class="calib-badge cb-lo">sous-predit</span>':f<0.95?'<span class="calib-badge cb-hi">sur-predit</span>':'<span class="calib-badge cb-ok">calibre</span>'):'')
-        +'<span style="font-weight:900;font-size:1.1rem;color:'+col+'">'+st.acc+'%</span>'
-        +'</div></div>'
-        +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px">'
-        +'<div class="comp-stat" style="background:var(--s2)"><div class="v">'+st.n+'</div><div class="l">Matchs</div></div>'
-        +'<div class="comp-stat" style="background:var(--s2)"><div class="v" style="color:'+col+'">'+st.ok+'</div><div class="l">Corrects</div></div>'
-        +'<div class="comp-stat" style="background:var(--s2)"><div class="v" style="color:var(--b)">'+st.brier+'</div><div class="l">Brier</div></div>'
-        +'<div class="comp-stat" style="background:var(--s2)"><div class="v" style="color:var(--y)">'+st.realRate+'%</div><div class="l">Taux reel</div></div>'
-        +'</div>'
-        +'<div style="display:flex;align-items:center;gap:8px;font-size:.68rem;color:var(--dm)">'
-        +'<span>Pred moy: '+st.predAvg+'%</span>'
-        +'<span style="font-size:.62rem;color:'+(Math.abs(biais)>5?'var(--y)':'var(--g)')+'">'+biaisTxt+'</span>'
-        +(f?'<span style="font-size:.62rem;color:var(--b)">Correction: x'+f+'</span>':'')
-        +'</div>'
-        +'<div class="mkt-bar" style="margin-top:8px"><div class="mkt-fill" style="width:'+st.acc+'%;background:'+col+'"></div></div>'
-        +'</div>';
-    });
+    // Calibration par tranche Over — style .tbl (ancienne version)
+    if(overSt&&overSt.n>=3){
+      var tranches=computeCalibTranches(entries,mkts[0]);
+      html+='<div class="st">CALIBRATION OVER +'+s+'</div>'
+        +'<div class="tbl"><table><tr><th>Pred.</th><th>N</th><th>Vrais+</th><th>Reel</th><th>Ecart</th></tr>';
+      tranches.forEach(function(tr){
+        if(!tr.n)return;
+        var reel=Math.round(tr.ok/tr.n*100),mid=Math.round((tr.min+tr.max)/2),ecart=reel-mid;
+        var ec=(ecart>=0?'+':'')+ecart+'%',ecC=Math.abs(ecart)<=10?'var(--g)':Math.abs(ecart)<=20?'var(--y)':'var(--r)';
+        var cl=reel>=60?'tg':reel>=45?'ty':'tr';
+        html+='<tr><td><b>'+tr.lbl+'</b></td><td>'+tr.n+'</td><td>'+tr.ok+'</td><td class="'+cl+'">'+reel+'%</td><td style="color:'+ecC+'">'+ec+'</td></tr>';
+      });
+      html+='</table></div>';
+    }
 
-  // ---- VUE CALIBRATION ----
-  } else if(fiabView==='calibration'){
-    html+='<div style="font-size:.72rem;color:var(--dm);margin-bottom:12px;line-height:1.6">La calibration montre si les probabilites predites correspondent aux taux reels. Un modele parfait affiche 50% quand le taux reel est 50%, 70% quand le taux reel est 70%, etc.</div>';
-    // Selector de marche
-    html+='<div class="mkt-sel-row">';
-    mkts.slice(0,7).forEach(function(mkt,i){
-      var st=mktStats[mkt.id];
-      if(!st||st.n<3)return;
-      html+='<button class="mkt-sel-btn'+(i===0?' on':'')+'" onclick="showCalibFor(\''+mkt.id+'\',this)">'+mkt.label+'</button>';
-    });
-    html+='</div>';
-    html+='<div id="calibDetail"></div>';
-
-    // Precalcul de toutes les tranches pour injection JS
-    var calibData={};
-    mkts.forEach(function(mkt){
-      if(mktStats[mkt.id]&&mktStats[mkt.id].n>=3){
-        calibData[mkt.id]={
-          tranches:computeCalibTranches(entries,mkt),
-          stats:mktStats[mkt.id],
-          label:mkt.label
-        };
-      }
-    });
-    html+='<script>window._calibData='+JSON.stringify(calibData)+';function showCalibFor(id,btn){document.querySelectorAll(".mkt-sel-btn").forEach(function(b){b.classList.remove("on")});btn.classList.add("on");var d=window._calibData[id];if(!d){document.getElementById("calibDetail").innerHTML="<div style=\'color:var(--dm);padding:20px;text-align:center\'>Pas assez de donnees</div>";return}var c3=d.tranches;var h="<div class=\'st\' style=\'margin-top:10px\'>"+d.label+" ("+d.stats.n+" matchs)</div>";h+="<div class=\'tbl\'><table><tr><th>Pred.</th><th>N</th><th>Vrais</th><th>Reel</th><th>Biais</th><th>Etat</th></tr>";c3.forEach(function(tr){var reel=Math.round(tr.ok/tr.n*100);var mid=Math.round((tr.min+tr.max)/2);var biais=reel-mid;var bs=(biais>=0?"+":"")+biais+"%";var bc=Math.abs(biais)<=10?"var(--g)":Math.abs(biais)<=20?"var(--y)":"var(--r)";var state=Math.abs(biais)<=10?"✓ OK":biais>0?"↑ Sous":"\u2193 Sur";var cl=reel>=60?"tg":reel>=45?"ty":"tr";h+="<tr><td><b>"+tr.lbl+"</b></td><td>"+tr.n+"</td><td>"+tr.ok+"</td><td class=\'"+cl+"\'>"+reel+"%</td><td style=\'color:"+bc+"\'>"+bs+"</td><td style=\'color:"+bc+"\'>"+state+"</td></tr>"});h+="</table></div>";var f='+JSON.stringify(Object.fromEntries(Object.entries(newCalib)))+';if(f[id]){var cv=f[id];var fTxt=cv>1.05?"Sous-predit → facteur x"+cv+" applique":cv<0.95?"Sur-predit → facteur x"+cv+" applique":"Calibration OK (pas de correction)";var fc=cv>1.05?"var(--b)":cv<0.95?"var(--r)":"var(--g)";h+="<div style=\'background:rgba(68,138,255,.06);border:1px solid rgba(68,138,255,.2);border-radius:8px;padding:10px;font-size:.7rem;color:var(--b);margin-top:8px\'>⚙ Calibration: "+fTxt+"</div>"}document.getElementById("calibDetail").innerHTML=h}setTimeout(function(){var first=document.querySelector(".mkt-sel-btn");if(first)first.click()},50);<\/script>';
-
-  // ---- VUE CONVERGENCE ----
-  } else if(fiabView==='convergence'){
-    html+='<div class="st">PRECISION PAR CONVERGENCE SIGNAUX</div>';
-    var convStats=[{lbl:'0 sig',n:0},{lbl:'1/3',n:0},{lbl:'2/3',n:0},{lbl:'3/3',n:0}];
-    var convMktStats={};
-    mkts.forEach(function(mkt){
-      convMktStats[mkt.id]=[{ok:0,n:0},{ok:0,n:0},{ok:0,n:0},{ok:0,n:0}];
-    });
+    // Convergence signaux — style .tbl (ancienne version, tous marchés)
+    var convStats=[{lbl:'0/3',n:0,ok:0},{lbl:'1/3',n:0,ok:0},{lbl:'2/3',n:0,ok:0},{lbl:'3/3',n:0,ok:0}];
     entries.forEach(function(t){
       var c=t.pConv||0;if(c<0||c>3)return;
+      // Sur l'over uniquement pour ce résumé
+      if(t.pPlus===null||t.pPlus===undefined)return;
       convStats[c].n++;
+      if((t.pPlus>=50&&t.rPlus)||(t.pPlus<50&&!t.rPlus))convStats[c].ok++;
+    });
+    html+='<div class="st">CONVERGENCE SIGNAUX (Over +'+s+')</div>'
+      +'<div class="tbl"><table><tr><th>Signaux</th><th>N</th><th>OK</th><th>Taux</th></tr>';
+    convStats.forEach(function(cs){
+      if(!cs.n)return;
+      var p=Math.round(cs.ok/cs.n*100),cl=p>=60?'tg':p>=45?'ty':'tr';
+      html+='<tr><td><b>'+cs.lbl+'</b></td><td>'+cs.n+'</td><td class="'+cl+'">'+cs.ok+'</td><td class="'+cl+'">'+p+'%</td></tr>';
+    });
+    html+='</table></div>';
+
+    // Mises >= 60% — style .sg (ancienne version)
+    var mises=entries.filter(function(t){return t.pPlus!==null&&t.pPlus>=60});
+    var misesGain=mises.filter(function(t){return t.rPlus}).length;
+    var misesAcc=mises.length?Math.round(misesGain/mises.length*100):0;
+    if(mises.length){
+      html+='<div class="sg g2" style="margin-bottom:10px">'
+        +'<div class="sb"><div class="sv" style="color:var(--o)">'+misesAcc+'%</div><div class="sl">Acc. >=60%</div></div>'
+        +'<div class="sb"><div class="sv" style="color:var(--dm)">'+mises.length+'</div><div class="sl">Mises >=60%</div></div>'
+        +'</div>';
+    }
+
+    // Derniers matchs — style ancienne version avec les 4 colonnes
+    html+='<div class="st">DERNIERS MATCHS</div>';
+    entries.slice().reverse().slice(0,20).forEach(function(t){
+      var predBest=t.pV1!==null?(t.pV1>=t.pX&&t.pV1>=t.pV2?'V1':t.pX>=t.pV1&&t.pX>=t.pV2?'X':'V2'):'?';
+      var plusOkM=t.pPlus!==null&&((t.pPlus>=50&&t.rPlus)||(t.pPlus<50&&!t.rPlus));
+      var bttsOkM=t.pBtts!==null&&((t.pBtts>=50&&t.rBtts)||(t.pBtts<50&&!t.rBtts));
+      var v1x2OkM=predBest!=='?'&&predBest===t.rV1x2;
+      html+='<div style="background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;margin-bottom:8px">'
+        +'<div style="display:flex;justify-content:space-between;margin-bottom:5px">'
+        +'<span style="font-size:.75rem;font-weight:700">'+t.home+' - '+t.away+'</span>'
+        +'<span style="font-size:.65rem;color:var(--dm)">'+t.date+'</span></div>'
+        +'<div style="font-size:.65rem;color:var(--dm);margin-bottom:6px">'+t.league+' · +'+t.seuil+'</div>'
+        +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px">'
+        +'<div style="background:var(--s2);border-radius:6px;padding:6px 4px;text-align:center">'
+        +'<div style="font-size:.8rem;font-weight:900">'+t.rH+'-'+t.rA+'</div>'
+        +'<div style="font-size:.55rem;color:var(--dm);margin-top:2px">SCORE</div></div>'
+        +'<div style="background:var(--s2);border-radius:6px;padding:6px 4px;text-align:center;border:1px solid '+(plusOkM?'var(--g)':'var(--r)')+';">'
+        +'<div style="font-size:.8rem;font-weight:900;color:'+(plusOkM?'var(--g)':'var(--r)')+'">'+( t.pPlus!==null?t.pPlus+'%':'?')+'</div>'
+        +'<div style="font-size:.55rem;color:var(--dm);margin-top:2px">+'+t.seuil+' '+(t.rPlus?'✓':'✗')+'</div></div>'
+        +'<div style="background:var(--s2);border-radius:6px;padding:6px 4px;text-align:center;border:1px solid '+(v1x2OkM?'var(--g)':'var(--r)')+';">'
+        +'<div style="font-size:.8rem;font-weight:900;color:'+(v1x2OkM?'var(--g)':'var(--r)')+'">'+predBest+'</div>'
+        +'<div style="font-size:.55rem;color:var(--dm);margin-top:2px">1X2 '+t.rV1x2+'</div></div>'
+        +'<div style="background:var(--s2);border-radius:6px;padding:6px 4px;text-align:center;border:1px solid '+(bttsOkM?'var(--g)':'var(--r)')+';">'
+        +'<div style="font-size:.8rem;font-weight:900;color:'+(bttsOkM?'var(--g)':'var(--r)')+'">'+( t.pBtts!==null?t.pBtts+'%':'?')+'</div>'
+        +'<div style="font-size:.55rem;color:var(--dm);margin-top:2px">BTTS '+(t.rBtts?'✓':'✗')+'</div></div>'
+        +'</div>'
+        +'<div style="font-size:.62rem;color:var(--dm);margin-top:5px">Conf. '+t.pConf+'% · '+(t.pConv||0)+'/'+(t.pNbSig||0)+' signaux'+(t.auto?' · auto':'')+'</div>'
+        +'</div>';
+    });
+
+  // ===== VUE MARCHES =====
+  } else if(fiabView==='marches'){
+    html+='<div class="st">LES 14 MARCHES</div>';
+    mkts.forEach(function(mkt){
+      var st=mktStats[mkt.id];
+      var col=st&&st.acc!==null?(st.acc>=60?'var(--g)':st.acc>=45?'var(--y)':'var(--r)'):'var(--dm)';
+      var bgc=st&&st.acc!==null?(st.acc>=60?'bgG':st.acc>=45?'bgY':'bgR'):'';
+      var f=newCalib[mkt.id];
+      var biais=st&&st.predAvg&&st.realRate?st.predAvg-st.realRate:null;
+      html+='<div class="lc">'
+        +'<div class="lh"><div>'
+        +'<div class="ln">'+mkt.label+'</div>'
+        +'<div class="lsu">'+(st&&st.n>=3
+          ?st.ok+'/'+st.n+' corrects · Brier: '+st.brier+' · Reel: '+st.realRate+'% · Pred moy: '+st.predAvg+'%'
+          :'Pas assez de donnees (min 3)')+'</div></div>'
+        +'<div style="display:flex;gap:6px;align-items:center">'
+        +(f?(f>1.05?'<span style="font-size:.6rem;color:var(--b);padding:2px 6px;background:rgba(68,138,255,.08);border-radius:4px;border:1px solid rgba(68,138,255,.3)">sous-pred</span>'
+            :f<0.95?'<span style="font-size:.6rem;color:var(--r);padding:2px 6px;background:rgba(255,64,96,.08);border-radius:4px;border:1px solid rgba(255,64,96,.3)">sur-pred</span>'
+            :'<span style="font-size:.6rem;color:var(--g);padding:2px 6px;background:rgba(0,230,118,.08);border-radius:4px;border:1px solid rgba(0,230,118,.3)">OK</span>'):'')
+        +(st&&st.acc!==null?'<div class="lbg '+bgc+'">'+st.acc+'%</div>'
+          :'<div class="lbg" style="background:var(--s2);color:var(--dm)">?</div>')
+        +'</div></div>'
+        +(st&&st.acc!==null?'<div class="lpb"><div class="lpf" style="width:'+st.acc+'%;background:'+col+'"></div></div>':'')
+        +(biais!==null?'<div style="font-size:.66rem;color:'+(Math.abs(biais)>5?'var(--y)':'var(--dm)')+'">Biais: '+(biais>=0?'+':'')+biais+'%'+(Math.abs(biais)>5?' ⚠ correction x'+f+' appliquee':' ✓ bon calibrage')+'</div>':'')
+        +'</div>';
+    });
+
+  // ===== VUE CALIBRATION =====
+  } else if(fiabView==='calibration'){
+    html+='<div style="font-size:.72rem;color:var(--dm);margin-bottom:10px;line-height:1.6">Montre si les probabilites predites correspondent aux taux reels. Ideal : prediction 60% = realite 60%.</div>';
+    html+='<div class="mkt-sel-row" id="calibSelRow">';
+    mkts.forEach(function(mkt){
+      var st=mktStats[mkt.id];if(!st||st.n<3)return;
+      html+='<button class="mkt-sel-btn" onclick="showCalibFor(\''+mkt.id+'\',this)">'+mkt.label+'</button>';
+    });
+    html+='</div><div id="calibDetail"></div>';
+    var calibData={};
+    mkts.forEach(function(mkt){
+      var st=mktStats[mkt.id];
+      if(st&&st.n>=3)calibData[mkt.id]={tranches:computeCalibTranches(entries,mkt),stats:st,label:mkt.label};
+    });
+    html+='<script>window._CD='+JSON.stringify(calibData)+';window._CF='+JSON.stringify(newCalib)+';'
+      +'function showCalibFor(id,btn){'
+        +'document.querySelectorAll(".mkt-sel-btn").forEach(function(b){b.classList.remove("on")});btn.classList.add("on");'
+        +'var d=window._CD[id];if(!d){document.getElementById("calibDetail").innerHTML="<div style=\'color:var(--dm);padding:20px;text-align:center\'>Pas assez de donnees</div>";return}'
+        +'var h="<div class=\'st\' style=\'margin-top:10px\'>"+d.label+" ("+d.stats.n+" matchs)</div>";'
+        +'h+="<div class=\'tbl\'><table><tr><th>Pred.</th><th>N</th><th>Vrais</th><th>Reel</th><th>Ecart</th><th>Etat</th></tr>";'
+        +'d.tranches.forEach(function(tr){var reel=Math.round(tr.ok/tr.n*100);var mid=Math.round((tr.min+tr.max)/2);var biais=reel-mid;'
+          +'var bs=(biais>=0?"+":"")+biais+"%";var bc=Math.abs(biais)<=10?"var(--g)":Math.abs(biais)<=20?"var(--y)":"var(--r)";'
+          +'var state=Math.abs(biais)<=10?"✓ OK":biais>0?"↑ Sous":"↓ Sur";'
+          +'var cl=reel>=60?"tg":reel>=45?"ty":"tr";'
+          +'h+="<tr><td><b>"+tr.lbl+"</b></td><td>"+tr.n+"</td><td>"+tr.ok+"</td><td class=\'"+cl+"\'>"+reel+"%</td><td style=\'color:"+bc+"\'>"+bs+"</td><td style=\'color:"+bc+"\'>"+state+"</td></tr>"});'
+        +'h+="</table></div>";'
+        +'var f=window._CF[id];if(f){var fTxt=f>1.05?"Sous-predit → correction x"+f+" appliquee":f<0.95?"Sur-predit → correction x"+f+" appliquee":"Calibration OK";'
+          +'var fc=f>1.05?"var(--b)":f<0.95?"var(--r)":"var(--g)";'
+          +'h+="<div style=\'background:rgba(0,0,0,.15);border:1px solid var(--bd);border-radius:8px;padding:10px;font-size:.7rem;margin-top:8px;color:"+fc+"\'>⚙ "+fTxt+"</div>";}'
+        +'document.getElementById("calibDetail").innerHTML=h;}'
+      +'setTimeout(function(){var f=document.querySelector(".mkt-sel-btn");if(f)f.click()},50);'
+      +'<\/script>';
+
+  // ===== VUE CONVERGENCE — 14 marches COMPLETS =====
+  } else if(fiabView==='convergence'){
+    var convMkt={};
+    mkts.forEach(function(mkt){convMkt[mkt.id]=[{ok:0,n:0},{ok:0,n:0},{ok:0,n:0},{ok:0,n:0}]});
+    entries.forEach(function(t){
+      var c=t.pConv||0;if(c<0||c>3)return;
       mkts.forEach(function(mkt){
         var prob=t[mkt.pKey];if(prob===null||prob===undefined)return;
-        var real;
-        if(mkt.rVal!==undefined)real=(t[mkt.rKey]===mkt.rVal)?1:0;
-        else if(mkt.positive)real=t[mkt.rKey]?1:0;
-        else real=t[mkt.rKey]?0:1;
-        convMktStats[mkt.id][c].n++;
-        if((prob>=50&&real)||(prob<50&&!real))convMktStats[mkt.id][c].ok++;
+        var real=getRealVal(t,mkt);
+        convMkt[mkt.id][c].n++;
+        if((prob>=50&&real)||(prob<50&&!real))convMkt[mkt.id][c].ok++;
       });
     });
-    // Tableau convergence par marche principal
-    html+='<div class="tbl" style="margin-bottom:14px"><table><tr><th>Marche</th><th>0 sig</th><th>1/3</th><th>2/3</th><th>3/3 ⚡</th></tr>';
-    mkts.slice(0,8).forEach(function(mkt){
+    html+='<div class="st">PRECISION PAR CONVERGENCE — 14 MARCHES</div>';
+    html+='<div class="tbl"><table><tr><th>Marche</th><th>0 sig</th><th>1/3</th><th>2/3</th><th>3/3 ⚡</th></tr>';
+    mkts.forEach(function(mkt){
+      if(!convMkt[mkt.id].some(function(cs){return cs.n>0}))return;
       var row='<tr><td><b>'+mkt.label+'</b></td>';
-      convMktStats[mkt.id].forEach(function(cs){
+      convMkt[mkt.id].forEach(function(cs){
         if(!cs.n){row+='<td style="color:var(--dm)">-</td>';return}
-        var p=Math.round(cs.ok/cs.n*100);
-        var cl=p>=65?'tg':p>=50?'ty':'tr';
+        var p=Math.round(cs.ok/cs.n*100),cl=p>=65?'tg':p>=50?'ty':'tr';
         row+='<td class="'+cl+'">'+p+'%<br><span style="font-size:.58rem;color:var(--dm)">'+cs.n+'m</span></td>';
       });
       html+=row+'</tr>';
     });
     html+='</table></div>';
 
-    // Graphe progression par convergence (tous marches confondus)
-    html+='<div class="st">AMELIORATION PAR SIGNAL</div>';
+    // Progression globale — style .bars (ancienne version)
     var convGlobal=[{ok:0,n:0},{ok:0,n:0},{ok:0,n:0},{ok:0,n:0}];
     entries.forEach(function(t){
       var c=t.pConv||0;if(c<0||c>3)return;
       mkts.forEach(function(mkt){
         var prob=t[mkt.pKey];if(prob===null||prob===undefined)return;
-        var real;
-        if(mkt.rVal!==undefined)real=(t[mkt.rKey]===mkt.rVal)?1:0;
-        else if(mkt.positive)real=t[mkt.rKey]?1:0;
-        else real=t[mkt.rKey]?0:1;
-        convGlobal[c].n++;
+        var real=getRealVal(t,mkt);convGlobal[c].n++;
         if((prob>=50&&real)||(prob<50&&!real))convGlobal[c].ok++;
       });
     });
-    var labels=['0','1/3','2/3','3/3'];
-    var mx=Math.max.apply(null,convGlobal.map(function(x){return x.n?Math.round(x.ok/x.n*100):0}));
-    html+='<div class="bars">';
+    html+='<div class="st">PRECISION GLOBALE PAR NIVEAU</div><div class="bars">';
+    var labels=['0 signal','1/3 signaux','2/3 signaux','3/3 signaux'];
+    var mx=Math.max.apply(null,convGlobal.map(function(x){return x.n?Math.round(x.ok/x.n*100):0}))||100;
     convGlobal.forEach(function(cs,i){
       if(!cs.n)return;
-      var p=Math.round(cs.ok/cs.n*100);
-      var col=p>=65?'var(--g)':p>=50?'var(--y)':'var(--r)';
-      html+='<div class="br2">'
-        +'<div class="bn">'+labels[i]+' ('+cs.n+' pred.)</div>'
-        +'<div class="bb2"><div class="bf" style="width:'+(mx?p/mx*100:p)+'%;background:'+col+'">'+(p>=20?p+'%':'')+'</div><div class="bv"></div></div>'
-        +'</div>';
+      var p=Math.round(cs.ok/cs.n*100),col=p>=65?'var(--g)':p>=50?'var(--y)':'var(--r)';
+      html+='<div class="br2"><div class="bn">'+labels[i]+' ('+cs.n+')</div>'
+        +'<div class="bb2"><div class="bf" style="width:'+(p/mx*100)+'%;background:'+col+'">'+(p>=20?p+'%':'')+'</div>'
+        +'<div class="bv"></div></div></div>';
     });
     html+='</div>';
 
-  // ---- VUE ROI ----
+  // ===== VUE ROI =====
   } else if(fiabView==='roi'){
-    html+='<div class="st">SIMULATION ROI PAR MARCHE</div>';
-    html+='<div style="font-size:.7rem;color:var(--dm);margin-bottom:12px;line-height:1.5">Simule une mise de 1€ sur chaque prediction ≥ 50%. Utilise la cote estimee (1/prob × 0.9). Montre quels marches sont reellement rentables.</div>';
+    html+='<div class="st">SIMULATION ROI — 1€ PAR MISE ≥50%</div>';
+    html+='<div style="font-size:.7rem;color:var(--dm);margin-bottom:10px;line-height:1.5">Simule 1€ mise sur chaque prediction ≥ 50%. Cote estimee = 1/prob × 0.9. Montre quels marches sont reellement rentables.</div>';
     var roiRows=mkts.map(function(mkt){
-      var st=mktStats[mkt.id];
-      if(!st||st.acc===null||st.n<5)return null;
+      var st=mktStats[mkt.id];if(!st||st.acc===null||st.n<5)return null;
       var valid=entries.filter(function(t){return t[mkt.pKey]!==null&&t[mkt.pKey]>=50});
-      var gain=0,n=valid.length;
+      var gain=0;
       valid.forEach(function(t){
-        var prob=t[mkt.pKey]/100;
-        var cote=Math.min(10,Math.max(1.1,1/prob*0.9));
-        var real;
-        if(mkt.rVal!==undefined)real=(t[mkt.rKey]===mkt.rVal)?1:0;
-        else if(mkt.positive)real=t[mkt.rKey]?1:0;
-        else real=t[mkt.rKey]?0:1;
+        var prob=t[mkt.pKey]/100,cote=Math.min(10,Math.max(1.1,1/prob*0.9)),real=getRealVal(t,mkt);
         gain+=real?cote-1:-1;
       });
-      var roi=n?Math.round(gain/n*100)/100:0;
-      return{mkt:mkt,n:n,gain:Math.round(gain*100)/100,roi:roi,st:st};
+      var roi=valid.length?Math.round(gain/valid.length*100)/100:0;
+      return{mkt:mkt,n:valid.length,gain:Math.round(gain*100)/100,roi:roi,st:st};
     }).filter(Boolean).sort(function(a,b){return b.roi-a.roi});
 
-    html+='<div class="tbl"><table><tr><th>Marche</th><th>Mises</th><th>Gain/p</th><th>Prec.</th><th>ROI</th></tr>';
+    html+='<div class="tbl"><table><tr><th>Marche</th><th>Mises</th><th>Gain tot.</th><th>Prec.</th><th>ROI/mise</th></tr>';
     roiRows.forEach(function(row){
       var col=row.roi>0?'var(--g)':row.roi>-0.1?'var(--y)':'var(--r)';
-      var roiStr=(row.roi>=0?'+':'')+row.roi+'€';
-      html+='<tr><td><b>'+row.mkt.label+'</b></td><td>'+row.n+'</td><td style="color:'+col+'">'+(row.gain>=0?'+':'')+row.gain+'€</td><td class="'+(row.st.acc>=65?'tg':row.st.acc>=50?'ty':'tr')+'">'+row.st.acc+'%</td><td style="color:'+col+';font-weight:700">'+roiStr+'</td></tr>';
+      html+='<tr><td><b>'+row.mkt.label+'</b></td><td>'+row.n+'</td>'
+        +'<td style="color:'+col+'">'+(row.gain>=0?'+':'')+row.gain+'€</td>'
+        +'<td class="'+(row.st.acc>=60?'tg':row.st.acc>=45?'ty':'tr')+'">'+row.st.acc+'%</td>'
+        +'<td style="color:'+col+';font-weight:700">'+(row.roi>=0?'+':'')+row.roi+'€</td></tr>';
     });
     html+='</table></div>';
 
-    // Resumé ROI
-    var roiPos=roiRows.filter(function(r){return r.roi>0});
-    var roiNeg=roiRows.filter(function(r){return r.roi<=0});
-    html+='<div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">'
-      +'<div class="sb" style="border-color:var(--g);background:rgba(0,230,118,.04)"><div class="sv" style="color:var(--g)">'+roiPos.length+'</div><div class="sl">Marches rentables</div></div>'
-      +'<div class="sb" style="border-color:var(--r);background:rgba(255,64,96,.03)"><div class="sv" style="color:var(--r)">'+roiNeg.length+'</div><div class="sl">Marches perdants</div></div>'
+    var roiPos=roiRows.filter(function(r){return r.roi>0}),roiNeg=roiRows.filter(function(r){return r.roi<=0});
+    html+='<div class="sg g2" style="margin-top:10px">'
+      +'<div class="sb" style="border-color:rgba(0,230,118,.3)"><div class="sv" style="color:var(--g)">'+roiPos.length+'</div><div class="sl">Marches + ROI</div></div>'
+      +'<div class="sb" style="border-color:rgba(255,64,96,.3)"><div class="sv" style="color:var(--r)">'+roiNeg.length+'</div><div class="sl">Marches - ROI</div></div>'
       +'</div>';
     if(roiPos.length){
-      var bestRoi=roiPos[0];
-      html+='<div style="margin-top:10px;padding:10px 14px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2);border-radius:10px;font-size:.78rem">'
-        +'<span style="font-weight:700;color:var(--g)">⭐ Meilleur marche: '+bestRoi.mkt.label+'</span>'
-        +'<span style="float:right;color:var(--y);font-weight:900">+'+bestRoi.roi+'€/mise</span>'
-        +'</div>';
+      var best=roiPos[0];
+      html+='<div class="pr" style="margin-top:8px"><div class="pr-l">'
+        +'<span style="color:var(--dm)">⭐ Meilleur: '+best.mkt.label+'</span>'
+        +'<span class="pr-p">+'+(best.roi>=0?best.roi:0)+'€/mise</span></div>'
+        +'<div class="pr-t"><div class="pr-f" style="width:'+Math.min(100,best.st.acc)+'%"></div></div></div>';
     }
   }
 
-  // Actions export/efface
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">'
+  // Actions export/efface/import — style ancienne version
+  html+='<div class="sg g2" style="margin-top:14px">'
     +'<button class="bsm" onclick="exportTrack()" style="padding:10px;text-align:center">Exporter JSON</button>'
     +'<button class="bsm" onclick="clearTrack()" style="padding:10px;text-align:center;color:var(--r);border-color:var(--r)">Effacer tracking</button>'
     +'</div>';
 
-  out.innerHTML=html;
-  out.style.display='block';
+  var out=document.getElementById('fiabOut');out.innerHTML=html;out.style.display='block';
 }
 
 function exportTrack(){
@@ -1958,6 +1513,7 @@ function clearTrack(){
   document.getElementById('fiabOut').style.display='none';
   showAl('fiabAl','in','Tracking efface');setTimeout(function(){hideAl('fiabAl')},2500);
 }
+
 
 // ---- INIT ----
 buildTz();initCfg();majDB();preset(2);
