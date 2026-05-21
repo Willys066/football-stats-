@@ -15,103 +15,69 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font);background:var(--bg);color:var(--tx);min-height:100vh;font-size:16px}
 .app{max-width:540px;margin:0 auto;padding:0 12px 100px}
-
-/* HEADER */
-.hdr{text-align:center;padding:22px 0 14px;position:relative}
+.hdr{text-align:center;padding:22px 0 14px}
 .hdr h1{font-size:2.4rem;font-weight:900;letter-spacing:6px;color:var(--tx);text-transform:uppercase;line-height:1}
 .hdr h1 span{color:var(--g)}
 .hdr p{color:var(--dm);font-size:.62rem;letter-spacing:3px;text-transform:uppercase;margin-top:5px;font-family:var(--mono)}
 .hdr-line{height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent);margin-top:12px;opacity:.4}
-
-/* TABS */
-.tabs{display:grid;grid-template-columns:repeat(7,1fr);background:var(--s1);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:14px;gap:0}
+.tabs{display:grid;grid-template-columns:repeat(7,1fr);background:var(--s1);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:14px}
 .tab{padding:10px 2px;text-align:center;cursor:pointer;font-size:.55rem;font-weight:700;color:var(--dm);background:transparent;border:none;letter-spacing:.5px;text-transform:uppercase;font-family:var(--font);border-right:1px solid var(--bd);transition:all .2s}
 .tab:last-child{border-right:none}
 .tab.on{background:var(--s3);color:var(--g);border-bottom:2px solid var(--g)}
 .tab:hover:not(.on){color:var(--tx)}
-
-/* PANELS */
 .panel{display:none}.panel.on{display:block}
-
-/* CARDS */
 .card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:12px}
 .clbl{font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--dm);margin-bottom:8px;display:block;font-family:var(--mono)}
-
-/* INPUTS */
 .inp{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:9px 12px;color:var(--tx);font-size:.82rem;outline:none;font-family:var(--font)}
-.inp:focus{border-color:var(--g)}
-.inp::placeholder{color:var(--dm)}
+.inp:focus{border-color:var(--g)}.inp::placeholder{color:var(--dm)}
 select.inp{cursor:pointer}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .lsm{font-size:.6rem;color:var(--dm);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase;font-family:var(--mono)}
-
-/* BUTTONS */
 .btn{width:100%;padding:12px;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:.9rem;letter-spacing:2px;font-family:var(--font);text-transform:uppercase;transition:all .15s}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn:not(:disabled):hover{filter:brightness(1.1);transform:translateY(-1px)}
-.bg{background:var(--g);color:#000}.bb{background:var(--b);color:#fff}.br{background:var(--r);color:#fff}.bo{background:var(--o);color:#000}.bp{background:var(--p);color:#fff}
+.bg{background:var(--g);color:#000}.bb{background:var(--b);color:#fff}.br{background:var(--r);color:#fff}.bp{background:var(--p);color:#fff}
 .bsm{padding:8px 14px;font-size:.72rem;font-weight:700;border-radius:7px;border:1px solid var(--bd);background:rgba(255,255,255,.04);color:var(--dm);cursor:pointer;font-family:var(--font);letter-spacing:.5px;transition:all .2s;text-transform:uppercase}
 .bsm:hover{border-color:var(--g);color:var(--g)}
-
-/* CHIPS */
 .chips{display:flex;gap:6px}
 .chip{flex:1;padding:8px 4px;background:var(--bg);border:1px solid var(--bd);border-radius:7px;text-align:center;cursor:pointer;font-weight:700;font-size:.82rem;color:var(--dm);transition:all .2s}
 .chip.on{background:rgba(0,229,160,.1);border-color:var(--g);color:var(--g)}
 .chip:hover:not(.on){border-color:var(--bd2);color:var(--tx)}
-
-/* STAT BOXES */
 .sg{display:grid;gap:7px;margin-bottom:10px}
 .g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr 1fr}
 .sb{background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:11px 6px;text-align:center}
 .sv{font-size:1.5rem;font-weight:900;line-height:1;font-family:var(--font)}
 .sl{font-size:.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dm);margin-top:3px;font-family:var(--mono)}
-
-/* PROGRESS */
 .pr{background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:12px;margin-bottom:10px}
 .pr-l{display:flex;justify-content:space-between;margin-bottom:7px;font-size:.75rem}
 .pr-p{font-weight:900;font-size:1.1rem;color:var(--y);font-family:var(--font)}
 .pr-t{height:6px;background:var(--dm2);border-radius:3px;overflow:hidden}
 .pr-f{height:100%;background:linear-gradient(90deg,var(--g),var(--teal));border-radius:3px;transition:width .8s}
-
-/* ALERTS */
 .al{display:none;border-radius:8px;padding:10px 13px;font-size:.78rem;margin-bottom:10px;line-height:1.5;font-family:var(--mono)}
 .al.on{display:block}
 .aok{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.35);color:var(--g)}
 .aer{background:rgba(255,61,90,.08);border:1px solid rgba(255,61,90,.35);color:var(--r)}
 .ain{background:rgba(61,155,255,.08);border:1px solid rgba(61,155,255,.35);color:var(--b)}
-
-/* LOADER */
 .ld{display:none;text-align:center;padding:28px}.ld.on{display:block}
 .sp{width:30px;height:30px;border:2px solid var(--bd);border-top-color:var(--g);border-radius:50%;animation:sp .7s linear infinite;margin:0 auto 10px}
 @keyframes sp{to{transform:rotate(360deg)}}
 .ld p{color:var(--dm);font-size:.78rem;font-family:var(--mono)}
 .lb{height:3px;background:var(--bd);border-radius:2px;margin-top:8px;overflow:hidden}
 .lf{height:100%;background:linear-gradient(90deg,var(--g),var(--teal));border-radius:2px;transition:width .3s}
-
-/* SECTION TITLE */
 .st{font-weight:700;font-size:.58rem;letter-spacing:3px;color:var(--dm);margin:16px 0 8px;display:flex;align-items:center;gap:8px;text-transform:uppercase;font-family:var(--mono)}
 .st::after{content:"";flex:1;height:1px;background:var(--bd)}
-
-/* TABLE */
 .tbl{overflow-x:auto;border:1px solid var(--bd);border-radius:9px;margin-bottom:10px}
 table{width:100%;border-collapse:collapse;font-size:.72rem}
 th{background:var(--s2);padding:7px 9px;text-align:left;font-size:.56rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dm);font-weight:700;font-family:var(--mono)}
 td{padding:7px 9px;border-top:1px solid var(--bd)}
 tr:hover td{background:var(--s2)}
 .tg{color:var(--g);font-weight:700}.ty{color:var(--y);font-weight:700}.tr{color:var(--r);font-weight:700}
-
-/* BARS */
 .bars{display:flex;flex-direction:column;gap:5px}
 .br2{display:flex;align-items:center;gap:8px;font-size:.7rem}
 .bn{width:120px;text-align:right;color:var(--dm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0}
-.bb2{flex:1;height:18px;background:var(--s2);border-radius:3px;overflow:hidden;position:relative}
+.bb2{flex:1;height:18px;background:var(--s2);border-radius:3px;overflow:hidden}
 .bf{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:5px;font-size:.62rem;font-weight:700;color:#000}
-.bv{position:absolute;right:5px;top:50%;transform:translateY(-50%);font-size:.62rem;color:var(--dm)}
-
-/* LOG */
 .log{background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:10px;max-height:150px;overflow-y:auto;font-size:.64rem;font-family:var(--mono);margin-top:10px;display:none}
-
-/* LEAGUE CARD */
 .lc{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px}
 .ln{font-weight:700;font-size:.88rem}.lsu{font-size:.65rem;color:var(--dm);margin-top:2px}
@@ -119,11 +85,6 @@ tr:hover td{background:var(--s2)}
 .bgG{background:rgba(0,229,160,.12);color:var(--g)}.bgY{background:rgba(255,199,44,.12);color:var(--y)}.bgR{background:rgba(255,61,90,.12);color:var(--r)}
 .lpb{height:4px;background:var(--s2);border-radius:3px;overflow:hidden;margin-bottom:9px}
 .lpf{height:100%;border-radius:3px;transition:width .6s}
-.ls3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
-.ls{background:var(--s2);border-radius:7px;padding:7px 4px;text-align:center}
-.ls .v{font-weight:900;font-size:1rem}.ls .l{font-size:.54rem;letter-spacing:1px;text-transform:uppercase;color:var(--dm);margin-top:2px}
-
-/* MATCH CARDS */
 .mc{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px;position:relative;overflow:hidden}
 .mc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
 .live::before{background:var(--r);animation:pu .8s infinite}.soon::before{background:var(--y)}.done::before{background:var(--dm)}
@@ -135,14 +96,6 @@ tr:hover td{background:var(--s2)}
 .mte{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
 .tn{flex:1;font-weight:700;font-size:.86rem;line-height:1.2}.th{text-align:left}.ta{text-align:right}
 .msc{text-align:center;font-weight:900;font-size:1.4rem;letter-spacing:2px;background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:5px 11px;flex-shrink:0}
-
-/* PREDICTION MINI */
-.pd{background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:6px 3px;text-align:center;position:relative;overflow:hidden}
-.pd.best{border-color:var(--g);background:rgba(0,229,160,.07)}.pd.good{border-color:var(--y);background:rgba(255,199,44,.05)}
-.pp{font-weight:900;font-size:.88rem;line-height:1}.pl{font-size:.52rem;letter-spacing:.5px;text-transform:uppercase;color:var(--dm);margin-top:2px;font-family:var(--mono)}
-.pb{height:2px;border-radius:1px;margin-top:3px}
-
-/* SIGNALS */
 .sig-row{display:flex;gap:4px;margin-bottom:7px;flex-wrap:wrap}
 .sig{padding:2px 7px;border-radius:5px;font-size:.6rem;font-weight:700;letter-spacing:.5px;font-family:var(--mono)}
 .sig-g{background:rgba(0,229,160,.1);color:var(--g);border:1px solid rgba(0,229,160,.25)}
@@ -158,14 +111,10 @@ tr:hover td{background:var(--s2)}
 .conf-track{flex:1;height:3px;background:var(--s2);border-radius:2px;overflow:hidden}
 .conf-fill{height:100%;border-radius:2px;transition:width .6s}
 .conf-lbl{font-size:.6rem;color:var(--dm);white-space:nowrap;font-family:var(--mono)}
-
-/* MATCH TAB SELECTOR (marché) */
 .mkt-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
 .mkt-tab{padding:6px 11px;font-size:.66rem;font-weight:700;border-radius:7px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:var(--font);letter-spacing:.5px;text-transform:uppercase;transition:all .2s}
 .mkt-tab.on{background:rgba(0,229,160,.1);border-color:var(--g);color:var(--g)}
 .mkt-tab:hover:not(.on){color:var(--tx);border-color:var(--bd2)}
-
-/* LEAGUE GROUPING */
 .lg-group{margin-bottom:12px;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
 .lg-header{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;background:var(--s2);cursor:pointer;gap:8px;transition:background .2s}
 .lg-header:hover{background:var(--s3)}
@@ -174,14 +123,11 @@ tr:hover td{background:var(--s2)}
 .lg-country{font-size:.62rem;color:var(--dm);font-family:var(--mono)}
 .lg-badges{display:flex;gap:6px;align-items:center;flex-shrink:0}
 .lg-nb{font-size:.64rem;color:var(--dm);font-family:var(--mono)}
-.lg-stat{padding:3px 8px;border-radius:5px;font-size:.7rem;font-weight:900}
 .lg-warn{font-size:.6rem;color:var(--y);background:rgba(255,199,44,.08);border:1px solid rgba(255,199,44,.2);border-radius:5px;padding:3px 7px;font-family:var(--mono)}
 .lg-body{display:none;padding:0 8px 8px 8px;background:var(--s1)}
 .lg-body.open{display:block}
 .lg-arrow{color:var(--dm);font-size:.8rem;transition:transform .2s;flex-shrink:0}
 .lg-header.open .lg-arrow{transform:rotate(90deg)}
-
-/* COMPETITION CARDS */
 .comp-card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:11px 13px;margin-bottom:8px}
 .comp-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:8px}
 .comp-name{font-weight:700;font-size:.84rem}
@@ -198,8 +144,6 @@ tr:hover td{background:var(--s2)}
 .sort-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
 .sort-btn{padding:5px 9px;font-size:.62rem;font-weight:700;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:var(--font);text-transform:uppercase;transition:all .2s}
 .sort-btn.on{border-color:var(--g);color:var(--g);background:rgba(0,229,160,.06)}
-
-/* TICKETS */
 .tk-card{background:var(--s1);border:2px solid var(--bd);border-radius:12px;padding:13px;margin-bottom:11px}
 .tk-card.best{border-color:var(--g);background:rgba(0,229,160,.03)}.tk-card.good{border-color:var(--y);background:rgba(255,199,44,.02)}
 .tk-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
@@ -213,35 +157,24 @@ tr:hover td{background:var(--s2)}
 .tk-result-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:7px}
 .tk-stat{background:var(--s2);border-radius:7px;padding:5px 3px;text-align:center;font-size:.68rem}
 .tk-stat .v{font-weight:900;font-size:.9rem;font-family:var(--font)}
-
-/* CONV FILTER */
 .conv-filter-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
 .conv-f-btn{padding:5px 11px;font-size:.68rem;font-weight:700;border-radius:7px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:var(--font);text-transform:uppercase;transition:all .2s}
 .conv-f-btn.on{background:rgba(0,229,160,.08);border-color:var(--g);color:var(--g)}
 .conv-f-btn.flash{background:rgba(255,199,44,.06);border-color:rgba(255,199,44,.3);color:var(--y)}
-
-/* FIAB TABS */
 .fiab-tabs{display:flex;background:var(--s1);border:1px solid var(--bd);border-radius:9px;overflow:hidden;margin-bottom:12px}
 .fiab-tab{flex:1;padding:8px 2px;text-align:center;cursor:pointer;font-size:.54rem;font-weight:700;color:var(--dm);background:transparent;border:none;font-family:var(--font);letter-spacing:.5px;text-transform:uppercase;transition:all .2s}
 .fiab-tab.on{background:var(--s3);color:var(--g)}
-
-/* WARN BANNER */
 .warn-banner{background:rgba(255,199,44,.06);border:1px solid rgba(255,199,44,.25);border-radius:7px;padding:9px 12px;font-size:.68rem;color:var(--y);margin-bottom:10px;line-height:1.5;font-family:var(--mono)}
 .info-api{background:rgba(61,155,255,.06);border:1px solid rgba(61,155,255,.25);border-radius:9px;padding:11px 13px;font-size:.7rem;color:var(--b);margin-bottom:11px;line-height:1.6}
 .info-api strong{color:var(--tx)}
-
-/* MODAL */
 .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:flex-end;justify-content:center}
 .mo.on{display:flex}
 .mb{background:var(--s1);border:1px solid var(--bd);border-top:2px solid var(--g);border-radius:16px 16px 0 0;padding:22px;width:100%;max-width:540px}
 .mt2{font-weight:900;font-size:1rem;margin-bottom:14px;letter-spacing:.5px}
-
-/* MARKET DETAIL in match */
-.mkt-detail{border-radius:8px;overflow:hidden;margin-top:8px}
 .mkt-section{margin-bottom:8px}
 .mkt-section-title{font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:var(--dm);margin-bottom:5px;font-family:var(--mono);padding:4px 0;border-bottom:1px solid var(--bd2)}
 .mkt-grid{display:grid;gap:4px}
-.g6{grid-template-columns:repeat(6,1fr)}.g5{grid-template-columns:repeat(5,1fr)}.g4r{grid-template-columns:repeat(4,1fr)}.g3r{grid-template-columns:repeat(3,1fr)}
+.g6{grid-template-columns:repeat(6,1fr)}.g4r{grid-template-columns:repeat(4,1fr)}.g3r{grid-template-columns:repeat(3,1fr)}
 .mkt-box{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:5px 3px;text-align:center;position:relative;overflow:hidden}
 .mkt-box.hi{border-color:var(--g);background:rgba(0,229,160,.07)}
 .mkt-box.mid{border-color:var(--y);background:rgba(255,199,44,.05)}
@@ -249,37 +182,21 @@ tr:hover td{background:var(--s2)}
 .mkt-prob{font-weight:900;font-size:.82rem;line-height:1;font-family:var(--font)}
 .mkt-lbl{font-size:.5rem;letter-spacing:.5px;text-transform:uppercase;color:var(--dm);margin-top:1px;font-family:var(--mono)}
 .mkt-bar{height:2px;border-radius:1px;margin-top:3px}
-.mkt-ctx{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
-.mkt-ctx-tag{font-size:.55rem;padding:1px 5px;border-radius:4px;font-family:var(--mono);background:var(--dm2);color:var(--dm)}
-.mkt-ctx-tag.g{background:rgba(0,229,160,.08);color:var(--g)}
-.mkt-ctx-tag.y{background:rgba(255,199,44,.07);color:var(--y)}
-.mkt-ctx-tag.r{background:rgba(255,61,90,.07);color:var(--r)}
 .dominant-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:.62rem;font-weight:700;background:rgba(0,229,160,.12);border:1px solid rgba(0,229,160,.3);color:var(--g);font-family:var(--mono);margin-bottom:7px}
-
-/* MR = result */
 .mr{background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:8px;margin-top:6px}
 .rr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-size:.74rem}
 .rr:last-child{margin-bottom:0}
-
-/* CALIB */
 .calib-badge{display:inline-flex;align-items:center;padding:1px 5px;border-radius:4px;font-size:.56rem;font-weight:700;font-family:var(--mono)}
 .cb-ok{background:rgba(0,229,160,.08);color:var(--g);border:1px solid rgba(0,229,160,.25)}
-.cb-hi{background:rgba(255,61,90,.06);color:var(--r);border:1px solid rgba(255,61,90,.25)}
-.cb-lo{background:rgba(61,155,255,.06);color:var(--b);border:1px solid rgba(61,155,255,.25)}
+/* Marché selector buttons */
 .mkt-sel-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
-.mkt-sel-btn{padding:4px 9px;font-size:.6rem;font-weight:700;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:var(--font);text-transform:uppercase;transition:all .2s}
+.mkt-sel-btn{padding:5px 10px;font-size:.62rem;font-weight:700;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:var(--font);text-transform:uppercase;transition:all .2s}
 .mkt-sel-btn.on{border-color:var(--g);color:var(--g);background:rgba(0,229,160,.06)}
-
-/* STATS MARKET TABS */
 .stats-mkt-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
 .stats-mkt-tab{padding:5px 10px;font-size:.62rem;font-weight:700;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--dm);cursor:pointer;font-family:var(--font);text-transform:uppercase;transition:all .2s}
 .stats-mkt-tab.on{background:rgba(0,229,160,.1);border-color:var(--g);color:var(--g)}
-
-/* Scrollbar */
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
-
-/* FGAP */
 .fgap{display:flex;gap:7px;flex-wrap:wrap}
 </style>
 </head>
@@ -303,12 +220,7 @@ tr:hover td{background:var(--s2)}
 <!-- CONFIG -->
 <div class="panel on" id="p0">
   <div class="warn-banner">Cles API stockees localement. Ne pas utiliser sur appareil partage.</div>
-  <div class="info-api">
-    <strong>API-Football :</strong><br>
-    1. Inscris-toi sur <a href="https://dashboard.api-football.com/register" target="_blank" style="color:var(--g)">dashboard.api-football.com</a><br>
-    2. Plan gratuit : 100 req/jour, 2 jours historique max<br>
-    3. Collecte chaque jour et exporte!
-  </div>
+  <div class="info-api"><strong>API-Football :</strong><br>1. Inscris-toi sur <a href="https://dashboard.api-football.com/register" target="_blank" style="color:var(--g)">dashboard.api-football.com</a><br>2. Plan gratuit : 100 req/jour, 2 jours historique max<br>3. Collecte chaque jour et exporte!</div>
   <div class="card">
     <span class="clbl">Cle API-Football</span>
     <div style="display:flex;gap:7px"><input class="inp" id="cfgKey" type="password" placeholder="Ta cle api-sports.io..."/><button class="bsm" onclick="togglePwd('cfgKey')">voir</button></div>
@@ -383,7 +295,7 @@ tr:hover td{background:var(--s2)}
   <div class="log" id="colLog"></div>
 </div>
 
-<!-- MATCHS DU JOUR -->
+<!-- MATCHS -->
 <div class="panel" id="p2">
   <div class="card">
     <span class="clbl">Date et filtres</span>
@@ -396,7 +308,6 @@ tr:hover td{background:var(--s2)}
         </select>
       </div>
     </div>
-    <!-- MARKET SELECTOR -->
     <div style="margin-bottom:10px">
       <div class="lsm" style="margin-bottom:6px">Marche a afficher</div>
       <div class="mkt-tabs" id="tdMktTabs">
@@ -408,14 +319,11 @@ tr:hover td{background:var(--s2)}
         <button class="mkt-tab" onclick="setTdMkt('cs',this)">CS/Buts</button>
       </div>
     </div>
-    <!-- SEUIL (affiché que si totaux) -->
     <div id="tdSeuilWrap" style="margin-bottom:10px;display:none">
       <div class="lsm">Seuil Over/Under</div>
       <div class="chips" id="tdChips">
-        <div class="chip" onclick="setSeuilTd(1.5)">+1.5</div>
-        <div class="chip on" onclick="setSeuilTd(2.5)">+2.5</div>
-        <div class="chip" onclick="setSeuilTd(3.5)">+3.5</div>
-        <div class="chip" onclick="setSeuilTd(4.5)">+4.5</div>
+        <div class="chip" onclick="setSeuilTd(1.5)">+1.5</div><div class="chip on" onclick="setSeuilTd(2.5)">+2.5</div>
+        <div class="chip" onclick="setSeuilTd(3.5)">+3.5</div><div class="chip" onclick="setSeuilTd(4.5)">+4.5</div>
       </div>
     </div>
     <div style="margin-bottom:10px">
@@ -461,7 +369,6 @@ tr:hover td{background:var(--s2)}
         <div class="chip" onclick="setSeuilSt(3.5)">+3.5</div><div class="chip" onclick="setSeuilSt(4.5)">+4.5</div>
       </div>
     </div>
-    <!-- STATS MARKET SELECTOR -->
     <div style="margin-bottom:12px">
       <div class="lsm" style="margin-bottom:5px">Marche a analyser</div>
       <div class="stats-mkt-tabs" id="statsMktTabs">
@@ -513,9 +420,7 @@ tr:hover td{background:var(--s2)}
     <div class="r2" style="margin-bottom:10px">
       <div><div class="lsm">Date des matchs</div><input class="inp" id="tkDate" type="date"/></div>
       <div><div class="lsm">Nb tickets</div>
-        <select class="inp" id="tkNb">
-          <option value="3">3 tickets</option><option value="4" selected>4 tickets</option><option value="5">5 tickets</option>
-        </select>
+        <select class="inp" id="tkNb"><option value="3">3 tickets</option><option value="4" selected>4 tickets</option><option value="5">5 tickets</option></select>
       </div>
     </div>
     <div class="r2" style="margin-bottom:10px">
@@ -612,7 +517,6 @@ tr:hover td{background:var(--s2)}
   </div>
 </div>
 </div>
-
 <script>
 // =========================================================
 // CONSTANTS & STATE
@@ -628,8 +532,8 @@ var compSort='plus',compData=[];
 var stopFlag=false,modalMatch=null,currentTickets=[],modalTkIdx=-1;
 var cfg={apiKey:'',tz:0};
 var allMatchsCache=[];
-var tdMkt='auto'; // current market for match tab
-var statsMkt='totaux'; // current market for stats tab
+var tdMkt='auto';
+var statsMkt='totaux';
 var fiabView='resume';
 
 // =========================================================
@@ -663,26 +567,17 @@ function parseFix(f,tz){
     home:f.teams&&f.teams.home?f.teams.home.name:'?',away:f.teams&&f.teams.away?f.teams.away.name:'?',
     h:h,a:a,total:(h!==null&&a!==null)?h+a:null,v1x2:v,btts:(h!==null&&a!==null)?(h>0&&a>0):null}
 }
-
-// =========================================================
-// API
-// =========================================================
 async function apiCall(endpoint,params){
   if(!cfg.apiKey)return null;
   var url=new URL(API+endpoint);
   Object.keys(params).forEach(function(k){url.searchParams.set(k,params[k])});
   for(var pi=0;pi<PROXIES.length;pi++){
-    try{
-      var r=await fetch(PROXIES[pi]+encodeURIComponent(url.toString()),{headers:{'x-apisports-key':cfg.apiKey,'x-rapidapi-key':cfg.apiKey}});
+    try{var r=await fetch(PROXIES[pi]+encodeURIComponent(url.toString()),{headers:{'x-apisports-key':cfg.apiKey,'x-rapidapi-key':cfg.apiKey}});
       if(r.ok){var d=await r.json();if(d&&d.response!==undefined)return d}
     }catch(e){}
   }
   return null;
 }
-
-// =========================================================
-// UI HELPERS
-// =========================================================
 function goTab(i){
   document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('on',i===j)});
   document.querySelectorAll('.panel').forEach(function(p,j){p.classList.toggle('on',i===j)});
@@ -716,10 +611,7 @@ function setConvFilter(v){
   [0,1,2,3].forEach(function(i){var b=document.getElementById('convF'+i);if(b)b.classList.toggle('on',i===v)});
   renderMatchsList();
 }
-function setConvTk(v){
-  convTkVal=v;
-  [1,2,3].forEach(function(i){var b=document.getElementById('tkc'+i);if(b)b.classList.toggle('on',i===v)});
-}
+function setConvTk(v){convTkVal=v;[1,2,3].forEach(function(i){var b=document.getElementById('tkc'+i);if(b)b.classList.toggle('on',i===v)})}
 function setTdMkt(v,btn){
   tdMkt=v;
   document.querySelectorAll('#tdMktTabs .mkt-tab').forEach(function(b){b.classList.remove('on')});
@@ -732,10 +624,6 @@ function setStatsMkt(v,btn){
   document.querySelectorAll('#statsMktTabs .stats-mkt-tab').forEach(function(b){b.classList.remove('on')});
   if(btn)btn.classList.add('on');
 }
-
-// =========================================================
-// CONFIG
-// =========================================================
 function buildTz(){
   var sel=document.getElementById('cfgTz'),auto=autoTz();
   for(var i=-12;i<=12;i++){var o=document.createElement('option');o.value=i;o.textContent='UTC'+(i>=0?'+':'')+i+(i===auto?' (auto)':'');if(i===auto)o.selected=true;sel.appendChild(o)}
@@ -759,10 +647,6 @@ function initCfg(){
   for(var i=0;i<sel.options.length;i++){if(parseInt(sel.options[i].value)===cfg.tz){sel.selectedIndex=i;break}}
   majTz();
 }
-
-// =========================================================
-// EXPORT / IMPORT
-// =========================================================
 function exportDB(){
   var blob=new Blob([JSON.stringify(getDB(),null,2)],{type:'application/json'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='fstats_'+today()+'.json';a.click();
@@ -790,10 +674,6 @@ function clearDB(){
   localStorage.removeItem(DB_KEY);localStorage.removeItem(RES_KEY);localStorage.removeItem(TRACK_KEY);majDB();
   showAl('cfgAl','in','Donnees effacees');setTimeout(function(){hideAl('cfgAl')},2500);
 }
-
-// =========================================================
-// COLLECTE
-// =========================================================
 function preset(n){document.getElementById('colDu').value=nAgo(n);document.getElementById('colAu').value=today()}
 async function checkQuota(){
   if(!cfg.apiKey){showAl('colAl','er','Entre ta cle dans Config');return}
@@ -840,43 +720,23 @@ async function lancer(force){
   majDB();if(m>0)setTimeout(function(){exportDB()},600);
 }
 function stopCol(){stopFlag=true;document.getElementById('btnStop').style.display='none'}
-
 // =========================================================
-// PREDICTION ENGINE — INDEPENDENT MARKETS
+// PREDICTION ENGINE
 // =========================================================
 function buildCache(){
   var db=getDB(),tz=getTz();
   var all=Object.values(db).reduce(function(a,v){return a.concat(v)},[]).filter(function(m){return m.total!==null&&TERM.indexOf(m.status)>=0});
-  function es(){return{
-    p15:0,p25:0,p35:0,p45:0,  // over totaux
-    u15:0,u25:0,u35:0,u45:0,  // under totaux (indep)
-    v1:0,x:0,v2:0,             // 1x2
-    bO:0,bN:0,                 // btts indep
-    dc1x:0,dcx2:0,dc12:0,     // double chance indep
-    csH:0,csA:0,               // clean sheet
-    hmsc:0,amsc:0,             // equipe marque
-    total:0,buts:0,butsH:0,butsA:0
-  }}
+  function es(){return{p15:0,p25:0,p35:0,p45:0,u15:0,u25:0,u35:0,u45:0,v1:0,x:0,v2:0,bO:0,bN:0,dc1x:0,dcx2:0,dc12:0,csH:0,csA:0,hmsc:0,amsc:0,total:0,buts:0,butsH:0,butsA:0}}
   var byL={},byH={},byD=[0,1,2,3,4,5,6].map(es);
   all.forEach(function(m){
     function fill(e){
       e.total++;e.buts+=m.total;e.butsH+=(m.h||0);e.butsA+=(m.a||0);
-      // Over/Under INDEPENDANTS (la somme peut != 100% selon seuil)
-      if(m.total>1.5)e.p15++;else e.u15++;
-      if(m.total>2.5)e.p25++;else e.u25++;
-      if(m.total>3.5)e.p35++;else e.u35++;
-      if(m.total>4.5)e.p45++;else e.u45++;
-      // 1X2
+      if(m.total>1.5)e.p15++;else e.u15++;if(m.total>2.5)e.p25++;else e.u25++;
+      if(m.total>3.5)e.p35++;else e.u35++;if(m.total>4.5)e.p45++;else e.u45++;
       if(m.v1x2==='V1')e.v1++;else if(m.v1x2==='X')e.x++;else if(m.v1x2==='V2')e.v2++;
-      // BTTS (indep: bO + bN = total)
       if(m.btts)e.bO++;else e.bN++;
-      // Double chance indep
-      if(m.v1x2==='V1'||m.v1x2==='X')e.dc1x++;
-      if(m.v1x2==='X'||m.v1x2==='V2')e.dcx2++;
-      if(m.v1x2==='V1'||m.v1x2==='V2')e.dc12++;
-      // CS / Buts équipe
-      if(m.a===0)e.csH++;if(m.h===0)e.csA++;
-      if(m.h>0)e.hmsc++;if(m.a>0)e.amsc++;
+      if(m.v1x2==='V1'||m.v1x2==='X')e.dc1x++;if(m.v1x2==='X'||m.v1x2==='V2')e.dcx2++;if(m.v1x2==='V1'||m.v1x2==='V2')e.dc12++;
+      if(m.a===0)e.csH++;if(m.h===0)e.csA++;if(m.h>0)e.hmsc++;if(m.a>0)e.amsc++;
     }
     var k=m.league+'|'+m.country;if(!byL[k])byL[k]=es();fill(byL[k]);
     var hk=m.heure?m.heure.split(':')[0]:'??';if(!byH[hk])byH[hk]=es();fill(byH[hk]);
@@ -884,13 +744,9 @@ function buildCache(){
   });
   return{byL:byL,byH:byH,byD:byD,total:all.length};
 }
-
 function pkOver(s){if(s<=1.5)return'p15';if(s<=2.5)return'p25';if(s<=3.5)return'p35';return'p45'}
 function pkUnder(s){if(s<=1.5)return'u15';if(s<=2.5)return'u25';if(s<=3.5)return'u35';return'u45'}
-
 function seuilAdaptatif(lig){if(!lig||lig.total<10)return null;return(lig.buts/lig.total)>=2.5?2.5:1.5}
-
-// weighted average across sources
 function weighted(fn,lig,h,dw){
   var vals=[];var vL=fn(lig),vH=fn(h),vD=fn(dw);
   if(vL!==null)vals.push([vL,.55]);if(vH!==null)vals.push([vH,.25]);if(vD!==null)vals.push([vD,.20]);
@@ -899,264 +755,104 @@ function weighted(fn,lig,h,dw){
   return vals.reduce(function(a,v){return a+v[0]*v[1]/sw},0);
 }
 function pct(st,key){return st&&st.total>=3?st[key]/st.total:null}
-
 function predict(match,cache,s){
   var tz=getTz(),lk=match.league+'|'+match.country,hk=match.heure?match.heure.split(':')[0]:'??';
   var dow=match.ts?new Date((match.ts+tz*3600)*1000).getUTCDay():null;
   var lig=cache.byL[lk]||null,h=cache.byH[hk]||null,dw=dow!==null?cache.byD[dow]:null;
   var w=function(fn){return weighted(fn,lig,h,dw)};
-
-  // TOTAUX — indépendants
   var plusPred=applyCalib(w(function(st){return pct(st,pkOver(s))}),'over');
   var underPred=applyCalib(w(function(st){return pct(st,pkUnder(s))}),'under');
-
-  // 1X2 — normalisation sur les 3 issues
-  var rv1=w(function(st){return pct(st,'v1')});
-  var rx=w(function(st){return pct(st,'x')});
-  var rv2=w(function(st){return pct(st,'v2')});
+  var rv1=w(function(st){return pct(st,'v1')}),rx=w(function(st){return pct(st,'x')}),rv2=w(function(st){return pct(st,'v2')});
   var rs=(rv1||0)+(rx||0)+(rv2||0);
   if(rs>0){rv1=(rv1||0)/rs;rx=(rx||0)/rs;rv2=(rv2||0)/rs}
   rv1=applyCalib(rv1,'v1');rx=applyCalib(rx,'x');rv2=applyCalib(rv2,'v2');
-
-  // DOUBLE CHANCE — indépendants (chacun depuis sa propre fréquence)
   var dc1x=applyCalib(w(function(st){return pct(st,'dc1x')}),'dc1x');
   var dcx2=applyCalib(w(function(st){return pct(st,'dcx2')}),'dcx2');
   var dc12=applyCalib(w(function(st){return pct(st,'dc12')}),'dc12');
-
-  // BTTS — indépendants
   var bttsO=applyCalib(w(function(st){return pct(st,'bO')}),'btts');
   var bttsN=applyCalib(w(function(st){return pct(st,'bN')}),'bttsN');
-
-  // CS / Equipe marque — indépendants
   var csH=applyCalib(w(function(st){return pct(st,'csH')}),'csH');
   var csA=applyCalib(w(function(st){return pct(st,'csA')}),'csA');
   var hmsc=applyCalib(w(function(st){return pct(st,'hmsc')}),'hmsc');
   var amsc=applyCalib(w(function(st){return pct(st,'amsc')}),'amsc');
-
-  // Stats brutes pour contexte
   var sigL=lig&&lig.total>=3?lig[pkOver(s)]/lig.total:null;
   var sigH=h&&h.total>=3?h[pkOver(s)]/h.total:null;
   var sigD=dw&&dw.total>=3?dw[pkOver(s)]/dw.total:null;
   var conv=0,nbSig=0;
-  if(sigL!==null){nbSig++;if(sigL>0.5)conv++}
-  if(sigH!==null){nbSig++;if(sigH>0.5)conv++}
-  if(sigD!==null){nbSig++;if(sigD>0.5)conv++}
-
+  if(sigL!==null){nbSig++;if(sigL>0.5)conv++}if(sigH!==null){nbSig++;if(sigH>0.5)conv++}if(sigD!==null){nbSig++;if(sigD>0.5)conv++}
   var moyBH=w(function(st){return st&&st.total>=3?st.butsH/st.total:null});
   var moyBA=w(function(st){return st&&st.total>=3?st.butsA/st.total:null});
-
-  // All markets ranked
   var allM=[
-    {id:'over',label:'+'+s+' buts',prob:plusPred},
-    {id:'under',label:'-'+s+' buts',prob:underPred},
-    {id:'btts',label:'BTTS Oui',prob:bttsO},
-    {id:'bttsN',label:'BTTS Non',prob:bttsN},
-    {id:'v1',label:'Dom',prob:rv1},
-    {id:'x',label:'Nul',prob:rx},
-    {id:'v2',label:'Ext',prob:rv2},
-    {id:'dc1x',label:'DC 1X',prob:dc1x},
-    {id:'dcx2',label:'DC X2',prob:dcx2},
-    {id:'dc12',label:'DC 12',prob:dc12},
-    {id:'csH',label:'CS Dom',prob:csH},
-    {id:'csA',label:'CS Ext',prob:csA},
-    {id:'hmsc',label:'Dom Mq',prob:hmsc},
-    {id:'amsc',label:'Ext Mq',prob:amsc}
+    {id:'over',label:'+'+s+' buts',prob:plusPred},{id:'under',label:'-'+s+' buts',prob:underPred},
+    {id:'btts',label:'BTTS Oui',prob:bttsO},{id:'bttsN',label:'BTTS Non',prob:bttsN},
+    {id:'v1',label:'Dom',prob:rv1},{id:'x',label:'Nul',prob:rx},{id:'v2',label:'Ext',prob:rv2},
+    {id:'dc1x',label:'DC 1X',prob:dc1x},{id:'dcx2',label:'DC X2',prob:dcx2},{id:'dc12',label:'DC 12',prob:dc12},
+    {id:'csH',label:'CS Dom',prob:csH},{id:'csA',label:'CS Ext',prob:csA},
+    {id:'hmsc',label:'Dom Mq',prob:hmsc},{id:'amsc',label:'Ext Mq',prob:amsc}
   ].filter(function(m){return m.prob!==null});
   allM.sort(function(a,b){return b.prob-a.prob});
-
-  return{plus:plusPred,under:underPred,v1:rv1,x:rx,v2:rv2,
-    dc1x:dc1x,dcx2:dcx2,dc12:dc12,
+  return{plus:plusPred,under:underPred,v1:rv1,x:rx,v2:rv2,dc1x:dc1x,dcx2:dcx2,dc12:dc12,
     btts:bttsO,bttsNon:bttsN,csH:csH,csA:csA,hmsc:hmsc,amsc:amsc,
     moyBH:moyBH?moyBH.toFixed(2):null,moyBA:moyBA?moyBA.toFixed(2):null,
     conf:lig?Math.min(100,Math.round(lig.total/50*100)):0,ligTotal:lig?lig.total:0,
     moyButs:lig&&lig.total?(lig.buts/lig.total).toFixed(2):null,
     sigL:sigL,sigH:sigH,sigD:sigD,convergence:conv,nbSig:nbSig,
     seuilAdapte:seuilAdaptatif(lig),allMarkets:allM,bestMarket:allM.length?allM[0]:null,
-    // raw ligue stats for context display
-    ligStats:lig?{
-      over:lig.total?Math.round(lig[pkOver(s)]/lig.total*100):null,
-      under:lig.total?Math.round(lig[pkUnder(s)]/lig.total*100):null,
-      bttsO:lig.total?Math.round(lig.bO/lig.total*100):null,
-      bttsN:lig.total?Math.round(lig.bN/lig.total*100):null,
-      v1:lig.total?Math.round(lig.v1/lig.total*100):null,
-      x:lig.total?Math.round(lig.x/lig.total*100):null,
-      v2:lig.total?Math.round(lig.v2/lig.total*100):null,
-      dc1x:lig.total?Math.round(lig.dc1x/lig.total*100):null,
-      dcx2:lig.total?Math.round(lig.dcx2/lig.total*100):null,
-      dc12:lig.total?Math.round(lig.dc12/lig.total*100):null,
-      csH:lig.total?Math.round(lig.csH/lig.total*100):null,
-      csA:lig.total?Math.round(lig.csA/lig.total*100):null,
-      hmsc:lig.total?Math.round(lig.hmsc/lig.total*100):null,
-      amsc:lig.total?Math.round(lig.amsc/lig.total*100):null
-    }:null,
-    hourStats:h?{
-      over:h.total?Math.round(h[pkOver(s)]/h.total*100):null,
-      bttsO:h.total?Math.round(h.bO/h.total*100):null,
-      v1:h.total?Math.round(h.v1/h.total*100):null
-    }:null
-  };
+    ligStats:lig?{over:lig.total?Math.round(lig[pkOver(s)]/lig.total*100):null,under:lig.total?Math.round(lig[pkUnder(s)]/lig.total*100):null,bttsO:lig.total?Math.round(lig.bO/lig.total*100):null,bttsN:lig.total?Math.round(lig.bN/lig.total*100):null,v1:lig.total?Math.round(lig.v1/lig.total*100):null,x:lig.total?Math.round(lig.x/lig.total*100):null,v2:lig.total?Math.round(lig.v2/lig.total*100):null,dc1x:lig.total?Math.round(lig.dc1x/lig.total*100):null,dcx2:lig.total?Math.round(lig.dcx2/lig.total*100):null,dc12:lig.total?Math.round(lig.dc12/lig.total*100):null,csH:lig.total?Math.round(lig.csH/lig.total*100):null,csA:lig.total?Math.round(lig.csA/lig.total*100):null,hmsc:lig.total?Math.round(lig.hmsc/lig.total*100):null,amsc:lig.total?Math.round(lig.amsc/lig.total*100):null}:null,
+    hourStats:h?{over:h.total?Math.round(h[pkOver(s)]/h.total*100):null,bttsO:h.total?Math.round(h.bO/h.total*100):null,v1:h.total?Math.round(h.v1/h.total*100):null}:null};
 }
-
 // =========================================================
 // CALIBRATION
 // =========================================================
 function getCalib(){try{return JSON.parse(localStorage.getItem(CALIB_KEY)||'{}')}catch(e){return{}}}
 function setCalib(c){localStorage.setItem(CALIB_KEY,JSON.stringify(c))}
-function resetCalib(){
-  if(!confirm('Reinitialiser tous les facteurs de calibration?'))return;
-  localStorage.removeItem(CALIB_KEY);
-  showAl('fiabAl','ok','Calibration reinitalisee.');setTimeout(function(){hideAl('fiabAl')},3000);
-}
+function resetCalib(){if(!confirm('Reinitialiser tous les facteurs de calibration?'))return;localStorage.removeItem(CALIB_KEY);showAl('fiabAl','ok','Calibration reinitalisee.');setTimeout(function(){hideAl('fiabAl')},3000)}
 function getCalibFactor(market){var c=getCalib();return c[market]!==undefined?c[market]:1.0}
-function applyCalib(val,market){
-  if(val===null)return null;
-  return Math.min(1,Math.max(0,val*getCalibFactor(market)));
-}
-
+function applyCalib(val,market){if(val===null)return null;return Math.min(1,Math.max(0,val*getCalibFactor(market)))}
 // =========================================================
-// MATCH CARD RENDERING — MARKET-AWARE
+// MATCH CARD RENDERING
 // =========================================================
 function mktBoxClass(v){if(v===null)return'';return v>=65?'hi':v>=50?'mid':'lo'}
 function mktColor(v){if(v===null)return'var(--dm)';return v>=65?'var(--g)':v>=50?'var(--y)':'var(--r)'}
-function mktBarColor(v){return mktColor(v)}
-function mktBox(prob,lbl,extra){
-  var v=prob!==null?Math.round(prob*100):null;
-  var cls=mktBoxClass(v),col=mktColor(v);
-  return'<div class="mkt-box '+cls+'">'
-    +'<div class="mkt-prob" style="color:'+col+'">'+(v!==null?v+'%':'?')+'</div>'
-    +'<div class="mkt-lbl">'+lbl+'</div>'
-    +'<div class="mkt-bar" style="background:'+mktBarColor(v)+';width:'+(v||0)+'%"></div>'
-    +(extra||'')
-    +'</div>';
+function mktBox(prob,lbl){
+  var v=prob!==null?Math.round(prob*100):null;var cls=mktBoxClass(v),col=mktColor(v);
+  return'<div class="mkt-box '+cls+'"><div class="mkt-prob" style="color:'+col+'">'+(v!==null?v+'%':'?')+'</div><div class="mkt-lbl">'+lbl+'</div><div class="mkt-bar" style="background:'+col+';width:'+(v||0)+'%"></div></div>';
 }
-function contextTag(val,lbl){
-  if(val===null)return'';
-  var cls=val>=65?'g':val>=50?'y':'r';
-  return'<span class="mkt-ctx-tag '+cls+'">'+lbl+': '+val+'%</span>';
-}
-
 function buildMatchHTML(m,pred,s){
   if(!pred)return'<div style="font-size:.73rem;color:var(--dm);padding:8px;background:var(--s2);border-radius:7px">Pas assez de donnees - Lance la collecte!</div>';
-  
   var hasCalib=Object.keys(getCalib()).length>0;
   var calibBadge=hasCalib?'<span class="calib-badge cb-ok" style="margin-left:5px">CALIBRE</span>':'';
   var convCls='conv-'+pred.convergence;
-  
-  function sigBadge(lbl,val){
-    if(val===null)return'<span class="sig sig-d">'+lbl+': ?</span>';
-    var v=Math.round(val*100);var cl=v>=60?'sig-g':v>=45?'sig-y':'sig-r';
-    return'<span class="sig '+cl+'">'+lbl+': '+v+'%</span>';
-  }
-
-  var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
-    +'<div class="sig-row" style="margin:0;flex:1">'+sigBadge('L',pred.sigL)+sigBadge('H',pred.sigH)+sigBadge('J',pred.sigD)+calibBadge+'</div>'
-    +'<span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span>'
-    +'</div>';
-
+  function sigBadge(lbl,val){if(val===null)return'<span class="sig sig-d">'+lbl+': ?</span>';var v=Math.round(val*100);var cl=v>=60?'sig-g':v>=45?'sig-y':'sig-r';return'<span class="sig '+cl+'">'+lbl+': '+v+'%</span>'}
+  var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="sig-row" style="margin:0;flex:1">'+sigBadge('L',pred.sigL)+sigBadge('H',pred.sigH)+sigBadge('J',pred.sigD)+calibBadge+'</div><span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span></div>';
   var sa=pred.seuilAdapte;
   if(sa!==null&&sa!==s)html+='<div style="font-size:.62rem;background:rgba(255,199,44,.06);border:1px solid rgba(255,199,44,.18);border-radius:5px;padding:3px 7px;margin-bottom:6px;color:var(--y)">Seuil adapte: +'+sa+' (moy '+pred.moyButs+' buts/match)</div>';
-
   var ligS=pred.ligStats,hourS=pred.hourStats;
-
   if(tdMkt==='auto'){
-    // Meilleur marche
-    if(pred.bestMarket){
-      var bv=Math.round(pred.bestMarket.prob*100);var bc=mktColor(bv);
-      html+='<div class="dominant-badge">⭐ '+pred.bestMarket.label+' — '+bv+'%</div>';
-    }
-    // Totaux
-    html+='<div class="mkt-section"><div class="mkt-section-title">Totaux</div><div class="mkt-grid g4r">'
-      +mktBox(pred.plus,'+'+s)
-      +mktBox(pred.under,'-'+s)
-      +mktBox(pred.btts,'BTTS Oui')
-      +mktBox(pred.bttsNon,'BTTS Non')
-      +'</div></div>';
-    // 1X2 + DC
-    html+='<div class="mkt-section"><div class="mkt-section-title">1X2 · Double Chance</div><div class="mkt-grid g6">'
-      +mktBox(pred.v1,'Dom')+mktBox(pred.x,'Nul')+mktBox(pred.v2,'Ext')
-      +mktBox(pred.dc1x,'DC 1X')+mktBox(pred.dcx2,'DC X2')+mktBox(pred.dc12,'DC 12')
-      +'</div></div>';
-    // CS + Buts
-    html+='<div class="mkt-section"><div class="mkt-section-title">CS · Equipe marque</div><div class="mkt-grid g4r">'
-      +mktBox(pred.csH,'CS Dom')+mktBox(pred.csA,'CS Ext')
-      +mktBox(pred.hmsc,'Dom Mq')+mktBox(pred.amsc,'Ext Mq')
-      +'</div></div>';
-  }
-  else if(tdMkt==='totaux'){
-    html+='<div class="mkt-section"><div class="mkt-section-title">Over / Under · Seuil +'+s+'</div>';
-    html+='<div class="mkt-grid g4r">'
-      +mktBox(pred.plus,'+'+s)+mktBox(pred.under,'-'+s)
-      +mktBox(pred.btts,'BTTS Oui')+mktBox(pred.bttsNon,'BTTS Non')
-      +'</div>';
-    // Dominance over vs under avec contexte ligue
-    if(pred.plus!==null&&pred.under!==null){
-      var ovP=Math.round(pred.plus*100),unP=Math.round(pred.under*100);
-      var dominant=ovP>=unP?'Over +'+s+' dominant ('+ovP+'%)':'Under -'+s+' dominant ('+unP+'%)';
-      html+='<div class="dominant-badge" style="margin-top:6px">'+dominant+'</div>';
-    }
-    if(ligS){
-      html+='<div style="font-size:.6rem;color:var(--dm);margin-top:5px;font-family:var(--mono)">Stats ligue: Over '+ligS.over+'% · Under '+ligS.under+'% · Moy '+pred.moyButs+' buts</div>';
-      if(hourS)html+='<div style="font-size:.6rem;color:var(--dm);margin-top:2px;font-family:var(--mono)">A cette heure: Over '+hourS.over+'%</div>';
-    }
+    if(pred.bestMarket)html+='<div class="dominant-badge">⭐ '+pred.bestMarket.label+' — '+Math.round(pred.bestMarket.prob*100)+'%</div>';
+    html+='<div class="mkt-section"><div class="mkt-section-title">Totaux</div><div class="mkt-grid g4r">'+mktBox(pred.plus,'+'+s)+mktBox(pred.under,'-'+s)+mktBox(pred.btts,'BTTS Oui')+mktBox(pred.bttsNon,'BTTS Non')+'</div></div>';
+    html+='<div class="mkt-section"><div class="mkt-section-title">1X2 · Double Chance</div><div class="mkt-grid g6">'+mktBox(pred.v1,'Dom')+mktBox(pred.x,'Nul')+mktBox(pred.v2,'Ext')+mktBox(pred.dc1x,'DC 1X')+mktBox(pred.dcx2,'DC X2')+mktBox(pred.dc12,'DC 12')+'</div></div>';
+    html+='<div class="mkt-section"><div class="mkt-section-title">CS · Equipe marque</div><div class="mkt-grid g4r">'+mktBox(pred.csH,'CS Dom')+mktBox(pred.csA,'CS Ext')+mktBox(pred.hmsc,'Dom Mq')+mktBox(pred.amsc,'Ext Mq')+'</div></div>';
+  } else if(tdMkt==='totaux'){
+    html+='<div class="mkt-section"><div class="mkt-section-title">Over/Under · +'+s+'</div><div class="mkt-grid g4r">'+mktBox(pred.plus,'+'+s)+mktBox(pred.under,'-'+s)+mktBox(pred.btts,'BTTS Oui')+mktBox(pred.bttsNon,'BTTS Non')+'</div>';
+    if(pred.plus!==null&&pred.under!==null){var ovP=Math.round(pred.plus*100),unP=Math.round(pred.under*100);html+='<div class="dominant-badge" style="margin-top:6px">'+(ovP>=unP?'Over +'+s+' dominant ('+ovP+'%)':'Under -'+s+' dominant ('+unP+'%)')+'</div>'}
+    if(ligS)html+='<div style="font-size:.6rem;color:var(--dm);margin-top:5px;font-family:var(--mono)">Ligue: Over '+ligS.over+'% · Under '+ligS.under+'% · Moy '+pred.moyButs+' buts</div>';
     html+='</div>';
-  }
-  else if(tdMkt==='v1x2'){
-    html+='<div class="mkt-section"><div class="mkt-section-title">Victoire 1X2</div><div class="mkt-grid g3r">'
-      +mktBox(pred.v1,'Domicile')+mktBox(pred.x,'Match Nul')+mktBox(pred.v2,'Exterieur')
-      +'</div></div>';
-    // Dominant
-    var best1x2=pred.v1>pred.x&&pred.v1>pred.v2?'Dom '+Math.round(pred.v1*100)+'%':pred.v2>pred.x?'Ext '+Math.round(pred.v2*100)+'%':'Nul '+Math.round(pred.x*100)+'%';
-    html+='<div class="dominant-badge">'+best1x2+'</div>';
+  } else if(tdMkt==='v1x2'){
+    html+='<div class="mkt-section"><div class="mkt-section-title">Victoire 1X2</div><div class="mkt-grid g3r">'+mktBox(pred.v1,'Domicile')+mktBox(pred.x,'Match Nul')+mktBox(pred.v2,'Exterieur')+'</div></div>';
     if(ligS)html+='<div style="font-size:.6rem;color:var(--dm);margin-top:4px;font-family:var(--mono)">Ligue: Dom '+ligS.v1+'% · Nul '+ligS.x+'% · Ext '+ligS.v2+'%</div>';
+  } else if(tdMkt==='btts'){
+    html+='<div class="mkt-section"><div class="mkt-section-title">BTTS · CS · Equipe marque</div><div class="mkt-grid g4r" style="margin-bottom:6px">'+mktBox(pred.btts,'BTTS Oui')+mktBox(pred.bttsNon,'BTTS Non')+mktBox(pred.csH,'CS Dom')+mktBox(pred.csA,'CS Ext')+'</div><div class="mkt-grid g4r">'+mktBox(pred.hmsc,'Dom Marque')+mktBox(pred.amsc,'Ext Marque')+'</div></div>';
+  } else if(tdMkt==='dc'){
+    html+='<div class="mkt-section"><div class="mkt-section-title">Double Chance</div><div class="mkt-grid g3r">'+mktBox(pred.dc1x,'1X')+mktBox(pred.dcx2,'X2')+mktBox(pred.dc12,'12')+'</div></div>';
+  } else if(tdMkt==='cs'){
+    html+='<div class="mkt-section"><div class="mkt-section-title">CS · Equipe marque</div><div class="mkt-grid g4r">'+mktBox(pred.csH,'CS Dom')+mktBox(pred.csA,'CS Ext')+mktBox(pred.hmsc,'Dom Mq')+mktBox(pred.amsc,'Ext Mq')+'</div></div>';
   }
-  else if(tdMkt==='btts'){
-    html+='<div class="mkt-section"><div class="mkt-section-title">BTTS · CS · Equipe marque</div>';
-    html+='<div class="mkt-grid g4r" style="margin-bottom:6px">'
-      +mktBox(pred.btts,'BTTS Oui')+mktBox(pred.bttsNon,'BTTS Non')
-      +mktBox(pred.csH,'CS Dom')+mktBox(pred.csA,'CS Ext')
-      +'</div>';
-    // Buts dom/ext
-    html+='<div class="mkt-grid g4r">'
-      +mktBox(pred.hmsc,'Dom Marque')+mktBox(pred.amsc,'Ext Marque')
-      +(pred.moyBH?'<div class="mkt-box"><div class="mkt-prob" style="color:var(--b)">'+pred.moyBH+'</div><div class="mkt-lbl">Moy Dom</div></div>':'')
-      +(pred.moyBA?'<div class="mkt-box"><div class="mkt-prob" style="color:var(--p)">'+pred.moyBA+'</div><div class="mkt-lbl">Moy Ext</div></div>':'')
-      +'</div></div>';
-    if(ligS){
-      html+='<div style="font-size:.6rem;color:var(--dm);margin-top:5px;font-family:var(--mono)">Ligue: BTTS '+ligS.bttsO+'% · CS Dom '+ligS.csH+'% · Dom Mq '+ligS.hmsc+'% · Ext Mq '+ligS.amsc+'%</div>';
-    }
-    var bestBtts=pred.btts!==null&&pred.bttsNon!==null?(pred.btts>pred.bttsNon?'BTTS Oui dominant':'BTTS Non dominant'):'';
-    if(bestBtts)html+='<div class="dominant-badge" style="margin-top:5px">'+bestBtts+'</div>';
-  }
-  else if(tdMkt==='dc'){
-    html+='<div class="mkt-section"><div class="mkt-section-title">Double Chance</div><div class="mkt-grid g3r">'
-      +mktBox(pred.dc1x,'1X')+mktBox(pred.dcx2,'X2')+mktBox(pred.dc12,'12')
-      +'</div></div>';
-    var bestDC=pred.dc1x!==null&&pred.dcx2!==null&&pred.dc12!==null
-      ?(pred.dc1x>=pred.dcx2&&pred.dc1x>=pred.dc12?'DC 1X dominant ('+Math.round(pred.dc1x*100)+'%)'
-        :pred.dcx2>=pred.dc12?'DC X2 dominant ('+Math.round(pred.dcx2*100)+'%)'
-        :'DC 12 dominant ('+Math.round(pred.dc12*100)+'%)'):'';
-    if(bestDC)html+='<div class="dominant-badge">'+bestDC+'</div>';
-    if(ligS)html+='<div style="font-size:.6rem;color:var(--dm);margin-top:4px;font-family:var(--mono)">Ligue: DC1X '+ligS.dc1x+'% · DCX2 '+ligS.dcx2+'% · DC12 '+ligS.dc12+'%</div>';
-  }
-  else if(tdMkt==='cs'){
-    html+='<div class="mkt-section"><div class="mkt-section-title">CS · Equipe marque</div><div class="mkt-grid g4r">'
-      +mktBox(pred.csH,'CS Dom')+mktBox(pred.csA,'CS Ext')
-      +mktBox(pred.hmsc,'Dom Mq')+mktBox(pred.amsc,'Ext Mq')
-      +'</div></div>';
-    html+='<div class="mkt-section"><div class="mkt-section-title">Buts attendus</div><div class="mkt-grid g4r">'
-      +(pred.moyBH?'<div class="mkt-box"><div class="mkt-prob" style="color:var(--b)">'+pred.moyBH+'</div><div class="mkt-lbl">Moy Dom</div></div>':'')
-      +(pred.moyBA?'<div class="mkt-box"><div class="mkt-prob" style="color:var(--p)">'+pred.moyBA+'</div><div class="mkt-lbl">Moy Ext</div></div>':'')
-      +mktBox(pred.btts,'BTTS Oui')+mktBox(pred.plus,'+'+s)
-      +'</div></div>';
-    if(ligS)html+='<div style="font-size:.6rem;color:var(--dm);margin-top:4px;font-family:var(--mono)">Ligue: CS Dom '+ligS.csH+'% · CS Ext '+ligS.csA+'% · Dom Mq '+ligS.hmsc+'% · Ext Mq '+ligS.amsc+'%</div>';
-  }
-
   html+='<div class="conf-bar" style="margin-top:8px"><div class="conf-track"><div class="conf-fill" style="width:'+pred.conf+'%;background:var(--g)"></div></div><span class="conf-lbl">Conf. '+pred.conf+'% · '+pred.ligTotal+' hist.'+(pred.moyButs?' · '+pred.moyButs+' buts/m':'')+'</span></div>';
   return html;
 }
-
 // =========================================================
-// LOAD & RENDER MATCHES — GROUPED BY LEAGUE
+// LOAD & RENDER MATCHES
 // =========================================================
 async function loadMatchs(source){
   if(!source)source='local';
@@ -1181,42 +877,24 @@ async function loadMatchs(source){
   else if(mode==='live')fxF=fx.filter(function(f){return LIVE.indexOf(f.status)>=0});
   else fxF=fx.slice();
   fxF.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd):null});
-  fxF.sort(function(a,b){
-    var ca=a._pred?a._pred.convergence:-1,cb=b._pred?b._pred.convergence:-1;
-    if(cb!==ca)return cb-ca;return(a.heure||'').localeCompare(b.heure||'');
-  });
+  fxF.sort(function(a,b){var ca=a._pred?a._pred.convergence:-1,cb=b._pred?b._pred.convergence:-1;if(cb!==ca)return cb-ca;return(a.heure||'').localeCompare(b.heure||'')});
   allMatchsCache=fxF;
   document.getElementById('tTot').textContent=fx.length;
   document.getElementById('tLiv').textContent=fx.filter(function(f){return LIVE.indexOf(f.status)>=0}).length;
   document.getElementById('tSoo').textContent=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0}).length;
   document.getElementById('tDon').textContent=fx.filter(function(f){return TERM.indexOf(f.status)>=0}).length;
-  document.getElementById('tdSum').style.display='block';
-  renderMatchsList();
+  document.getElementById('tdSum').style.display='block';renderMatchsList();
 }
-
 function renderMatchsList(){
   window._matchRefs=[];var list=document.getElementById('tdList');list.innerHTML='';
   var fx=allMatchsCache.filter(function(m){if(convFilterVal===0)return true;return(m._pred?m._pred.convergence:0)>=convFilterVal});
   if(!fx.length){list.innerHTML='<div style="text-align:center;color:var(--dm);padding:30px;font-size:.82rem">Aucun match. Baisse la convergence minimum.</div>';return}
   var results=getRes(),track=getTrack();
-  // Auto-track
-  fx.forEach(function(m){
-    if(TERM.indexOf(m.status)>=0&&m.h!==null&&m.a!==null&&m._pred&&!track.find(function(t){return t.id===m.id})){
-      track.push(buildTrackEntry(m,m._pred,seuilTd,m.h,m.a));setTrack(track);
-    }
-  });
-
-  // Group by league
+  fx.forEach(function(m){if(TERM.indexOf(m.status)>=0&&m.h!==null&&m.a!==null&&m._pred&&!track.find(function(t){return t.id===m.id})){track.push(buildTrackEntry(m,m._pred,seuilTd,m.h,m.a));setTrack(track)}});
   var groups={};
-  fx.forEach(function(m){
-    var k=m.league+'|||'+m.country;
-    if(!groups[k])groups[k]={league:m.league,country:m.country,matchs:[]};
-    groups[k].matchs.push(m);
-  });
-
+  fx.forEach(function(m){var k=m.league+'|||'+m.country;if(!groups[k])groups[k]={league:m.league,country:m.country,matchs:[]};groups[k].matchs.push(m)});
   Object.keys(groups).forEach(function(gk){
     var g=groups[gk];
-    // League-level stat: taux over du marche actif
     var ligRate=null,ligRateLabel='';
     if(g.matchs.length>0&&g.matchs[0]._pred&&g.matchs[0]._pred.ligStats){
       var ls=g.matchs[0]._pred.ligStats;
@@ -1227,31 +905,14 @@ function renderMatchsList(){
       else if(tdMkt==='cs'){ligRate=ls.csH;ligRateLabel='CS Dom: '+ls.csH+'% / CS Ext: '+ls.csA+'%'}
     }
     var highCorrelation=ligRate!==null&&ligRate>=70&&g.matchs.length>=2;
-    var ligStatColor=ligRate!==null?(ligRate>=60?'var(--g)':ligRate>=45?'var(--y)':'var(--r)'):'var(--dm)';
     var lgBgCls=ligRate!==null?(ligRate>=60?'bgG':ligRate>=45?'bgY':'bgR'):'';
-
     var groupDiv=document.createElement('div');groupDiv.className='lg-group';
     var headerDiv=document.createElement('div');headerDiv.className='lg-header';
-    headerDiv.innerHTML='<div class="lg-header-left">'
-      +'<div class="lg-name">'+g.league+'</div>'
-      +'<div class="lg-country">'+g.country+(ligRateLabel?' · '+ligRateLabel:'')+'</div>'
-      +'</div>'
-      +'<div class="lg-badges">'
-      +'<span class="lg-nb">'+g.matchs.length+' match'+(g.matchs.length>1?'s':'')+'</span>'
-      +(ligRate!==null?'<span class="lg-stat lbg '+lgBgCls+'" style="font-size:.72rem">'+ligRate+'%</span>':'')
-      +(highCorrelation?'<span class="lg-warn">⚠ corr.</span>':'')
-      +'</div>'
-      +'<span class="lg-arrow">▶</span>';
+    headerDiv.innerHTML='<div class="lg-header-left"><div class="lg-name">'+g.league+'</div><div class="lg-country">'+g.country+(ligRateLabel?' · '+ligRateLabel:'')+'</div></div><div class="lg-badges"><span class="lg-nb">'+g.matchs.length+' match'+(g.matchs.length>1?'s':'')+'</span>'+(ligRate!==null?'<span class="lbg '+lgBgCls+'" style="font-size:.72rem;padding:3px 8px;border-radius:5px">'+ligRate+'%</span>':'')+(highCorrelation?'<span class="lg-warn">⚠ corr.</span>':'')+'</div><span class="lg-arrow">▶</span>';
     var bodyDiv=document.createElement('div');
-    // Expand by default if few groups or high convergence
     var defaultOpen=Object.keys(groups).length<=3||g.matchs.some(function(m){return(m._pred?m._pred.convergence:0)>=2});
-    bodyDiv.className='lg-body'+(defaultOpen?' open':'');
-    headerDiv.classList.toggle('open',defaultOpen);
-
-    headerDiv.onclick=function(){
-      bodyDiv.classList.toggle('open');this.classList.toggle('open');
-    };
-
+    bodyDiv.className='lg-body'+(defaultOpen?' open':'');headerDiv.classList.toggle('open',defaultOpen);
+    headerDiv.onclick=function(){bodyDiv.classList.toggle('open');this.classList.toggle('open')};
     g.matchs.forEach(function(m){
       var pred=m._pred,isLv=LIVE.indexOf(m.status)>=0,isDn=TERM.indexOf(m.status)>=0;
       var cls=isLv?'live':isDn?'done':'soon';
@@ -1260,36 +921,16 @@ function renderMatchsList(){
       var score=(m.h!==null&&m.a!==null)?m.h+' - '+m.a:m.heure;
       var res=results[m.id];
       var midx=window._matchRefs.length;
-      window._matchRefs[midx]={
-        id:m.id,home:m.home,away:m.away,league:m.league,country:m.country,_seuil:seuilTd,
-        _pred:pred?{plus:pred.plus,under:pred.under,v1:pred.v1,x:pred.x,v2:pred.v2,
-          btts:pred.btts,bttsNon:pred.bttsNon,csH:pred.csH,csA:pred.csA,
-          hmsc:pred.hmsc,amsc:pred.amsc,dc1x:pred.dc1x,dcx2:pred.dcx2,dc12:pred.dc12,
-          conf:pred.conf,convergence:pred.convergence,nbSig:pred.nbSig}:null
-      };
-
+      window._matchRefs[midx]={id:m.id,home:m.home,away:m.away,league:m.league,country:m.country,_seuil:seuilTd,_pred:pred?{plus:pred.plus,under:pred.under,v1:pred.v1,x:pred.x,v2:pred.v2,btts:pred.btts,bttsNon:pred.bttsNon,csH:pred.csH,csA:pred.csA,hmsc:pred.hmsc,amsc:pred.amsc,dc1x:pred.dc1x,dcx2:pred.dcx2,dc12:pred.dc12,conf:pred.conf,convergence:pred.convergence,nbSig:pred.nbSig}:null};
       var resHTML='';
-      if(res){
-        var tot=res.h+res.a,v1x2=res.h>res.a?'V1':res.h<res.a?'V2':'X',ok=tot>seuilTd;
-        resHTML='<div class="mr"><div class="rr"><span style="color:var(--dm)">Resultat</span><span style="font-weight:700">'+res.h+' - '+res.a+' ('+v1x2+')</span></div>'
-          +'<div class="rr"><span style="color:var(--dm)">+'+seuilTd+'</span><span style="color:'+(ok?'var(--g)':'var(--r)')+'">'+( ok?'OUI':'NON')+'</span></div>'
-          +'<div class="rr"><span style="color:var(--dm)">BTTS</span><span style="color:'+(res.h>0&&res.a>0?'var(--g)':'var(--r)')+'">'+( res.h>0&&res.a>0?'OUI':'NON')+'</span></div>'
-          +'</div>';
-      }
-
+      if(res){var tot=res.h+res.a,v1x2r=res.h>res.a?'V1':res.h<res.a?'V2':'X',ok=tot>seuilTd;resHTML='<div class="mr"><div class="rr"><span style="color:var(--dm)">Resultat</span><span style="font-weight:700">'+res.h+' - '+res.a+' ('+v1x2r+')</span></div><div class="rr"><span style="color:var(--dm)">+'+seuilTd+'</span><span style="color:'+(ok?'var(--g)':'var(--r)')+'">'+( ok?'OUI':'NON')+'</span></div><div class="rr"><span style="color:var(--dm)">BTTS</span><span style="color:'+(res.h>0&&res.a>0?'var(--g)':'var(--r)')+'">'+( res.h>0&&res.a>0?'OUI':'NON')+'</span></div></div>'}
       var card=document.createElement('div');card.className='mc '+cls;card.style.marginBottom='8px';
-      card.innerHTML='<div class="mt-row"><div class="ml">'+m.heure+'</div><div class="ms '+scls+'">'+stxt+'</div></div>'
-        +'<div class="mte"><div class="tn th">'+m.home+'</div><div class="msc">'+score+'</div><div class="tn ta">'+m.away+'</div></div>'
-        +buildMatchHTML(m,pred,seuilTd)
-        +resHTML
-        +(!res?'<button class="bsm" onclick="openModal('+midx+')" style="width:100%;padding:8px;text-align:center;margin-top:5px">Saisir le resultat</button>':'');
+      card.innerHTML='<div class="mt-row"><div class="ml">'+m.heure+'</div><div class="ms '+scls+'">'+stxt+'</div></div><div class="mte"><div class="tn th">'+m.home+'</div><div class="msc">'+score+'</div><div class="tn ta">'+m.away+'</div></div>'+buildMatchHTML(m,pred,seuilTd)+resHTML+(!res?'<button class="bsm" onclick="openModal('+midx+')" style="width:100%;padding:8px;text-align:center;margin-top:5px">Saisir le resultat</button>':'');
       bodyDiv.appendChild(card);
     });
-    groupDiv.appendChild(headerDiv);groupDiv.appendChild(bodyDiv);
-    list.appendChild(groupDiv);
+    groupDiv.appendChild(headerDiv);groupDiv.appendChild(bodyDiv);list.appendChild(groupDiv);
   });
 }
-
 function openModal(idx){
   var match=typeof idx==='number'?window._matchRefs[idx]:idx;if(!match)return;
   modalMatch=match;document.getElementById('moName').textContent=match.home+' vs '+match.away;
@@ -1304,16 +945,10 @@ function saveResult(){
   if(modalMatch._pred){var track=getTrack();if(!track.find(function(t){return t.id===modalMatch.id})){track.push(buildTrackEntry({id:modalMatch.id,home:modalMatch.home,away:modalMatch.away,league:modalMatch.league||'?',country:modalMatch.country||'?'},modalMatch._pred,modalMatch._seuil||seuilTd,h,a));setTrack(track)}}
   document.getElementById('modal').classList.remove('on');renderMatchsList();
 }
-
 // =========================================================
-// STATS — MULTI-MARKET
+// STATS
 // =========================================================
-function initStDates(){
-  var db=getDB(),dates=Object.keys(db).sort();if(!dates.length)return;
-  if(!document.getElementById('stDu').value)document.getElementById('stDu').value=dates[0];
-  if(!document.getElementById('stAu').value)document.getElementById('stAu').value=dates[dates.length-1];
-}
-
+function initStDates(){var db=getDB(),dates=Object.keys(db).sort();if(!dates.length)return;if(!document.getElementById('stDu').value)document.getElementById('stDu').value=dates[0];if(!document.getElementById('stAu').value)document.getElementById('stAu').value=dates[dates.length-1]}
 function calcStats(){
   var db=getDB(),du=document.getElementById('stDu').value,au=document.getElementById('stAu').value;
   var lf=document.getElementById('stLig').value.trim().toLowerCase(),s=seuilSt,tz=getTz();
@@ -1321,119 +956,86 @@ function calcStats(){
   if(!dates.length){showAl('stAl','er','Aucune donnee - Lance la collecte');return}
   hideAl('stAl');document.getElementById('stLd').classList.add('on');document.getElementById('stOut').style.display='none';
   setTimeout(function(){
-    var matchs=[];
-    dates.forEach(function(d){var ms=(db[d]||[]).filter(function(m){return TERM.indexOf(m.status)>=0});if(lf)ms=ms.filter(function(m){return m.league.toLowerCase().indexOf(lf)>=0});matchs=matchs.concat(ms)});
+    var matchs=[];dates.forEach(function(d){var ms=(db[d]||[]).filter(function(m){return TERM.indexOf(m.status)>=0});if(lf)ms=ms.filter(function(m){return m.league.toLowerCase().indexOf(lf)>=0});matchs=matchs.concat(ms)});
     var av=matchs.filter(function(m){return m.total!==null}),n=av.length;
     if(!n){document.getElementById('stLd').classList.remove('on');showAl('stAl','er','Aucun match termine avec score');return}
-    var out=document.getElementById('stOut');
-    out.innerHTML=buildStatsHTML(av,n,s,tz,dates.length,matchs);
-    document.getElementById('stLd').classList.remove('on');out.style.display='block';
+    document.getElementById('stOut').innerHTML=buildStatsHTML(av,n,s,tz,dates.length,matchs);
+    document.getElementById('stLd').classList.remove('on');document.getElementById('stOut').style.display='block';
   },50);
 }
-
-function buildStatsHourDay(av,n,s,tz,key,keyLabel){
-  // Retourne stats par heure ou jour pour un marché
-  var hm={};
-  var getVal=function(m){
-    if(key==='over')return m.total>s?1:0;
-    if(key==='under')return m.total<=s?1:0;
-    if(key==='v1')return m.v1x2==='V1'?1:0;
-    if(key==='x')return m.v1x2==='X'?1:0;
-    if(key==='v2')return m.v1x2==='V2'?1:0;
-    if(key==='bttsO')return m.btts?1:0;
-    if(key==='bttsN')return m.btts?0:1;
-    if(key==='dc1x')return(m.v1x2==='V1'||m.v1x2==='X')?1:0;
-    if(key==='dcx2')return(m.v1x2==='X'||m.v1x2==='V2')?1:0;
-    if(key==='dc12')return(m.v1x2==='V1'||m.v1x2==='V2')?1:0;
-    if(key==='csH')return m.a===0?1:0;
-    if(key==='csA')return m.h===0?1:0;
-    if(key==='hmsc')return m.h>0?1:0;
-    if(key==='amsc')return m.a>0?1:0;
-    return 0;
-  };
-  av.forEach(function(m){
-    var hk=(m.heure?m.heure.split(':')[0]:'??')+'h';
-    if(!hm[hk])hm[hk]={ok:0,total:0};hm[hk].total++;hm[hk].ok+=getVal(m);
-  });
-  var hrs=Object.keys(hm).sort();
-  var html='<div class="tbl"><table><tr><th>Heure</th><th>Matchs</th><th>'+keyLabel+'</th><th>Taux</th></tr>';
-  hrs.forEach(function(hk){var v=hm[hk],p=Math.round(v.ok/v.total*100),cl=p>=60?'tg':p>=45?'ty':'tr';html+='<tr><td><b>'+hk+'</b></td><td>'+v.total+'</td><td class="'+cl+'">'+v.ok+'</td><td class="'+cl+'">'+p+'%</td></tr>'});
+function getMktVal(m,key,s){
+  if(key==='over')return m.total>s?1:0;if(key==='under')return m.total<=s?1:0;
+  if(key==='v1')return m.v1x2==='V1'?1:0;if(key==='x')return m.v1x2==='X'?1:0;if(key==='v2')return m.v1x2==='V2'?1:0;
+  if(key==='bttsO')return m.btts?1:0;if(key==='bttsN')return m.btts?0:1;
+  if(key==='dc1x')return(m.v1x2==='V1'||m.v1x2==='X')?1:0;if(key==='dcx2')return(m.v1x2==='X'||m.v1x2==='V2')?1:0;if(key==='dc12')return(m.v1x2==='V1'||m.v1x2==='V2')?1:0;
+  if(key==='csH')return m.a===0?1:0;if(key==='csA')return m.h===0?1:0;
+  if(key==='hmsc')return m.h>0?1:0;if(key==='amsc')return m.a>0?1:0;
+  return 0;
+}
+function buildStatsByHour(av,s,tz,key,kl){
+  var hm={};av.forEach(function(m){var hk=(m.heure?m.heure.split(':')[0]:'??')+'h';if(!hm[hk])hm[hk]={ok:0,total:0};hm[hk].total++;hm[hk].ok+=getMktVal(m,key,s)});
+  var html='<div class="tbl"><table><tr><th>Heure</th><th>Matchs</th><th>'+kl+'</th><th>Taux</th></tr>';
+  Object.keys(hm).sort().forEach(function(hk){var v=hm[hk],p=Math.round(v.ok/v.total*100),cl=p>=60?'tg':p>=45?'ty':'tr';html+='<tr><td><b>'+hk+'</b></td><td>'+v.total+'</td><td class="'+cl+'">'+v.ok+'</td><td class="'+cl+'">'+p+'%</td></tr>'});
   return html+'</table></div>';
 }
-
+function buildStatsByDay(av,s,tz,key,kl){
+  var DAY=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  var dm=[0,1,2,3,4,5,6].map(function(){return{ok:0,total:0}});
+  av.forEach(function(m){if(!m.ts)return;var dw=new Date((m.ts+tz*3600)*1000).getUTCDay();dm[dw].total++;dm[dw].ok+=getMktVal(m,key,s)});
+  var html='<div class="tbl"><table><tr><th>Jour</th><th>Matchs</th><th>'+kl+'</th><th>Taux</th></tr>';
+  [1,2,3,4,5,6,0].forEach(function(i){var v=dm[i];if(!v.total)return;var p=Math.round(v.ok/v.total*100),cl=p>=60?'tg':p>=45?'ty':'tr';html+='<tr><td><b>'+DAY[i]+'</b></td><td>'+v.total+'</td><td class="'+cl+'">'+v.ok+'</td><td class="'+cl+'">'+p+'%</td></tr>'});
+  return html+'</table></div>';
+}
 function buildStatsHTML(av,n,s,tz,nbDates,matchs){
   var ligs=new Set(matchs.map(function(m){return m.league})).size;
   var html='<div class="sg g4"><div class="sb"><div class="sv" style="color:var(--b)">'+matchs.length+'</div><div class="sl">Total</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+nbDates+'</div><div class="sl">Jours</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+ligs+'</div><div class="sl">Ligues</div></div><div class="sb"><div class="sv">'+(n/nbDates).toFixed(1)+'</div><div class="sl">Moy/Jour</div></div></div>';
-
   if(statsMkt==='totaux'||statsMkt==='global'){
     var plus=av.filter(function(m){return m.total>s}).length,under=av.filter(function(m){return m.total<=s}).length;
-    html+='<div class="st">OVER / UNDER +'+s+'</div>';
-    html+='<div class="sg g4"><div class="sb"><div class="sv" style="color:var(--g)">'+plus+'</div><div class="sl">Over +'+s+'</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+under+'</div><div class="sl">Under -'+s+'</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(plus/n*100)+'%</div><div class="sl">% Over</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+Math.round(under/n*100)+'%</div><div class="sl">% Under</div></div></div>';
-    html+='<div class="pr"><div class="pr-l"><span style="color:var(--dm)">Taux Over +'+s+'</span><span class="pr-p">'+Math.round(plus/n*100)+'%</span></div><div class="pr-t"><div class="pr-f" style="width:'+Math.round(plus/n*100)+'%"></div></div></div>';
-    html+='<div class="st">Over par heure</div>'+buildStatsHourDay(av,n,s,tz,'over','Over');
-    html+='<div class="st">Under par heure</div>'+buildStatsHourDay(av,n,s,tz,'under','Under');
+    html+='<div class="st">OVER / UNDER +'+s+'</div><div class="sg g4"><div class="sb"><div class="sv" style="color:var(--g)">'+plus+'</div><div class="sl">Over</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+under+'</div><div class="sl">Under</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(plus/n*100)+'%</div><div class="sl">% Over</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+Math.round(under/n*100)+'%</div><div class="sl">% Under</div></div></div>';
+    html+='<div class="st">Over par heure</div>'+buildStatsByHour(av,s,tz,'over','Over');
+    html+='<div class="st">Over par jour</div>'+buildStatsByDay(av,s,tz,'over','Over');
+    html+='<div class="st">Under par heure</div>'+buildStatsByHour(av,s,tz,'under','Under');
+    html+='<div class="st">Under par jour</div>'+buildStatsByDay(av,s,tz,'under','Under');
   }
   if(statsMkt==='v1x2'||statsMkt==='global'){
     var v1=av.filter(function(m){return m.v1x2==='V1'}).length,xr=av.filter(function(m){return m.v1x2==='X'}).length,v2=av.filter(function(m){return m.v1x2==='V2'}).length;
-    html+='<div class="st">1X2</div>';
-    html+='<div class="sg g3"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(v1/n*100)+'%</div><div class="sl">V1 Dom ('+v1+')</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(xr/n*100)+'%</div><div class="sl">Nul ('+xr+')</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(v2/n*100)+'%</div><div class="sl">V2 Ext ('+v2+')</div></div></div>';
-    html+='<div class="st">V1 Domicile par heure</div>'+buildStatsHourDay(av,n,s,tz,'v1','V1 Dom');
-    html+='<div class="st">V2 Exterieur par heure</div>'+buildStatsHourDay(av,n,s,tz,'v2','V2 Ext');
-    html+='<div class="st">Match Nul par heure</div>'+buildStatsHourDay(av,n,s,tz,'x','Nul');
-    // par ligue
-    var lmV={};
-    av.forEach(function(m){var k=m.league+'|||'+m.country;if(!lmV[k])lmV[k]={v1:0,x:0,v2:0,total:0};lmV[k].total++;if(m.v1x2==='V1')lmV[k].v1++;if(m.v1x2==='X')lmV[k].x++;if(m.v1x2==='V2')lmV[k].v2++});
-    var barsV=Object.keys(lmV).filter(function(k){return lmV[k].total>=10}).map(function(k){var v=lmV[k];return{name:k.split('|||')[0],pV1:Math.round(v.v1/v.total*100),pX:Math.round(v.x/v.total*100),pV2:Math.round(v.v2/v.total*100),total:v.total}}).sort(function(a,b){return b.pV1-a.pV1}).slice(0,12);
-    if(barsV.length){html+='<div class="st">Top ligues V1 (min 10 matchs)</div><div class="bars">'+barsV.map(function(l){var c=l.pV1>=55?'var(--g)':l.pV1>=45?'var(--y)':'var(--r)';return'<div class="br2"><div class="bn" title="'+l.name+'">'+l.name+'</div><div class="bb2"><div class="bf" style="width:'+l.pV1+'%;background:'+c+'">'+l.pV1+'%</div></div></div>'}).join('')+'</div>'}
+    html+='<div class="st">1X2</div><div class="sg g3"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(v1/n*100)+'%</div><div class="sl">V1 Dom ('+v1+')</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+Math.round(xr/n*100)+'%</div><div class="sl">Nul ('+xr+')</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(v2/n*100)+'%</div><div class="sl">V2 Ext ('+v2+')</div></div></div>';
+    html+='<div class="st">V1 par heure</div>'+buildStatsByHour(av,s,tz,'v1','V1 Dom');
+    html+='<div class="st">V1 par jour</div>'+buildStatsByDay(av,s,tz,'v1','V1 Dom');
+    html+='<div class="st">V2 par heure</div>'+buildStatsByHour(av,s,tz,'v2','V2 Ext');
+    html+='<div class="st">V2 par jour</div>'+buildStatsByDay(av,s,tz,'v2','V2 Ext');
+    html+='<div class="st">Nul par heure</div>'+buildStatsByHour(av,s,tz,'x','Nul');
+    html+='<div class="st">Nul par jour</div>'+buildStatsByDay(av,s,tz,'x','Nul');
   }
   if(statsMkt==='btts'||statsMkt==='global'){
     var bO=av.filter(function(m){return m.btts===true}).length,bN=av.filter(function(m){return m.btts===false}).length;
-    html+='<div class="st">BTTS</div>';
-    html+='<div class="sg g2"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(bO/(bO+bN||1)*100)+'%</div><div class="sl">BTTS Oui ('+bO+')</div></div><div class="sb"><div class="sv" style="color:var(--r)">'+Math.round(bN/(bO+bN||1)*100)+'%</div><div class="sl">BTTS Non ('+bN+')</div></div></div>';
-    html+='<div class="st">BTTS Oui par heure</div>'+buildStatsHourDay(av,n,s,tz,'bttsO','BTTS Oui');
-    html+='<div class="st">BTTS Non par heure</div>'+buildStatsHourDay(av,n,s,tz,'bttsN','BTTS Non');
-    var lmBtts={};
-    av.forEach(function(m){var k=m.league+'|||'+m.country;if(!lmBtts[k])lmBtts[k]={bO:0,bN:0,total:0};lmBtts[k].total++;if(m.btts)lmBtts[k].bO++;else lmBtts[k].bN++});
-    var barsBtts=Object.keys(lmBtts).filter(function(k){return lmBtts[k].total>=10}).map(function(k){var v=lmBtts[k];return{name:k.split('|||')[0],p:Math.round(v.bO/v.total*100),total:v.total}}).sort(function(a,b){return b.p-a.p}).slice(0,12);
-    if(barsBtts.length){html+='<div class="st">Top ligues BTTS Oui (min 10)</div><div class="bars">'+barsBtts.map(function(l){var c=l.p>=65?'var(--g)':l.p>=50?'var(--y)':'var(--r)';return'<div class="br2"><div class="bn">'+l.name+'</div><div class="bb2"><div class="bf" style="width:'+l.p+'%;background:'+c+'">'+l.p+'%</div></div></div>'}).join('')+'</div>'}
+    html+='<div class="st">BTTS</div><div class="sg g2"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(bO/(bO+bN||1)*100)+'%</div><div class="sl">BTTS Oui ('+bO+')</div></div><div class="sb"><div class="sv" style="color:var(--r)">'+Math.round(bN/(bO+bN||1)*100)+'%</div><div class="sl">BTTS Non ('+bN+')</div></div></div>';
+    html+='<div class="st">BTTS Oui par heure</div>'+buildStatsByHour(av,s,tz,'bttsO','BTTS Oui');
+    html+='<div class="st">BTTS Oui par jour</div>'+buildStatsByDay(av,s,tz,'bttsO','BTTS Oui');
   }
   if(statsMkt==='dc'||statsMkt==='global'){
     var dc1x=av.filter(function(m){return m.v1x2==='V1'||m.v1x2==='X'}).length;
     var dcx2=av.filter(function(m){return m.v1x2==='X'||m.v1x2==='V2'}).length;
     var dc12=av.filter(function(m){return m.v1x2==='V1'||m.v1x2==='V2'}).length;
-    html+='<div class="st">DOUBLE CHANCE</div>';
-    html+='<div class="sg g3"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(dc1x/n*100)+'%</div><div class="sl">DC 1X</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(dcx2/n*100)+'%</div><div class="sl">DC X2</div></div><div class="sb"><div class="sv" style="color:var(--o)">'+Math.round(dc12/n*100)+'%</div><div class="sl">DC 12</div></div></div>';
-    html+='<div class="st">DC 1X par heure</div>'+buildStatsHourDay(av,n,s,tz,'dc1x','DC 1X');
-    html+='<div class="st">DC X2 par heure</div>'+buildStatsHourDay(av,n,s,tz,'dcx2','DC X2');
+    html+='<div class="st">DOUBLE CHANCE</div><div class="sg g3"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(dc1x/n*100)+'%</div><div class="sl">DC 1X</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(dcx2/n*100)+'%</div><div class="sl">DC X2</div></div><div class="sb"><div class="sv" style="color:var(--o)">'+Math.round(dc12/n*100)+'%</div><div class="sl">DC 12</div></div></div>';
+    html+='<div class="st">DC 1X par heure</div>'+buildStatsByHour(av,s,tz,'dc1x','DC 1X');
+    html+='<div class="st">DC 1X par jour</div>'+buildStatsByDay(av,s,tz,'dc1x','DC 1X');
   }
   if(statsMkt==='cs'||statsMkt==='global'){
     var csH=av.filter(function(m){return m.a===0}).length,csA=av.filter(function(m){return m.h===0}).length;
-    html+='<div class="st">CLEAN SHEET</div>';
-    html+='<div class="sg g2"><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(csH/n*100)+'%</div><div class="sl">CS Dom ('+csH+')</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+Math.round(csA/n*100)+'%</div><div class="sl">CS Ext ('+csA+')</div></div></div>';
-    html+='<div class="st">CS Domicile par heure</div>'+buildStatsHourDay(av,n,s,tz,'csH','CS Dom');
-    html+='<div class="st">CS Exterieur par heure</div>'+buildStatsHourDay(av,n,s,tz,'csA','CS Ext');
-    var lmCS={};
-    av.forEach(function(m){var k=m.league+'|||'+m.country;if(!lmCS[k])lmCS[k]={csH:0,csA:0,total:0};lmCS[k].total++;if(m.a===0)lmCS[k].csH++;if(m.h===0)lmCS[k].csA++});
-    var barsCS=Object.keys(lmCS).filter(function(k){return lmCS[k].total>=10}).map(function(k){var v=lmCS[k];return{name:k.split('|||')[0],pCSH:Math.round(v.csH/v.total*100),pCSA:Math.round(v.csA/v.total*100),total:v.total}}).sort(function(a,b){return b.pCSH-a.pCSH}).slice(0,12);
-    if(barsCS.length){html+='<div class="st">Top ligues CS Dom (min 10)</div><div class="bars">'+barsCS.map(function(l){var c=l.pCSH>=30?'var(--g)':l.pCSH>=20?'var(--y)':'var(--r)';return'<div class="br2"><div class="bn">'+l.name+'</div><div class="bb2"><div class="bf" style="width:'+l.pCSH*2+'%;background:'+c+'">'+l.pCSH+'%</div></div></div>'}).join('')+'</div>'}
+    html+='<div class="st">CLEAN SHEET</div><div class="sg g2"><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(csH/n*100)+'%</div><div class="sl">CS Dom ('+csH+')</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+Math.round(csA/n*100)+'%</div><div class="sl">CS Ext ('+csA+')</div></div></div>';
+    html+='<div class="st">CS Dom par heure</div>'+buildStatsByHour(av,s,tz,'csH','CS Dom');
+    html+='<div class="st">CS Dom par jour</div>'+buildStatsByDay(av,s,tz,'csH','CS Dom');
   }
   if(statsMkt==='buts'||statsMkt==='global'){
     var hmsc=av.filter(function(m){return m.h>0}).length,amsc=av.filter(function(m){return m.a>0}).length;
     var mD=(av.reduce(function(a,m){return a+(m.h||0)},0)/n).toFixed(2),mE=(av.reduce(function(a,m){return a+(m.a||0)},0)/n).toFixed(2);
-    html+='<div class="st">DOM MARQUE / EXT MARQUE</div>';
-    html+='<div class="sg g4"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(hmsc/n*100)+'%</div><div class="sl">Dom Mq</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(amsc/n*100)+'%</div><div class="sl">Ext Mq</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+mD+'</div><div class="sl">Moy Dom</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+mE+'</div><div class="sl">Moy Ext</div></div></div>';
-    html+='<div style="font-size:.7rem;color:var(--y);padding:8px;background:rgba(255,199,44,.05);border-radius:7px;margin-bottom:10px;font-family:var(--mono)">⚠ Dom Marque / Ext Marque = stats globales. Consulte la vue par ligue pour analyser par contexte specifique.</div>';
-    html+='<div class="st">Dom Marque par heure</div>'+buildStatsHourDay(av,n,s,tz,'hmsc','Dom Mq');
-    html+='<div class="st">Ext Marque par heure</div>'+buildStatsHourDay(av,n,s,tz,'amsc','Ext Mq');
-    // par ligue
-    var lmButs={};
-    av.forEach(function(m){var k=m.league+'|||'+m.country;if(!lmButs[k])lmButs[k]={hmsc:0,amsc:0,total:0,bH:0,bA:0};lmButs[k].total++;if(m.h>0)lmButs[k].hmsc++;if(m.a>0)lmButs[k].amsc++;lmButs[k].bH+=m.h||0;lmButs[k].bA+=m.a||0});
-    var barsButs=Object.keys(lmButs).filter(function(k){return lmButs[k].total>=10}).map(function(k){var v=lmButs[k];return{name:k.split('|||')[0],pHmsc:Math.round(v.hmsc/v.total*100),pAmsc:Math.round(v.amsc/v.total*100),mH:(v.bH/v.total).toFixed(2),mA:(v.bA/v.total).toFixed(2),total:v.total}}).sort(function(a,b){return b.pHmsc-a.pHmsc}).slice(0,12);
-    if(barsButs.length){html+='<div class="st">Dom Marque par ligue (min 10)</div><div class="tbl"><table><tr><th>Ligue</th><th>Dom Mq</th><th>Ext Mq</th><th>Moy D</th><th>Moy E</th></tr>'+barsButs.map(function(l){var cl=l.pHmsc>=80?'tg':l.pHmsc>=65?'ty':'tr';return'<tr><td><b>'+l.name+'</b></td><td class="'+cl+'">'+l.pHmsc+'%</td><td>'+l.pAmsc+'%</td><td style="color:var(--b)">'+l.mH+'</td><td style="color:var(--p)">'+l.mA+'</td></tr>'}).join('')+'</table></div>'}
+    html+='<div class="st">DOM / EXT MARQUE</div><div class="sg g4"><div class="sb"><div class="sv" style="color:var(--g)">'+Math.round(hmsc/n*100)+'%</div><div class="sl">Dom Mq</div></div><div class="sb"><div class="sv" style="color:var(--b)">'+Math.round(amsc/n*100)+'%</div><div class="sl">Ext Mq</div></div><div class="sb"><div class="sv" style="color:var(--y)">'+mD+'</div><div class="sl">Moy Dom</div></div><div class="sb"><div class="sv" style="color:var(--p)">'+mE+'</div><div class="sl">Moy Ext</div></div></div>';
+    html+='<div class="st">Dom Marque par heure</div>'+buildStatsByHour(av,s,tz,'hmsc','Dom Mq');
+    html+='<div class="st">Dom Marque par jour</div>'+buildStatsByDay(av,s,tz,'hmsc','Dom Mq');
   }
   return html;
 }
-
 // =========================================================
 // COMPETITIONS
 // =========================================================
@@ -1477,8 +1079,7 @@ function renderComps(){
     var pCsH=c.total?Math.round(c.csH/c.total*100):0,pCsA=c.total?Math.round(c.csA/c.total*100):0;
     var pHmsc=c.total?Math.round(c.hmsc/c.total*100):0,pAmsc=c.total?Math.round(c.amsc/c.total*100):0;
     var col=p>=60?'var(--g)':p>=45?'var(--y)':'var(--r)',bgc=p>=60?'bgG':p>=45?'bgY':'bgR';
-    var sa=seuilAdaptatif(c);
-    function seuilAdaptatif(lig){if(!lig||lig.total<10)return null;return(lig.buts/lig.total)>=2.5?2.5:1.5}
+    var sa=c.total>=10?(c.buts/c.total>=2.5?2.5:1.5):null;
     var div=document.createElement('div');div.className='comp-card';
     div.innerHTML='<div class="comp-head" onclick="toggleComp(this)"><div><div class="comp-name">'+c.name+'</div><div class="comp-country">'+c.country+'</div></div><div class="comp-badge"><span class="comp-n">'+c.total+' matchs</span><span class="lbg '+bgc+'" style="font-size:.75rem">+'+s+': '+p+'%</span></div></div>'
       +'<div class="comp-body"><div class="lpb"><div class="lpf" style="width:'+p+'%;background:'+col+'"></div></div>'
@@ -1512,7 +1113,7 @@ function selectPari(pred,type){
   if(type==='v1x2'){var best=null,bestP=0;if(pred.v1!==null&&pred.v1>bestP){best='V1';bestP=pred.v1}if(pred.x!==null&&pred.x>bestP){best='X';bestP=pred.x}if(pred.v2!==null&&pred.v2>bestP){best='V2';bestP=pred.v2}if(!best||bestP<0.35)return null;return{label:best,prob:bestP,coteEst:estCote(bestP)}}
   if(type==='dc'){var bDC=null,bDCP=0;if(pred.dc1x!==null&&pred.dc1x>bDCP){bDC='DC 1X';bDCP=pred.dc1x}if(pred.dcx2!==null&&pred.dcx2>bDCP){bDC='DC X2';bDCP=pred.dcx2}if(pred.dc12!==null&&pred.dc12>bDCP){bDC='DC 12';bDCP=pred.dc12}if(!bDC||bDCP<0.55)return null;return{label:bDC,prob:bDCP,coteEst:estCote(bDCP)}}
   if(type==='best'){if(!pred.bestMarket||pred.bestMarket.prob<0.50)return null;return{label:pred.bestMarket.label,prob:pred.bestMarket.prob,coteEst:estCote(pred.bestMarket.prob)}}
-  if(type==='mix'){var allM2=pred.allMarkets||[];var top=allM2.filter(function(m){return m.prob>=0.55});if(top.length)return{label:top[0].label,prob:top[0].prob,coteEst:estCote(top[0].prob)};var opts=[];if(pred.plus!==null)opts.push({label:'+'+s+' buts',prob:pred.plus,coteEst:estCote(pred.plus)});if(!opts.length)return null;opts.sort(function(a,b){return b.prob-a.prob});return opts[0]}
+  if(type==='mix'){var allM2=pred.allMarkets||[];var top=allM2.filter(function(m){return m.prob>=0.55});if(top.length)return{label:top[0].label,prob:top[0].prob,coteEst:estCote(top[0].prob)};if(pred.plus!==null)return{label:'+'+s+' buts',prob:pred.plus,coteEst:estCote(pred.plus)};return null}
   return null;
 }
 async function genTickets(){
@@ -1589,26 +1190,25 @@ function saveTkResult(result){
   saved.push({id:tk.id,date:tk.date,result:result,coteTotal:tk.coteTotal,matchs:tk.matchs.map(function(c){return{home:c.m.home,away:c.m.away,pari:c.pari.label,prob:Math.round(c.pari.prob*100),conv:c.pred.convergence,nbSig:c.pred.nbSig,cote:c.pari.coteEst}})});
   setTickets(saved);document.getElementById('modalTk').classList.remove('on');renderTickets(currentTickets);
 }
-
 // =========================================================
-// FIABILITE — 14 MARCHES
+// FIABILITE — DATA HELPERS
 // =========================================================
 function getAllMarkets(s){
   return[
-    {id:'over',  label:'Over +'+s,      pKey:'pPlus',    rKey:'rPlus',  rVal:null,positive:true},
-    {id:'under', label:'Under -'+s,     pKey:'pUnder',   rKey:'rUnder', rVal:null,positive:true},
-    {id:'btts',  label:'BTTS Oui',      pKey:'pBtts',    rKey:'rBtts',  rVal:null,positive:true},
-    {id:'bttsN', label:'BTTS Non',      pKey:'pBttsNon', rKey:'rBtts',  rVal:null,positive:false},
-    {id:'v1',    label:'V1 Dom',        pKey:'pV1',      rKey:'rV1x2',  rVal:'V1',positive:true},
-    {id:'x',     label:'Nul',           pKey:'pX',       rKey:'rV1x2',  rVal:'X', positive:true},
-    {id:'v2',    label:'V2 Ext',        pKey:'pV2',      rKey:'rV1x2',  rVal:'V2',positive:true},
-    {id:'dc1x',  label:'DC 1X',         pKey:'pDc1x',    rKey:'rDc1x',  rVal:null,positive:true},
-    {id:'dcx2',  label:'DC X2',         pKey:'pDcx2',    rKey:'rDcx2',  rVal:null,positive:true},
-    {id:'dc12',  label:'DC 12',         pKey:'pDc12',    rKey:'rDc12',  rVal:null,positive:true},
-    {id:'csH',   label:'CS Dom',        pKey:'pCsH',     rKey:'rCsH',   rVal:null,positive:true},
-    {id:'csA',   label:'CS Ext',        pKey:'pCsA',     rKey:'rCsA',   rVal:null,positive:true},
-    {id:'hmsc',  label:'Dom Marque',    pKey:'pHmsc',    rKey:'rHmsc',  rVal:null,positive:true},
-    {id:'amsc',  label:'Ext Marque',    pKey:'pAmsc',    rKey:'rAmsc',  rVal:null,positive:true}
+    {id:'over',  label:'Over +'+s,   pKey:'pPlus',    rKey:'rPlus',  rVal:null, positive:true},
+    {id:'under', label:'Under -'+s,  pKey:'pUnder',   rKey:'rUnder', rVal:null, positive:true},
+    {id:'btts',  label:'BTTS Oui',   pKey:'pBtts',    rKey:'rBtts',  rVal:null, positive:true},
+    {id:'bttsN', label:'BTTS Non',   pKey:'pBttsNon', rKey:'rBtts',  rVal:null, positive:false},
+    {id:'v1',    label:'V1 Dom',     pKey:'pV1',      rKey:'rV1x2',  rVal:'V1', positive:true},
+    {id:'x',     label:'Nul',        pKey:'pX',       rKey:'rV1x2',  rVal:'X',  positive:true},
+    {id:'v2',    label:'V2 Ext',     pKey:'pV2',      rKey:'rV1x2',  rVal:'V2', positive:true},
+    {id:'dc1x',  label:'DC 1X',      pKey:'pDc1x',    rKey:'rDc1x',  rVal:null, positive:true},
+    {id:'dcx2',  label:'DC X2',      pKey:'pDcx2',    rKey:'rDcx2',  rVal:null, positive:true},
+    {id:'dc12',  label:'DC 12',      pKey:'pDc12',    rKey:'rDc12',  rVal:null, positive:true},
+    {id:'csH',   label:'CS Dom',     pKey:'pCsH',     rKey:'rCsH',   rVal:null, positive:true},
+    {id:'csA',   label:'CS Ext',     pKey:'pCsA',     rKey:'rCsA',   rVal:null, positive:true},
+    {id:'hmsc',  label:'Dom Marque', pKey:'pHmsc',    rKey:'rHmsc',  rVal:null, positive:true},
+    {id:'amsc',  label:'Ext Marque', pKey:'pAmsc',    rKey:'rAmsc',  rVal:null, positive:true}
   ];
 }
 function getRealVal(t,mkt){
@@ -1649,7 +1249,8 @@ function computeAndSaveCalib(entries,s){
     if(st.n>=10&&st.predAvg&&st.realRate){
       newCalib[mkt.id]=Math.min(1.3,Math.max(0.7,Math.round(st.realRate/st.predAvg*100)/100));
     }
-  });setCalib(newCalib);return newCalib;
+  });
+  setCalib(newCalib);return newCalib;
 }
 function buildTrackEntry(m,pred,s,h,a){
   var tot=h+a;
@@ -1673,6 +1274,42 @@ function buildTrackEntry(m,pred,s,h,a){
     pDc12:pred.dc12!==null?Math.round(pred.dc12*100):null,
     pConf:pred.conf||0,pConv:pred.convergence||0,pNbSig:pred.nbSig||0,auto:true};
 }
+
+// =========================================================
+// FIABILITE — buildFiabGlobalCache
+// Calcule UNE SEULE FOIS tout ce qu'il faut pour tous les onglets
+// =========================================================
+function buildFiabGlobalCache(entries,s){
+  var mkts=getAllMarkets(s);
+  // Précision par marché
+  var mktStats={};
+  mkts.forEach(function(mkt){mktStats[mkt.id]=mktAccuracy(entries,mkt)});
+  // Données calibration (tranches) par marché
+  var calibData={};
+  mkts.forEach(function(mkt){
+    var st=mktStats[mkt.id];
+    if(st&&st.n>=3){
+      calibData[mkt.id]={tranches:computeCalibTranches(entries,mkt),stats:st,label:mkt.label,id:mkt.id};
+    }
+  });
+  // Convergence (0/1/2/3 signaux) par marché — CORRECTION : calculé ici, pas dans renderFiabOut
+  var convData={};
+  mkts.forEach(function(mkt){convData[mkt.id]=[{ok:0,n:0},{ok:0,n:0},{ok:0,n:0},{ok:0,n:0}]});
+  entries.forEach(function(t){
+    var c=t.pConv||0;if(c<0||c>3)return;
+    mkts.forEach(function(mkt){
+      var prob=t[mkt.pKey];if(prob===null||prob===undefined)return;
+      var real=getRealVal(t,mkt);
+      convData[mkt.id][c].n++;
+      if((prob>=50&&real)||(prob<50&&!real))convData[mkt.id][c].ok++;
+    });
+  });
+  return{mktStats:mktStats,calibData:calibData,convData:convData,mkts:mkts};
+}
+
+// =========================================================
+// FIABILITE — RENDER (onglets Resume / Marches / Analyse / ROI)
+// =========================================================
 function setFiabView(v){
   fiabView=v;
   document.querySelectorAll('.fiab-tab').forEach(function(b){b.classList.toggle('on',b.dataset.v===v)});
@@ -1688,34 +1325,35 @@ function calcFiabilite(){
 function renderFiabOut(){
   var entries=getTrack(),s=seuilFiab;
   if(!entries.length)return;
-  var mkts=getAllMarkets(s),newCalib=getCalib(),calibApplied=Object.keys(newCalib).length>0;
-  var mktStats={};mkts.forEach(function(mkt){mktStats[mkt.id]=mktAccuracy(entries,mkt)});
+  var newCalib=getCalib(),calibApplied=Object.keys(newCalib).length>0;
+  // Calcul global — stocké sur window pour showMarcheFor()
+  var gc=buildFiabGlobalCache(entries,s);
+  window._calibData=gc.calibData;
+  window._calibFact=newCalib;
+  window._convData=gc.convData;  // FIX: plus de référence à convMktData inexistante
+  var mkts=gc.mkts,mktStats=gc.mktStats;
   var savedTk=getTickets(),tkWon=savedTk.filter(function(t){return t.result==='won'}).length;
   var tkLost=savedTk.filter(function(t){return t.result==='lost'}).length,tkTotal=tkWon+tkLost;
   var html='';
+  // Onglets
   html+='<div class="fiab-tabs">'
     +'<button class="fiab-tab'+(fiabView==='resume'?' on':'')+'" data-v="resume" onclick="setFiabView(\'resume\')">Resume</button>'
     +'<button class="fiab-tab'+(fiabView==='marches'?' on':'')+'" data-v="marches" onclick="setFiabView(\'marches\')">Marches</button>'
-    +'<button class="fiab-tab'+(fiabView==='calibration'?' on':'')+'" data-v="calibration" onclick="setFiabView(\'calibration\')">Calibration</button>'
-    +'<button class="fiab-tab'+(fiabView==='convergence'?' on':'')+'" data-v="convergence" onclick="setFiabView(\'convergence\')">Convergence</button>'
+    +'<button class="fiab-tab'+(fiabView==='analyse'?' on':'')+'" data-v="analyse" onclick="setFiabView(\'analyse\')">Analyse</button>'
     +'<button class="fiab-tab'+(fiabView==='roi'?' on':'')+'" data-v="roi" onclick="setFiabView(\'roi\')">ROI</button>'
     +'</div>';
+  // Bandeau calibration
   if(calibApplied){
     var nCalib=Object.keys(newCalib).length;
-    html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:9px 12px;margin-bottom:11px;font-size:.66rem;line-height:1.7">'
-      +'<div style="font-weight:700;color:var(--g);margin-bottom:2px">⚡ Auto-calibration active ('+nCalib+' marches)</div>'
-      +'<div style="color:var(--dm);font-family:var(--mono)">'+Object.entries(newCalib).map(function(e){
-        var f=e[1],mkt=mkts.find(function(m){return m.id===e[0]});
-        return'<span style="margin-right:5px">'+(mkt?mkt.label:e[0])+' '+(f>1.05?'↑':f<0.95?'↓':'≈')+'×'+f+'</span>';
-      }).join('')+'</div></div>';
+    html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:9px 12px;margin-bottom:11px;font-size:.66rem;line-height:1.7"><div style="font-weight:700;color:var(--g);margin-bottom:2px">⚡ Auto-calibration active ('+nCalib+' marches)</div><div style="color:var(--dm);font-family:var(--mono)">'+Object.entries(newCalib).map(function(e){var f=e[1],mkt=mkts.find(function(m){return m.id===e[0]});return'<span style="margin-right:5px">'+(mkt?mkt.label:e[0])+' '+(f>1.05?'↑':f<0.95?'↓':'≈')+'×'+f+'</span>'}).join('')+'</div></div>';
   }
-
   function accBox(id,lbl){
     var st=mktStats[id];if(!st||st.acc===null)return'<div class="sb"><div class="sv" style="color:var(--dm)">?</div><div class="sl">'+lbl+'</div></div>';
     var col=st.acc>=60?'var(--g)':st.acc>=45?'var(--y)':'var(--r)';
     return'<div class="sb"><div class="sv" style="color:'+col+'">'+st.acc+'%</div><div class="sl">'+lbl+'</div></div>';
   }
 
+  // ---- RESUME ----
   if(fiabView==='resume'){
     html+='<div class="st">PRECISION ('+entries.length+' matchs)</div>';
     html+='<div class="sg g4">'+accBox('over','Over +'+s)+accBox('under','Under -'+s)+accBox('btts','BTTS Oui')+accBox('bttsN','BTTS Non')+'</div>';
@@ -1733,90 +1371,75 @@ function renderFiabOut(){
       html+='<div class="lc" style="border-color:rgba(0,229,160,.3)"><div class="lh"><div><div class="ln" style="color:var(--g)">🏆 Meilleur</div><div class="lsu">'+bst.m.label+'</div></div><div class="lbg bgG">'+bst.s.acc+'%</div></div><div class="lpb"><div class="lpf" style="width:'+bst.s.acc+'%;background:var(--g)"></div></div><div style="font-size:.66rem;color:var(--dm);font-family:var(--mono)">'+bst.s.ok+'/'+bst.s.n+' corrects · Brier: '+bst.s.brier+'</div></div>';
       html+='<div class="lc" style="border-color:rgba(255,61,90,.3)"><div class="lh"><div><div class="ln" style="color:var(--r)">⚠ A eviter</div><div class="lsu">'+wst.m.label+'</div></div><div class="lbg bgR">'+wst.s.acc+'%</div></div><div class="lpb"><div class="lpf" style="width:'+wst.s.acc+'%;background:var(--r)"></div></div><div style="font-size:.66rem;color:var(--dm);font-family:var(--mono)">'+wst.s.ok+'/'+wst.s.n+' corrects · Brier: '+wst.s.brier+'</div></div>';
     }
-    // Calibration tranche Over
     if(overSt&&overSt.n>=3){
-      var tranches=computeCalibTranches(entries,mkts[0]);
+      var trOver=computeCalibTranches(entries,mkts[0]);
       html+='<div class="st">CALIBRATION OVER +'+s+'</div><div class="tbl"><table><tr><th>Pred.</th><th>N</th><th>Vrais+</th><th>Reel</th><th>Ecart</th></tr>';
-      tranches.forEach(function(tr){if(!tr.n)return;var reel=Math.round(tr.ok/tr.n*100),mid=Math.round((tr.min+tr.max)/2),ecart=reel-mid;var ec=(ecart>=0?'+':'')+ecart+'%',ecC=Math.abs(ecart)<=10?'var(--g)':Math.abs(ecart)<=20?'var(--y)':'var(--r)';var cl=reel>=60?'tg':reel>=45?'ty':'tr';html+='<tr><td><b>'+tr.lbl+'</b></td><td>'+tr.n+'</td><td>'+tr.ok+'</td><td class="'+cl+'">'+reel+'%</td><td style="color:'+ecC+'">'+ec+'</td></tr>'});
+      trOver.forEach(function(tr){if(!tr.n)return;var reel=Math.round(tr.ok/tr.n*100),mid=Math.round((tr.min+tr.max)/2),ecart=reel-mid;var ec=(ecart>=0?'+':'')+ecart+'%',ecC=Math.abs(ecart)<=10?'var(--g)':Math.abs(ecart)<=20?'var(--y)':'var(--r)';var cl=reel>=60?'tg':reel>=45?'ty':'tr';html+='<tr><td><b>'+tr.lbl+'</b></td><td>'+tr.n+'</td><td>'+tr.ok+'</td><td class="'+cl+'">'+reel+'%</td><td style="color:'+ecC+'">'+ec+'</td></tr>'});
       html+='</table></div>';
     }
-    // Derniers matchs
     html+='<div class="st">DERNIERS MATCHS</div>';
     entries.slice().reverse().slice(0,15).forEach(function(t){
       var predBest=t.pV1!==null?(t.pV1>=t.pX&&t.pV1>=t.pV2?'V1':t.pX>=t.pV1&&t.pX>=t.pV2?'X':'V2'):'?';
-      var plusOkM=t.pPlus!==null&&((t.pPlus>=50&&t.rPlus)||(t.pPlus<50&&!t.rPlus));
-      var bttsOkM=t.pBtts!==null&&((t.pBtts>=50&&t.rBtts)||(t.pBtts<50&&!t.rBtts));
-      var v1x2OkM=predBest!=='?'&&predBest===t.rV1x2;
-      html+='<div style="background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:9px 11px;margin-bottom:7px">'
-        +'<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:.73rem;font-weight:700">'+t.home+' - '+t.away+'</span><span style="font-size:.62rem;color:var(--dm);font-family:var(--mono)">'+t.date+'</span></div>'
-        +'<div style="font-size:.62rem;color:var(--dm);margin-bottom:5px;font-family:var(--mono)">'+t.league+' · +'+t.seuil+'</div>'
-        +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">'
-        +'<div style="background:var(--s2);border-radius:6px;padding:5px 3px;text-align:center"><div style="font-size:.78rem;font-weight:900">'+t.rH+'-'+t.rA+'</div><div style="font-size:.52rem;color:var(--dm);margin-top:1px;font-family:var(--mono)">SCORE</div></div>'
-        +'<div style="background:var(--s2);border-radius:6px;padding:5px 3px;text-align:center;border:1px solid '+(plusOkM?'var(--g)':'var(--r)')+'"><div style="font-size:.78rem;font-weight:900;color:'+(plusOkM?'var(--g)':'var(--r)')+'">'+( t.pPlus!==null?t.pPlus+'%':'?')+'</div><div style="font-size:.52rem;color:var(--dm);margin-top:1px;font-family:var(--mono)">+'+t.seuil+' '+(t.rPlus?'✓':'✗')+'</div></div>'
-        +'<div style="background:var(--s2);border-radius:6px;padding:5px 3px;text-align:center;border:1px solid '+(v1x2OkM?'var(--g)':'var(--r)')+'"><div style="font-size:.78rem;font-weight:900;color:'+(v1x2OkM?'var(--g)':'var(--r)')+'">'+predBest+'</div><div style="font-size:.52rem;color:var(--dm);margin-top:1px;font-family:var(--mono)">1X2 '+t.rV1x2+'</div></div>'
-        +'<div style="background:var(--s2);border-radius:6px;padding:5px 3px;text-align:center;border:1px solid '+(bttsOkM?'var(--g)':'var(--r)')+'"><div style="font-size:.78rem;font-weight:900;color:'+(bttsOkM?'var(--g)':'var(--r)')+'">'+( t.pBtts!==null?t.pBtts+'%':'?')+'</div><div style="font-size:.52rem;color:var(--dm);margin-top:1px;font-family:var(--mono)">BTTS '+(t.rBtts?'✓':'✗')+'</div></div>'
-        +'</div>'
-        +'<div style="font-size:.6rem;color:var(--dm);margin-top:4px;font-family:var(--mono)">Conf. '+t.pConf+'% · '+(t.pConv||0)+'/'+(t.pNbSig||0)+' sig'+(t.auto?' · auto':'')+'</div></div>';
+      var plusOk=t.pPlus!==null&&((t.pPlus>=50&&t.rPlus)||(t.pPlus<50&&!t.rPlus));
+      var bttsOk=t.pBtts!==null&&((t.pBtts>=50&&t.rBtts)||(t.pBtts<50&&!t.rBtts));
+      var v1x2Ok=predBest!=='?'&&predBest===t.rV1x2;
+      html+='<div style="background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:9px 11px;margin-bottom:7px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:.73rem;font-weight:700">'+t.home+' - '+t.away+'</span><span style="font-size:.62rem;color:var(--dm);font-family:var(--mono)">'+t.date+'</span></div><div style="font-size:.62rem;color:var(--dm);margin-bottom:5px;font-family:var(--mono)">'+t.league+' · +'+t.seuil+'</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px"><div style="background:var(--s2);border-radius:6px;padding:5px 3px;text-align:center"><div style="font-size:.78rem;font-weight:900">'+t.rH+'-'+t.rA+'</div><div style="font-size:.52rem;color:var(--dm);font-family:var(--mono)">SCORE</div></div><div style="background:var(--s2);border-radius:6px;padding:5px 3px;text-align:center;border:1px solid '+(plusOk?'var(--g)':'var(--r)')+'"><div style="font-size:.78rem;font-weight:900;color:'+(plusOk?'var(--g)':'var(--r)')+'">'+( t.pPlus!==null?t.pPlus+'%':'?')+'</div><div style="font-size:.52rem;color:var(--dm);font-family:var(--mono)">+'+t.seuil+' '+(t.rPlus?'✓':'✗')+'</div></div><div style="background:var(--s2);border-radius:6px;padding:5px 3px;text-align:center;border:1px solid '+(v1x2Ok?'var(--g)':'var(--r)')+'"><div style="font-size:.78rem;font-weight:900;color:'+(v1x2Ok?'var(--g)':'var(--r)')+'">'+predBest+'</div><div style="font-size:.52rem;color:var(--dm);font-family:var(--mono)">1X2 '+t.rV1x2+'</div></div><div style="background:var(--s2);border-radius:6px;padding:5px 3px;text-align:center;border:1px solid '+(bttsOk?'var(--g)':'var(--r)')+'"><div style="font-size:.78rem;font-weight:900;color:'+(bttsOk?'var(--g)':'var(--r)')+'">'+( t.pBtts!==null?t.pBtts+'%':'?')+'</div><div style="font-size:.52rem;color:var(--dm);font-family:var(--mono)">BTTS '+(t.rBtts?'✓':'✗')+'</div></div></div><div style="font-size:.6rem;color:var(--dm);margin-top:4px;font-family:var(--mono)">Conf. '+t.pConf+'% · '+(t.pConv||0)+'/'+(t.pNbSig||0)+' sig'+(t.auto?' · auto':'')+'</div></div>';
     });
   }
+
+  // ---- MARCHES — sélecteur + vue détaillée complète par marché ----
   else if(fiabView==='marches'){
-    html+='<div class="st">LES 14 MARCHES</div>';
+    html+='<div style="font-size:.65rem;color:var(--dm);margin-bottom:9px;line-height:1.5;font-family:var(--mono)">Selectionnez un marche : carte resume, tableau calibration par tranche, biais visuels, et precision par convergence.</div>';
+    html+='<div class="mkt-sel-row" id="marchesSelRow">';
     mkts.forEach(function(mkt){
       var st=mktStats[mkt.id];
-      var col=st&&st.acc!==null?(st.acc>=60?'var(--g)':st.acc>=45?'var(--y)':'var(--r)'):'var(--dm)';
-      var bgc=st&&st.acc!==null?(st.acc>=60?'bgG':st.acc>=45?'bgY':'bgR'):'';
-      var f=newCalib[mkt.id];var biais=st&&st.predAvg&&st.realRate?st.predAvg-st.realRate:null;
-      html+='<div class="lc"><div class="lh"><div><div class="ln">'+mkt.label+'</div><div class="lsu" style="font-family:var(--mono)">'+(st&&st.n>=3?st.ok+'/'+st.n+' corrects · Brier: '+st.brier+' · Reel: '+st.realRate+'% · Pred moy: '+st.predAvg+'%':'Pas assez (min 3)')+'</div></div>'
-        +'<div style="display:flex;gap:5px;align-items:center">'
-        +(f?(f>1.05?'<span style="font-size:.58rem;color:var(--b);padding:1px 5px;background:rgba(61,155,255,.07);border-radius:4px;border:1px solid rgba(61,155,255,.25)">sous-pred</span>':f<0.95?'<span style="font-size:.58rem;color:var(--r);padding:1px 5px;background:rgba(255,61,90,.06);border-radius:4px;border:1px solid rgba(255,61,90,.25)">sur-pred</span>':'<span style="font-size:.58rem;color:var(--g);padding:1px 5px;background:rgba(0,229,160,.06);border-radius:4px;border:1px solid rgba(0,229,160,.25)">OK</span>'):'')
-        +(st&&st.acc!==null?'<div class="lbg '+bgc+'">'+st.acc+'%</div>':'<div class="lbg" style="background:var(--s2);color:var(--dm)">?</div>')
-        +'</div></div>'
-        +(st&&st.acc!==null?'<div class="lpb"><div class="lpf" style="width:'+st.acc+'%;background:'+col+'"></div></div>':'')
-        +(biais!==null?'<div style="font-size:.64rem;color:'+(Math.abs(biais)>5?'var(--y)':'var(--dm)')+';font-family:var(--mono)">Biais: '+(biais>=0?'+':'')+biais+'%'+(Math.abs(biais)>5?' ⚠ x'+f+' applique':' ✓')+'</div>':'')
-        +'</div>';
+      var dot=st&&st.acc!==null?(st.acc>=60?'🟢':st.acc>=45?'🟡':'🔴'):'⚪';
+      var accTxt=st&&st.acc!==null?' '+st.acc+'%':'';
+      html+='<button class="mkt-sel-btn" id="mbtn_'+mkt.id+'" onclick="showMarcheFor(\''+mkt.id+'\',this)">'+dot+' '+mkt.label+accTxt+'</button>';
     });
+    html+='</div><div id="marcheDetail"></div>';
   }
-  else if(fiabView==='calibration'){
-    html+='<div style="font-size:.7rem;color:var(--dm);margin-bottom:9px;line-height:1.5;font-family:var(--mono)">Probabilites predites vs taux reels par tranche. Ideal: pred 60% = reel 60%.</div>';
-    var calibData={};
-    mkts.forEach(function(mkt){var st=mktStats[mkt.id];if(st&&st.n>=3)calibData[mkt.id]={tranches:computeCalibTranches(entries,mkt),stats:st,label:mkt.label}});
-    html+='<div class="mkt-sel-row" id="calibSelRow">';
-    mkts.forEach(function(mkt){if(!calibData[mkt.id])return;html+='<button class="mkt-sel-btn" onclick="showCalibFor(\''+mkt.id+'\',this)">'+mkt.label+'</button>'});
-    html+='</div><div id="calibDetail"></div>';
-    html+='<script>window._CD='+JSON.stringify(calibData)+';window._CF='+JSON.stringify(newCalib)+';'
-      +'function showCalibFor(id,btn){'
-      +'document.querySelectorAll(".mkt-sel-btn").forEach(function(b){b.classList.remove("on")});btn.classList.add("on");'
-      +'var d=window._CD[id];if(!d){document.getElementById("calibDetail").innerHTML="Pas assez de donnees";return}'
-      +'var h="<div class=\'st\' style=\'margin-top:10px\'>"+d.label+" ("+d.stats.n+" matchs)</div>";'
-      +'h+="<div class=\'tbl\'><table><tr><th>Pred.</th><th>N</th><th>Vrais</th><th>Reel</th><th>Ecart</th></tr>";'
-      +'d.tranches.forEach(function(tr){var reel=Math.round(tr.ok/tr.n*100);var mid=Math.round((tr.min+tr.max)/2);var biais=reel-mid;var bs=(biais>=0?"+":"")+biais+"%";var bc=Math.abs(biais)<=10?"var(--g)":Math.abs(biais)<=20?"var(--y)":"var(--r)";var cl=reel>=60?"tg":reel>=45?"ty":"tr";h+="<tr><td><b>"+tr.lbl+"</b></td><td>"+tr.n+"</td><td>"+tr.ok+"</td><td class=\'"+cl+"\'>"+reel+"%</td><td style=\'color:"+bc+"\'>"+bs+"</td></tr>"});'
-      +'h+="</table></div>";'
-      +'var f=window._CF[id];if(f){var fc=f>1.05?"var(--b)":f<0.95?"var(--r)":"var(--g)";h+="<div style=\'background:rgba(0,0,0,.15);border:1px solid var(--bd);border-radius:7px;padding:9px;font-size:.68rem;margin-top:7px;color:"+fc+"\'>⚙ x"+f+"</div>";}'
-      +'document.getElementById("calibDetail").innerHTML=h;}'
-      +'setTimeout(function(){var f=document.querySelector(".mkt-sel-btn");if(f)f.click()},50);'
-      +'<\/script>';
-  }
-  else if(fiabView==='convergence'){
-    var convMkt={};
-    mkts.forEach(function(mkt){convMkt[mkt.id]=[{ok:0,n:0},{ok:0,n:0},{ok:0,n:0},{ok:0,n:0}]});
-    entries.forEach(function(t){
-      var c=t.pConv||0;if(c<0||c>3)return;
-      mkts.forEach(function(mkt){
-        var prob=t[mkt.pKey];if(prob===null||prob===undefined)return;
-        var real=getRealVal(t,mkt);convMkt[mkt.id][c].n++;
-        if((prob>=50&&real)||(prob<50&&!real))convMkt[mkt.id][c].ok++;
-      });
-    });
-    html+='<div class="st">PRECISION PAR CONVERGENCE — 14 MARCHES</div>';
-    html+='<div class="tbl"><table><tr><th>Marche</th><th>0 sig</th><th>1/3</th><th>2/3</th><th>3/3 ⚡</th></tr>';
+
+  // ---- ANALYSE — vue comparative globale ----
+  else if(fiabView==='analyse'){
+    var calibScores=Object.values(gc.calibData).map(function(d){
+      if(!d.tranches.length)return null;
+      var totalBiais=0,tw=0;
+      d.tranches.forEach(function(tr){var mid=Math.round((tr.min+tr.max)/2),reel=Math.round(tr.ok/tr.n*100);totalBiais+=Math.abs(reel-mid)*tr.n;tw+=tr.n});
+      return{id:d.id,label:d.label,avgBiais:tw?Math.round(totalBiais/tw):99,n:d.stats.n,acc:d.stats.acc};
+    }).filter(Boolean).sort(function(a,b){return a.avgBiais-b.avgBiais});
+    if(calibScores.length>=2){
+      var best=calibScores[0],worst=calibScores[calibScores.length-1];
+      html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">';
+      html+='<div style="background:var(--s1);border:1px solid rgba(0,229,160,.3);border-radius:10px;padding:11px 12px"><div style="font-size:.6rem;letter-spacing:2px;color:var(--g);font-family:var(--mono);margin-bottom:4px">🏆 MEILLEUR</div><div style="font-weight:900;font-size:.9rem;margin-bottom:2px">'+best.label+'</div><div style="font-size:.62rem;color:var(--dm);font-family:var(--mono)">Biais moy: ±'+best.avgBiais+'% · '+best.n+' matchs</div><div style="height:3px;background:var(--s2);border-radius:2px;margin-top:6px;overflow:hidden"><div style="height:100%;width:'+best.acc+'%;background:var(--g);border-radius:2px"></div></div></div>';
+      html+='<div style="background:var(--s1);border:1px solid rgba(255,61,90,.3);border-radius:10px;padding:11px 12px"><div style="font-size:.6rem;letter-spacing:2px;color:var(--r);font-family:var(--mono);margin-bottom:4px">⚠ A RECALIBRER</div><div style="font-weight:900;font-size:.9rem;margin-bottom:2px">'+worst.label+'</div><div style="font-size:.62rem;color:var(--dm);font-family:var(--mono)">Biais moy: ±'+worst.avgBiais+'% · '+worst.n+' matchs</div><div style="height:3px;background:var(--s2);border-radius:2px;margin-top:6px;overflow:hidden"><div style="height:100%;width:'+worst.acc+'%;background:var(--r);border-radius:2px"></div></div></div>';
+      html+='</div>';
+    }
+    html+='<div class="st">TOUS LES MARCHES</div>';
+    html+='<div class="tbl"><table><tr><th>Marche</th><th>N</th><th>Prec.</th><th>Brier</th><th>Biais</th><th>×</th></tr>';
     mkts.forEach(function(mkt){
-      if(!convMkt[mkt.id].some(function(cs){return cs.n>0}))return;
-      var row='<tr><td><b>'+mkt.label+'</b></td>';
-      convMkt[mkt.id].forEach(function(cs){if(!cs.n){row+='<td style="color:var(--dm)">-</td>';return}var p=Math.round(cs.ok/cs.n*100),cl=p>=65?'tg':p>=50?'ty':'tr';row+='<td class="'+cl+'">'+p+'%<br><span style="font-size:.56rem;color:var(--dm)">'+cs.n+'</span></td>'});
-      html+=row+'</tr>';
+      var st=mktStats[mkt.id];if(!st||st.acc===null)return;
+      var biais=st.predAvg&&st.realRate?st.predAvg-st.realRate:null;
+      var f=newCalib[mkt.id];
+      var col=st.acc>=60?'tg':st.acc>=45?'ty':'tr';
+      var biaisStr=biais!==null?(biais>=0?'+':'')+biais+'%':'?';
+      var biaisCol=biais!==null?(Math.abs(biais)>5?'var(--y)':'var(--g)'):'var(--dm)';
+      var fCol=f?(f>1.05?'var(--b)':f<0.95?'var(--r)':'var(--g)'):'var(--dm)';
+      html+='<tr><td><b>'+mkt.label+'</b></td><td style="color:var(--dm)">'+st.n+'</td><td class="'+col+'">'+st.acc+'%</td><td style="color:var(--dm)">'+st.brier+'</td><td style="color:'+biaisCol+'">'+biaisStr+'</td><td style="color:'+fCol+';font-weight:700">'+(f?'×'+f:'—')+'</td></tr>';
     });
     html+='</table></div>';
+    var ranked2=mkts.map(function(m){return{m:m,s:mktStats[m.id]}}).filter(function(x){return x.s.n>=3&&x.s.acc!==null}).sort(function(a,b){return b.s.acc-a.s.acc});
+    if(ranked2.length){
+      html+='<div class="st">CLASSEMENT PAR PRECISION</div><div style="display:flex;flex-direction:column;gap:5px">';
+      ranked2.forEach(function(row){
+        var col=row.s.acc>=60?'var(--g)':row.s.acc>=45?'var(--y)':'var(--r)';
+        html+='<div style="display:flex;align-items:center;gap:8px"><div style="width:80px;text-align:right;color:var(--dm);font-family:var(--mono);font-size:.6rem;flex-shrink:0">'+row.m.label+'</div><div style="flex:1;height:18px;background:var(--s2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+row.s.acc+'%;background:'+col+';border-radius:3px;display:flex;align-items:center;padding-left:5px;font-size:.62rem;font-weight:700;color:#000">'+(row.s.acc>20?row.s.acc+'%':'')+'</div></div><div style="width:32px;font-size:.62rem;color:'+col+';font-weight:700">'+row.s.acc+'%</div></div>';
+      });
+      html+='</div>';
+    }
   }
+
+  // ---- ROI ----
   else if(fiabView==='roi'){
     html+='<div class="st">ROI — 1€ PAR MISE ≥50%</div>';
     html+='<div style="font-size:.68rem;color:var(--dm);margin-bottom:9px;line-height:1.5;font-family:var(--mono)">Simule 1€ par prediction ≥ 50%. Cote = 1/prob × 0.9.</div>';
@@ -1840,7 +1463,97 @@ function renderFiabOut(){
 
   html+='<div class="sg g2" style="margin-top:12px"><button class="bsm" onclick="exportTrack()" style="padding:9px;text-align:center">Exporter JSON</button><button class="bsm" onclick="clearTrack()" style="padding:9px;text-align:center;color:var(--r);border-color:var(--r)">Effacer tracking</button></div>';
   var out=document.getElementById('fiabOut');out.innerHTML=html;out.style.display='block';
+  // Auto-click premier bouton de l'onglet Marches
+  if(fiabView==='marches'){
+    setTimeout(function(){var firstBtn=document.querySelector('#marchesSelRow .mkt-sel-btn');if(firstBtn)firstBtn.click()},60);
+  }
 }
+// =========================================================
+// showMarcheFor — vue complète d'un marché (onglet Marchés)
+// Contient : carte résumé · tableau calibration · barres biais · convergence
+// =========================================================
+function showMarcheFor(id,btn){
+  document.querySelectorAll('#marchesSelRow .mkt-sel-btn').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  var d=window._calibData&&window._calibData[id];
+  var f=window._calibFact&&window._calibFact[id];
+  var cd=window._convData&&window._convData[id];
+  var panel=document.getElementById('marcheDetail');
+  if(!d){
+    panel.innerHTML='<div style="background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px;text-align:center;color:var(--dm);font-family:var(--mono);font-size:.72rem">Pas assez de donnees pour ce marche (minimum 3 matchs traces)</div>';
+    return;
+  }
+  var fcol=f?(f>1.05?'var(--b)':f<0.95?'var(--r)':'var(--g)'):'var(--dm)';
+  var flab=f?(f>1.05?'Sous-predit — facteur ×'+f+' applique':f<0.95?'Sur-predit — facteur ×'+f+' applique':'Calibration OK'):'Non calibre (min 10 matchs requis)';
+  var acccol=d.stats.acc>=60?'var(--g)':d.stats.acc>=45?'var(--y)':'var(--r)';
+  var h='';
+
+  // === 1. CARTE RÉSUMÉ ===
+  h+='<div style="background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:13px;margin-bottom:10px">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">';
+  h+='<div><div style="font-weight:900;font-size:1rem;letter-spacing:.5px">'+d.label+'</div><div style="font-size:.6rem;color:var(--dm);font-family:var(--mono);margin-top:3px">'+d.stats.n+' matchs traces</div></div>';
+  if(f)h+='<div style="background:rgba(0,0,0,.2);border:1px solid var(--bd2);border-radius:7px;padding:5px 10px;text-align:center"><div style="font-size:.54rem;color:var(--dm);font-family:var(--mono)">FACTEUR</div><div style="font-size:1rem;font-weight:900;color:'+fcol+'">×'+f+'</div></div>';
+  h+='</div>';
+  // 4 métriques
+  h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px">';
+  h+='<div style="background:var(--s2);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:1.1rem;font-weight:900;color:'+acccol+'">'+d.stats.acc+'%</div><div style="font-size:.5rem;letter-spacing:1px;text-transform:uppercase;color:var(--dm);margin-top:2px;font-family:var(--mono)">Precision</div></div>';
+  h+='<div style="background:var(--s2);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:1.1rem;font-weight:900;color:var(--b)">'+d.stats.brier+'</div><div style="font-size:.5rem;letter-spacing:1px;text-transform:uppercase;color:var(--dm);margin-top:2px;font-family:var(--mono)">Brier</div></div>';
+  h+='<div style="background:var(--s2);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:1.1rem;font-weight:900;color:var(--y)">'+d.stats.realRate+'%</div><div style="font-size:.5rem;letter-spacing:1px;text-transform:uppercase;color:var(--dm);margin-top:2px;font-family:var(--mono)">Taux reel</div></div>';
+  h+='<div style="background:var(--s2);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:1.1rem;font-weight:900;color:var(--p)">'+d.stats.predAvg+'%</div><div style="font-size:.5rem;letter-spacing:1px;text-transform:uppercase;color:var(--dm);margin-top:2px;font-family:var(--mono)">Pred. moy</div></div>';
+  h+='</div>';
+  // Barre de précision
+  h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><div style="flex:1;height:5px;background:var(--s2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+d.stats.acc+'%;background:'+acccol+';border-radius:3px;transition:width .6s"></div></div><span style="font-size:.6rem;color:var(--dm);font-family:var(--mono);white-space:nowrap">'+d.stats.acc+'%</span></div>';
+  // Facteur note
+  h+='<div style="background:rgba(0,0,0,.15);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;font-size:.64rem;color:'+fcol+';font-family:var(--mono)">⚙ '+flab+'</div>';
+  h+='</div>';
+
+  // === 2. TABLEAU CALIBRATION PAR TRANCHE ===
+  h+='<div style="font-size:.54rem;letter-spacing:2px;text-transform:uppercase;color:var(--dm);font-family:var(--mono);margin-bottom:6px">CALIBRATION PAR TRANCHE DE PROBABILITE</div>';
+  h+='<div style="border:1px solid var(--bd);border-radius:9px;overflow:hidden;margin-bottom:10px"><table style="width:100%;border-collapse:collapse;font-size:.72rem"><tr style="background:var(--s2)">';
+  ['PRED.','N','VRAIS+','REEL','ECART'].forEach(function(th){h+='<th style="padding:8px 9px;text-align:left;font-size:.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dm);font-family:var(--mono);font-weight:700">'+th+'</th>'});
+  h+='</tr>';
+  d.tranches.forEach(function(tr){
+    var reel=Math.round(tr.ok/tr.n*100),mid=Math.round((tr.min+tr.max)/2),biais=reel-mid;
+    var bs=(biais>=0?'+':'')+biais+'%',bc=Math.abs(biais)<=10?'var(--g)':Math.abs(biais)<=20?'var(--y)':'var(--r)';
+    var rc=reel>=60?'var(--g)':reel>=45?'var(--y)':'var(--r)';
+    h+='<tr style="border-top:1px solid var(--bd)"><td style="padding:8px 9px;font-weight:700">'+tr.lbl+'</td><td style="padding:8px 9px;color:var(--dm)">'+tr.n+'</td><td style="padding:8px 9px">'+tr.ok+'</td><td style="padding:8px 9px;font-weight:700;color:'+rc+'">'+reel+'%</td><td style="padding:8px 9px;font-weight:700;color:'+bc+'">'+bs+'</td></tr>';
+  });
+  h+='</table></div>';
+
+  // === 3. BARRES DE BIAIS VISUELLES ===
+  h+='<div style="font-size:.54rem;letter-spacing:2px;text-transform:uppercase;color:var(--dm);font-family:var(--mono);margin-bottom:6px">BIAIS VISUEL PAR TRANCHE</div>';
+  d.tranches.forEach(function(tr){
+    var reel=Math.round(tr.ok/tr.n*100),mid=Math.round((tr.min+tr.max)/2),biais=reel-mid;
+    var bc=Math.abs(biais)<=10?'var(--g)':Math.abs(biais)<=20?'var(--y)':'var(--r)';
+    var w=Math.min(100,Math.abs(biais)*4),bs=(biais>=0?'+':'')+biais+'%';
+    h+='<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><div style="width:54px;text-align:right;color:var(--dm);font-family:var(--mono);font-size:.6rem;flex-shrink:0">'+tr.lbl+'</div><div style="flex:1;height:18px;background:var(--s2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+w+'%;background:'+bc+';border-radius:3px;display:flex;align-items:center;padding-left:5px;font-size:.6rem;font-weight:700;color:#000">'+(w>20?bs:'')+'</div></div><div style="width:38px;font-size:.64rem;font-family:var(--mono);color:'+bc+';flex-shrink:0;font-weight:700">'+bs+'</div></div>';
+  });
+
+  // === 4. CONVERGENCE PAR MARCHÉ ===
+  if(cd&&cd.some(function(cs){return cs.n>0})){
+    h+='<div style="font-size:.54rem;letter-spacing:2px;text-transform:uppercase;color:var(--dm);font-family:var(--mono);margin:14px 0 5px">PRECISION PAR CONVERGENCE DES SIGNAUX</div>';
+    h+='<div style="font-size:.63rem;color:var(--dm);font-family:var(--mono);margin-bottom:9px;line-height:1.5">Impact du nb de signaux concordants (Ligue + Heure + Jour) pour <strong style="color:var(--tx)">'+d.label+'</strong>.</div>';
+    var labels=['0 signal','1/3','2/3','3/3 ⚡'];
+    // Barres
+    cd.forEach(function(cs,i){
+      if(!cs.n)return;
+      var p=Math.round(cs.ok/cs.n*100),col=p>=65?'var(--g)':p>=50?'var(--y)':'var(--r)';
+      h+='<div style="display:flex;align-items:center;gap:7px;margin-bottom:6px"><div style="width:56px;text-align:right;color:var(--dm);font-family:var(--mono);font-size:.6rem;flex-shrink:0">'+labels[i]+'</div><div style="flex:1;height:20px;background:var(--s2);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+p+'%;background:'+col+';border-radius:4px;display:flex;align-items:center;padding-left:6px;font-size:.63rem;font-weight:700;color:#000">'+(p>15?p+'%':'')+'</div></div><div style="width:52px;font-size:.62rem;font-family:var(--mono);flex-shrink:0"><span style="color:'+col+';font-weight:700">'+p+'%</span><span style="color:var(--dm);font-size:.56rem"> ('+cs.n+')</span></div></div>';
+    });
+    // Tableau convergence
+    h+='<div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-top:9px"><table style="width:100%;border-collapse:collapse;font-size:.72rem"><tr style="background:var(--s2)"><th style="padding:7px 9px;text-align:left;font-size:.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dm);font-family:var(--mono)">SIGNAUX</th><th style="padding:7px 9px;text-align:left;font-size:.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dm);font-family:var(--mono)">N</th><th style="padding:7px 9px;text-align:left;font-size:.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dm);font-family:var(--mono)">OK</th><th style="padding:7px 9px;text-align:left;font-size:.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dm);font-family:var(--mono)">TAUX</th></tr>';
+    cd.forEach(function(cs,i){
+      if(!cs.n)return;
+      var p=Math.round(cs.ok/cs.n*100),col=p>=65?'var(--g)':p>=50?'var(--y)':'var(--r)';
+      h+='<tr style="border-top:1px solid var(--bd)"><td style="padding:7px 9px;font-weight:700">'+labels[i]+'</td><td style="padding:7px 9px;color:var(--dm)">'+cs.n+'</td><td style="padding:7px 9px">'+cs.ok+'</td><td style="padding:7px 9px;font-weight:700;color:'+col+'">'+p+'%</td></tr>';
+    });
+    h+='</table></div>';
+  } else {
+    h+='<div style="margin-top:12px;padding:10px;background:var(--s2);border-radius:8px;text-align:center;font-size:.68rem;color:var(--dm);font-family:var(--mono)">Aucune donnee de convergence disponible pour ce marche</div>';
+  }
+  panel.innerHTML=h;
+}
+
 function exportTrack(){
   var blob=new Blob([JSON.stringify(getTrack(),null,2)],{type:'application/json'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tracking_'+today()+'.json';a.click();
@@ -1857,7 +1570,7 @@ function clearTrack(){
 buildTz();initCfg();majDB();preset(2);
 document.getElementById('tdDate').value=today();
 document.getElementById('tkDate').value=today();
-document.getElementById('tdSeuilWrap').style.display='block'; // auto mode shows seuil
+document.getElementById('tdSeuilWrap').style.display='block';
 </script>
 </body>
 </html>
