@@ -747,6 +747,78 @@ function buildCache(){
 function pkOver(s){if(s<=1.5)return'p15';if(s<=2.5)return'p25';if(s<=3.5)return'p35';return'p45'}
 function pkUnder(s){if(s<=1.5)return'u15';if(s<=2.5)return'u25';if(s<=3.5)return'u35';return'u45'}
 function seuilAdaptatif(lig){if(!lig||lig.total<10)return null;return(lig.buts/lig.total)>=2.5?2.5:1.5}
+
+// =========================================================
+// LIVE CONTEXT — recalage intra-jour
+// Calcule les stats des matchs DÉJÀ TERMINÉS aujourd'hui
+// Retourne null si seuil non atteint (pas assez de matchs joués)
+// =========================================================
+function buildLiveContext(matchsJour,s){
+  if(!matchsJour||!matchsJour.length)return null;
+  var tz=getTz();
+  // Grouper par heure
+  var byHour={};
+  var globalDone={total:0,done:0};
+  // Stats globales jour (tous marchés)
+  var dayStats={p15:0,p25:0,p35:0,p45:0,u15:0,u25:0,u35:0,u45:0,v1:0,x:0,v2:0,bO:0,bN:0,dc1x:0,dcx2:0,dc12:0,csH:0,csA:0,hmsc:0,amsc:0,total:0};
+  // Stats par heure
+  matchsJour.forEach(function(m){
+    var hk=m.heure?m.heure.split(':')[0]:'??';
+    if(!byHour[hk])byHour[hk]={total:0,done:0,p15:0,p25:0,p35:0,p45:0,u15:0,u25:0,u35:0,u45:0,v1:0,x:0,v2:0,bO:0,bN:0,dc1x:0,dcx2:0,dc12:0,csH:0,csA:0,hmsc:0,amsc:0};
+    byHour[hk].total++;globalDone.total++;
+    if(TERM.indexOf(m.status)>=0&&m.total!==null){
+      byHour[hk].done++;globalDone.done++;
+      // Remplir stats heure
+      function fillH(e){
+        e.total++;
+        if(m.total>1.5)e.p15++;else e.u15++;if(m.total>2.5)e.p25++;else e.u25++;
+        if(m.total>3.5)e.p35++;else e.u35++;if(m.total>4.5)e.p45++;else e.u45++;
+        if(m.v1x2==='V1')e.v1++;else if(m.v1x2==='X')e.x++;else if(m.v1x2==='V2')e.v2++;
+        if(m.btts)e.bO++;else e.bN++;
+        if(m.v1x2==='V1'||m.v1x2==='X')e.dc1x++;if(m.v1x2==='X'||m.v1x2==='V2')e.dcx2++;if(m.v1x2==='V1'||m.v1x2==='V2')e.dc12++;
+        if(m.a===0)e.csH++;if(m.h===0)e.csA++;if(m.h>0)e.hmsc++;if(m.a>0)e.amsc++;
+      }
+      fillH(byHour[hk]);fillH(dayStats);
+    }
+  });
+  // Seuil jour : 60% des matchs du jour terminés
+  var dayActive=globalDone.total>0&&globalDone.done/globalDone.total>=0.60?dayStats:null;
+  return{byHour:byHour,day:dayActive,globalDone:globalDone};
+}
+
+// Extrait le taux d'un marché depuis les stats live
+function liveRate(st,mktId,s){
+  if(!st||!st.total)return null;
+  var key=mktId==='over'?pkOver(s):mktId==='under'?pkUnder(s):
+    mktId==='btts'?'bO':mktId==='bttsN'?'bN':
+    mktId==='v1'?'v1':mktId==='x'?'x':mktId==='v2'?'v2':
+    mktId==='dc1x'?'dc1x':mktId==='dcx2'?'dcx2':mktId==='dc12'?'dc12':
+    mktId==='csH'?'csH':mktId==='csA'?'csA':
+    mktId==='hmsc'?'hmsc':mktId==='amsc'?'amsc':null;
+  if(!key)return null;
+  return st[key]/st.total;
+}
+
+// Signal live heure : actif si ≥50% des matchs de ce créneau sont terminés
+function liveHourSignal(liveCtx,hk,mktId,s){
+  if(!liveCtx)return null;
+  var hs=liveCtx.byHour[hk];
+  if(!hs||hs.total<2||hs.done/hs.total<0.50)return null;
+  return liveRate(hs,mktId,s);
+}
+
+// Correction par biais de ligue : évite que le signal live tire dans le mauvais sens
+// si la ligue est anormalement prolifique/défensive vs la moyenne globale
+function ligBiasCorrection(ligStat,globalHistRate,liveRaw){
+  if(ligStat===null||globalHistRate===null||globalHistRate===0||liveRaw===null)return liveRaw;
+  // Ratio biais ligue vs global historique
+  var biasRatio=ligStat/globalHistRate;
+  // Applique le ratio au signal live pour corriger l'effet de composition
+  // Clampé entre 0.7 et 1.3 pour ne pas exploser
+  var corrected=liveRaw*Math.min(1.3,Math.max(0.7,biasRatio));
+  return Math.min(1,Math.max(0,corrected));
+}
+
 function weighted(fn,lig,h,dw){
   var vals=[];var vL=fn(lig),vH=fn(h),vD=fn(dw);
   if(vL!==null)vals.push([vL,.55]);if(vH!==null)vals.push([vH,.25]);if(vD!==null)vals.push([vD,.20]);
@@ -754,34 +826,83 @@ function weighted(fn,lig,h,dw){
   var sw=vals.reduce(function(a,v){return a+v[1]},0);
   return vals.reduce(function(a,v){return a+v[0]*v[1]/sw},0);
 }
+
+// Weighted avec signal live intra-jour (4ème source, poids 10%, conditionnel)
+function weightedLive(fn,lig,h,dw,liveVal){
+  var vals=[];var vL=fn(lig),vH=fn(h),vD=fn(dw);
+  if(vL!==null)vals.push([vL,.55]);if(vH!==null)vals.push([vH,.25]);if(vD!==null)vals.push([vD,.20]);
+  // Signal live uniquement si actif ET on a au moins le signal ligue
+  if(liveVal!==null&&vL!==null)vals.push([liveVal,.10]);
+  if(!vals.length)return null;
+  var sw=vals.reduce(function(a,v){return a+v[1]},0);
+  return vals.reduce(function(a,v){return a+v[0]*v[1]/sw},0);
+}
+
 function pct(st,key){return st&&st.total>=3?st[key]/st.total:null}
-function predict(match,cache,s){
+
+function predict(match,cache,s,liveCtx){
   var tz=getTz(),lk=match.league+'|'+match.country,hk=match.heure?match.heure.split(':')[0]:'??';
   var dow=match.ts?new Date((match.ts+tz*3600)*1000).getUTCDay():null;
   var lig=cache.byL[lk]||null,h=cache.byH[hk]||null,dw=dow!==null?cache.byD[dow]:null;
-  var w=function(fn){return weighted(fn,lig,h,dw)};
-  var plusPred=applyCalib(w(function(st){return pct(st,pkOver(s))}),'over');
-  var underPred=applyCalib(w(function(st){return pct(st,pkUnder(s))}),'under');
-  var rv1=w(function(st){return pct(st,'v1')}),rx=w(function(st){return pct(st,'x')}),rv2=w(function(st){return pct(st,'v2')});
+
+  // Taux historique global pour correction biais ligue
+  var allMatchsHist=Object.values(cache.byL);
+  var globalTot=allMatchsHist.reduce(function(a,v){return a+v.total},0);
+  var globalOver=globalTot>0?allMatchsHist.reduce(function(a,v){return a+v[pkOver(s)]},0)/globalTot:null;
+
+  // Calcul signal live pour chaque marché, corrigé par biais de ligue
+  function getLiveSignal(mktId){
+    // Signal heure live
+    var lhRaw=liveHourSignal(liveCtx,hk,mktId,s);
+    // Signal jour live
+    var ldRaw=liveCtx&&liveCtx.day?liveRate(liveCtx.day,mktId,s):null;
+    // Correction biais ligue sur les deux
+    var ligHistRate=lig&&lig.total>=5?liveRate(lig,mktId,s):null;
+    var lhCorr=ligBiasCorrection(ligHistRate,globalOver,lhRaw);
+    var ldCorr=ligBiasCorrection(ligHistRate,globalOver,ldRaw);
+    // Combine les deux signaux live (heure prioritaire)
+    if(lhCorr!==null&&ldCorr!==null)return lhCorr*0.6+ldCorr*0.4;
+    if(lhCorr!==null)return lhCorr;
+    if(ldCorr!==null)return ldCorr;
+    return null;
+  }
+
+  var liveFlagH=liveCtx&&liveCtx.byHour[hk]&&liveCtx.byHour[hk].done>0;
+  var liveFlagD=liveCtx&&liveCtx.day;
+
+  function wL(fn,mktId){return weightedLive(fn,lig,h,dw,getLiveSignal(mktId))}
+
+  var plusPred=applyCalib(wL(function(st){return pct(st,pkOver(s))},'over'),'over');
+  var underPred=applyCalib(wL(function(st){return pct(st,pkUnder(s))},'under'),'under');
+  var rv1=wL(function(st){return pct(st,'v1')},'v1'),rx=wL(function(st){return pct(st,'x')},'x'),rv2=wL(function(st){return pct(st,'v2')},'v2');
   var rs=(rv1||0)+(rx||0)+(rv2||0);
   if(rs>0){rv1=(rv1||0)/rs;rx=(rx||0)/rs;rv2=(rv2||0)/rs}
   rv1=applyCalib(rv1,'v1');rx=applyCalib(rx,'x');rv2=applyCalib(rv2,'v2');
-  var dc1x=applyCalib(w(function(st){return pct(st,'dc1x')}),'dc1x');
-  var dcx2=applyCalib(w(function(st){return pct(st,'dcx2')}),'dcx2');
-  var dc12=applyCalib(w(function(st){return pct(st,'dc12')}),'dc12');
-  var bttsO=applyCalib(w(function(st){return pct(st,'bO')}),'btts');
-  var bttsN=applyCalib(w(function(st){return pct(st,'bN')}),'bttsN');
-  var csH=applyCalib(w(function(st){return pct(st,'csH')}),'csH');
-  var csA=applyCalib(w(function(st){return pct(st,'csA')}),'csA');
-  var hmsc=applyCalib(w(function(st){return pct(st,'hmsc')}),'hmsc');
-  var amsc=applyCalib(w(function(st){return pct(st,'amsc')}),'amsc');
+  var dc1x=applyCalib(wL(function(st){return pct(st,'dc1x')},'dc1x'),'dc1x');
+  var dcx2=applyCalib(wL(function(st){return pct(st,'dcx2')},'dcx2'),'dcx2');
+  var dc12=applyCalib(wL(function(st){return pct(st,'dc12')},'dc12'),'dc12');
+  var bttsO=applyCalib(wL(function(st){return pct(st,'bO')},'btts'),'btts');
+  var bttsN=applyCalib(wL(function(st){return pct(st,'bN')},'bttsN'),'bttsN');
+  var csH=applyCalib(wL(function(st){return pct(st,'csH')},'csH'),'csH');
+  var csA=applyCalib(wL(function(st){return pct(st,'csA')},'csA'),'csA');
+  var hmsc=applyCalib(wL(function(st){return pct(st,'hmsc')},'hmsc'),'hmsc');
+  var amsc=applyCalib(wL(function(st){return pct(st,'amsc')},'amsc'),'amsc');
+
   var sigL=lig&&lig.total>=3?lig[pkOver(s)]/lig.total:null;
   var sigH=h&&h.total>=3?h[pkOver(s)]/h.total:null;
   var sigD=dw&&dw.total>=3?dw[pkOver(s)]/dw.total:null;
   var conv=0,nbSig=0;
-  if(sigL!==null){nbSig++;if(sigL>0.5)conv++}if(sigH!==null){nbSig++;if(sigH>0.5)conv++}if(sigD!==null){nbSig++;if(sigD>0.5)conv++}
-  var moyBH=w(function(st){return st&&st.total>=3?st.butsH/st.total:null});
-  var moyBA=w(function(st){return st&&st.total>=3?st.butsA/st.total:null});
+  if(sigL!==null){nbSig++;if(sigL>0.5)conv++}
+  if(sigH!==null){nbSig++;if(sigH>0.5)conv++}
+  if(sigD!==null){nbSig++;if(sigD>0.5)conv++}
+
+  // Info live pour affichage
+  var liveHourSt=liveCtx&&liveCtx.byHour[hk]&&liveCtx.byHour[hk].done>=1?liveCtx.byHour[hk]:null;
+  var liveDaySt=liveCtx&&liveCtx.day?liveCtx.day:null;
+  var liveActive=!!(liveHourSt||liveDaySt);
+
+  var moyBH=weighted(function(st){return st&&st.total>=3?st.butsH/st.total:null},lig,h,dw);
+  var moyBA=weighted(function(st){return st&&st.total>=3?st.butsA/st.total:null},lig,h,dw);
   var allM=[
     {id:'over',label:'+'+s+' buts',prob:plusPred},{id:'under',label:'-'+s+' buts',prob:underPred},
     {id:'btts',label:'BTTS Oui',prob:bttsO},{id:'bttsN',label:'BTTS Non',prob:bttsN},
@@ -797,6 +918,9 @@ function predict(match,cache,s){
     conf:lig?Math.min(100,Math.round(lig.total/50*100)):0,ligTotal:lig?lig.total:0,
     moyButs:lig&&lig.total?(lig.buts/lig.total).toFixed(2):null,
     sigL:sigL,sigH:sigH,sigD:sigD,convergence:conv,nbSig:nbSig,
+    liveActive:liveActive,
+    liveHour:liveHourSt?{done:liveHourSt.done,total:liveHourSt.total,over:liveHourSt.total?Math.round(liveHourSt[pkOver(s)]/liveHourSt.total*100):null,under:liveHourSt.total?Math.round(liveHourSt[pkUnder(s)]/liveHourSt.total*100):null,btts:liveHourSt.total?Math.round(liveHourSt.bO/liveHourSt.total*100):null,v1:liveHourSt.total?Math.round(liveHourSt.v1/liveHourSt.total*100):null}:null,
+    liveDay:liveDaySt?{done:liveCtx.globalDone.done,total:liveCtx.globalDone.total,over:liveDaySt.total?Math.round(liveDaySt[pkOver(s)]/liveDaySt.total*100):null,under:liveDaySt.total?Math.round(liveDaySt[pkUnder(s)]/liveDaySt.total*100):null,btts:liveDaySt.total?Math.round(liveDaySt.bO/liveDaySt.total*100):null,v1:liveDaySt.total?Math.round(liveDaySt.v1/liveDaySt.total*100):null}:null,
     seuilAdapte:seuilAdaptatif(lig),allMarkets:allM,bestMarket:allM.length?allM[0]:null,
     ligStats:lig?{over:lig.total?Math.round(lig[pkOver(s)]/lig.total*100):null,under:lig.total?Math.round(lig[pkUnder(s)]/lig.total*100):null,bttsO:lig.total?Math.round(lig.bO/lig.total*100):null,bttsN:lig.total?Math.round(lig.bN/lig.total*100):null,v1:lig.total?Math.round(lig.v1/lig.total*100):null,x:lig.total?Math.round(lig.x/lig.total*100):null,v2:lig.total?Math.round(lig.v2/lig.total*100):null,dc1x:lig.total?Math.round(lig.dc1x/lig.total*100):null,dcx2:lig.total?Math.round(lig.dcx2/lig.total*100):null,dc12:lig.total?Math.round(lig.dc12/lig.total*100):null,csH:lig.total?Math.round(lig.csH/lig.total*100):null,csA:lig.total?Math.round(lig.csA/lig.total*100):null,hmsc:lig.total?Math.round(lig.hmsc/lig.total*100):null,amsc:lig.total?Math.round(lig.amsc/lig.total*100):null}:null,
     hourStats:h?{over:h.total?Math.round(h[pkOver(s)]/h.total*100):null,bttsO:h.total?Math.round(h.bO/h.total*100):null,v1:h.total?Math.round(h.v1/h.total*100):null}:null};
@@ -848,6 +972,22 @@ function buildMatchHTML(m,pred,s){
   } else if(tdMkt==='cs'){
     html+='<div class="mkt-section"><div class="mkt-section-title">CS · Equipe marque</div><div class="mkt-grid g4r">'+mktBox(pred.csH,'CS Dom')+mktBox(pred.csA,'CS Ext')+mktBox(pred.hmsc,'Dom Mq')+mktBox(pred.amsc,'Ext Mq')+'</div></div>';
   }
+  // Signal live intra-jour
+  if(pred.liveActive){
+    var lh=pred.liveHour,ld=pred.liveDay;
+    var liveKey=tdMkt==='v1x2'?'v1':tdMkt==='btts'?'btts':tdMkt==='under'?'under':'over';
+    html+='<div style="background:rgba(0,196,204,.06);border:1px solid rgba(0,196,204,.25);border-radius:7px;padding:6px 10px;margin-top:5px;font-size:.62rem;font-family:var(--mono)">';
+    html+='<span style="color:var(--teal);font-weight:700">⟳ RECALAGE LIVE</span>';
+    if(lh&&lh.done>0){
+      var lhVal=lh[liveKey];
+      html+='<span style="color:var(--dm);margin-left:6px">Heure: '+lh.done+'/'+lh.total+' joues'+(lhVal!==null?' · '+(liveKey==='over'||liveKey==='under'||liveKey==='btts'?'taux: '+lhVal+'%':'V1: '+lhVal+'%'):'')+'</span>';
+    }
+    if(ld&&ld.done>0){
+      var ldVal=ld[liveKey];
+      html+='<span style="color:var(--dm);margin-left:6px">Jour: '+ld.done+'/'+ld.total+' joues'+(ldVal!==null?' · taux: '+ldVal+'%':'')+'</span>';
+    }
+    html+='</div>';
+  }
   html+='<div class="conf-bar" style="margin-top:8px"><div class="conf-track"><div class="conf-fill" style="width:'+pred.conf+'%;background:var(--g)"></div></div><span class="conf-lbl">Conf. '+pred.conf+'% · '+pred.ligTotal+' hist.'+(pred.moyButs?' · '+pred.moyButs+' buts/m':'')+'</span></div>';
   return html;
 }
@@ -876,7 +1016,9 @@ async function loadMatchs(source){
   else if(mode==='done')fxF=fx.filter(function(f){return TERM.indexOf(f.status)>=0});
   else if(mode==='live')fxF=fx.filter(function(f){return LIVE.indexOf(f.status)>=0});
   else fxF=fx.slice();
-  fxF.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd):null});
+    // Contexte live : matchs deja termines de la journee
+  var liveCtx=buildLiveContext(fxF,seuilTd);
+  fxF.forEach(function(m){m._pred=cache.total>0?predict(m,cache,seuilTd,liveCtx):null});
   fxF.sort(function(a,b){var ca=a._pred?a._pred.convergence:-1,cb=b._pred?b._pred.convergence:-1;if(cb!==ca)return cb-ca;return(a.heure||'').localeCompare(b.heure||'')});
   allMatchsCache=fxF;
   document.getElementById('tTot').textContent=fx.length;
@@ -1436,6 +1578,42 @@ function renderFiabOut(){
         html+='<div style="display:flex;align-items:center;gap:8px"><div style="width:80px;text-align:right;color:var(--dm);font-family:var(--mono);font-size:.6rem;flex-shrink:0">'+row.m.label+'</div><div style="flex:1;height:18px;background:var(--s2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+row.s.acc+'%;background:'+col+';border-radius:3px;display:flex;align-items:center;padding-left:5px;font-size:.62rem;font-weight:700;color:#000">'+(row.s.acc>20?row.s.acc+'%':'')+'</div></div><div style="width:32px;font-size:.62rem;color:'+col+';font-weight:700">'+row.s.acc+'%</div></div>';
       });
       html+='</div>';
+    }
+
+    // Pertinence du recalage live intra-jour
+    // Comparaison : matchs trackes avec pConv elevee vs pConv faible
+    // (proxy : plus pConv est haut = plus les signaux ligue/heure/jour concordaient = signal live plus likely actif)
+    html+='<div class="st">PERTINENCE DU RECALAGE LIVE</div>';
+    html+='<div style="font-size:.65rem;color:var(--dm);margin-bottom:9px;line-height:1.6;font-family:var(--mono)">Analyse si les matchs avec forte convergence de signaux (proxy du recalage live actif) ont une meilleure precision que ceux sans convergence.</div>';
+    var liveAnalysis=mkts.map(function(mkt){
+      var withConv=entries.filter(function(t){return t[mkt.pKey]!==null&&(t.pConv||0)>=2});
+      var noConv=entries.filter(function(t){return t[mkt.pKey]!==null&&(t.pConv||0)<=1});
+      if(withConv.length<3||noConv.length<3)return null;
+      var accWith=0,accNo=0;
+      withConv.forEach(function(t){var prob=t[mkt.pKey]/100,real=getRealVal(t,mkt);if((prob>=0.5&&real)||(prob<0.5&&!real))accWith++});
+      noConv.forEach(function(t){var prob=t[mkt.pKey]/100,real=getRealVal(t,mkt);if((prob>=0.5&&real)||(prob<0.5&&!real))accNo++});
+      accWith=Math.round(accWith/withConv.length*100);
+      accNo=Math.round(accNo/noConv.length*100);
+      var delta=accWith-accNo;
+      return{label:mkt.label,accWith:accWith,accNo:accNo,delta:delta,nWith:withConv.length,nNo:noConv.length};
+    }).filter(Boolean).sort(function(a,b){return b.delta-a.delta});
+    if(liveAnalysis.length){
+      var improved=liveAnalysis.filter(function(r){return r.delta>0}).length;
+      var degraded=liveAnalysis.filter(function(r){return r.delta<0}).length;
+      var neutral=liveAnalysis.length-improved-degraded;
+      html+='<div class="sg g3" style="margin-bottom:10px"><div class="sb" style="border-color:rgba(0,229,160,.3)"><div class="sv" style="color:var(--g)">'+improved+'</div><div class="sl">Ameliores</div></div><div class="sb"><div class="sv" style="color:var(--dm)">'+neutral+'</div><div class="sl">Neutres</div></div><div class="sb" style="border-color:rgba(255,61,90,.3)"><div class="sv" style="color:var(--r)">'+degraded+'</div><div class="sl">Degrade</div></div></div>';
+      html+='<div class="tbl"><table><tr><th>Marche</th><th>Avec (n)</th><th>Sans (n)</th><th>Delta</th></tr>';
+      liveAnalysis.forEach(function(row){
+        var dc=row.delta>3?'var(--g)':row.delta>0?'var(--teal)':row.delta<-3?'var(--r)':'var(--dm)';
+        var ds=(row.delta>=0?'+':'')+row.delta+'%';
+        html+='<tr><td><b>'+row.label+'</b></td><td style="color:var(--g)">'+row.accWith+'% <span style="color:var(--dm);font-size:.6rem">('+row.nWith+')</span></td><td style="color:var(--dm)">'+row.accNo+'% <span style="font-size:.6rem">('+row.nNo+')</span></td><td style="color:'+dc+';font-weight:700">'+ds+'</td></tr>';
+      });
+      html+='</table></div>';
+      var verdict=improved>degraded?'✅ Le recalage live ameliore globalement la precision sur '+improved+'/'+liveAnalysis.length+' marches.':improved===degraded?'⚖️ Impact neutre du recalage live — continuer a accumuler des donnees.':'⚠️ Recalage live peu pertinent sur cet historique — peut manquer de donnees.';
+      var vcol=improved>degraded?'var(--g)':improved===degraded?'var(--y)':'var(--r)';
+      html+='<div style="background:rgba(0,0,0,.15);border:1px solid var(--bd);border-radius:7px;padding:9px 12px;font-size:.7rem;color:'+vcol+';font-family:var(--mono);line-height:1.5">'+verdict+'</div>';
+    } else {
+      html+='<div style="padding:12px;background:var(--s2);border-radius:8px;text-align:center;font-size:.68rem;color:var(--dm);font-family:var(--mono)">Pas assez de donnees (min 3 matchs avec et sans convergence par marche)</div>';
     }
   }
 
