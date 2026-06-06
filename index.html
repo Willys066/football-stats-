@@ -1070,12 +1070,23 @@ tr:hover td{background:var(--s2)}
 
 <!-- ═══════════════════════════════════════════════════════ ODDS ══ -->
 <div class="panel" id="p7">
-<div class="lock-overlay" id="lockCotes"><div style="filter:blur(2px);pointer-events:none;max-height:380px;overflow:hidden">
-  <div class="info-api" style="margin-bottom:10px"><strong>The Odds API :</strong> Inscris-toi sur <a href="https://the-odds-api.com" target="_blank" style="color:var(--g)">the-odds-api.com</a> · Plan gratuit : 500 req/mois · Clé à saisir dans Config</div>
-  <div class="card">
-    <span class="clbl">Collecte globale des cotes</span>
-    <p style="font-size:.72rem;color:var(--dm);font-family:var(--mono);line-height:1.5;margin-bottom:12px">Détecte automatiquement toutes les compétitions foot actives via The Odds API et récupère les cotes en une seule opération.</p>
-    <div style="margin-bottom</div><div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-label">Analyse des Cotes — Version Complète</div><div class="lock-sub">Croisement cotes bookmakers × prédictions FootStats</div></div></div>
+<div class="lock-overlay" id="lockCotes" style="min-height:320px">
+  <div style="filter:blur(2px);pointer-events:none;padding:14px">
+    <div class="card" style="margin-bottom:10px">
+      <span class="clbl">Collecte globale des cotes</span>
+      <p style="font-size:.72rem;color:var(--dm);font-family:var(--mono);line-height:1.5;margin-bottom:12px">Détecte automatiquement toutes les compétitions foot actives via The Odds API et récupère les cotes en une seule opération.</p>
+      <div style="height:36px;background:var(--bd);border-radius:7px;opacity:.4"></div>
+    </div>
+    <div class="card">
+      <span class="clbl">Analyse croisée</span>
+      <p style="font-size:.72rem;color:var(--dm);font-family:var(--mono);line-height:1.5">Croisement entre les cotes bookmakers et les prédictions FootStats pour détecter les value bets.</p>
+      <div style="height:80px;background:var(--bd);border-radius:7px;opacity:.3;margin-top:8px"></div>
+    </div>
+  </div>
+  <div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-label">Analyse des Cotes — Version Complète</div><div class="lock-sub">Croisement cotes bookmakers × prédictions FootStats</div></div>
+</div>
+</div>
+
 <div class="panel" id="p8">
   <div class="card">
     <span class="clbl">&#x2B50; Sélection du jour</span>
@@ -5812,23 +5823,34 @@ function finishSync(added,skipped,total,status){
   document.getElementById('syncPct').textContent='100%';
   document.getElementById('syncFill').style.width='100%';
   document.getElementById('syncFill').style.background=added>0?'var(--g)':'var(--y)';
-  try{
-    var track=getTrackCompat();
-    if(track.length){hideAl('fiabAl');computeAndSaveCalib(track,seuilFiab);renderFiabOut();}
-  }catch(e){showAl('fiabAl','in','Sync terminée — '+added+' entrées ajoutées');}
+  var track=getTrackCompat();
+  if(track.length){
+    hideAl('fiabAl');
+    try{computeAndSaveCalib(track,seuilFiab);}catch(e){console.warn('calib err',e);}
+    try{renderFiabOut();}catch(e){showAl('fiabAl','er','Erreur rendu: '+e.message);}
+  } else {
+    showAl('fiabAl','in','Sync terminée — '+added+' ajoutés. Clique sur "Analyser la fiabilité".');
+  }
 }
 
 function calcFiabilite(){
   var track=getTrackCompat();
-  if(!track.length){showAl('fiabAl','er','Aucune donnée — Lance d\'abord la Synchronisation globale ou charge des matchs terminés');return}
+  if(!track.length){showAl('fiabAl','er','Aucune donnée — Lance d\'abord la Synchronisation globale');return}
   hideAl('fiabAl');
-  try{computeAndSaveCalib(track,seuilFiab);renderFiabOut();}
+  try{computeAndSaveCalib(track,seuilFiab);}catch(e){console.warn('calib err',e);}
+  try{renderFiabOut();}
   catch(e){showAl('fiabAl','er','Erreur analyse: '+e.message);}
 }
 function renderFiabOut(){
   try{
   ensureScoresTab();
-  var entries=getTrackCompat(),s=seuilFiab;if(!entries.length)return;
+  var entries=getTrackCompat(),s=seuilFiab;
+  if(!entries.length){
+    var out2=document.getElementById('fiabOut');
+    out2.style.display='block';
+    out2.innerHTML='<div class="al on ain" style="margin-top:8px">Aucune donnée — Lance d\'abord la <strong>Synchronisation globale</strong> puis clique sur <strong>Analyser la fiabilité</strong>.</div>';
+    return;
+  }
   var newCalib=getCalib(),calibApplied=Object.keys(newCalib).length>0;
   var gc=buildFiabGlobalCache(entries,s);
   window._calibData=gc.calibData;window._calibFact=newCalib;window._convData=gc.convData;
