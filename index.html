@@ -5858,7 +5858,7 @@ function renderFiabOut(){
   var savedTk=getTickets(),tkWon=savedTk.filter(function(t){return t.result==='won'}).length;
   var tkLost=savedTk.filter(function(t){return t.result==='lost'}).length,tkTotal=tkWon+tkLost;
   var html='';
-  html+='<div class="fiab-tabs"><button class="fiab-tab'+(fiabView==='resume'?' on':'')+'" data-v="resume" onclick="setFiabView(\'resume\')">Résumé</button><button class="fiab-tab'+(fiabView==='marches'?' on':'')+'" data-v="marches" onclick="setFiabView(\'marches\')">Marchés</button><button class="fiab-tab'+(fiabView==='analyse'?' on':'')+'" data-v="analyse" onclick="setFiabView(\'analyse\')">Analyse</button><button class="fiab-tab'+(fiabView==='roi'?' on':'')+'" data-v="roi" onclick="setFiabView(\'roi\')">ROI</button><button class="fiab-tab" data-v="tranches" onclick="showFiabLock(\'Tranches\',\'Analyse de précision par tranche de confiance\')" style="color:var(--dm)">🔒 Tranches</button><button class="fiab-tab" data-v="scores" onclick="showFiabLock(\'Scores\',\'Précision détaillée des prédictions de score\')" style="color:var(--dm)">🔒 Scores</button><button class="fiab-tab'+(fiabView==='selection'?' on':'')+'" data-v="selection" onclick="setFiabView(\'selection\')">Sélection</button><button class="fiab-tab" data-v="zeroo" onclick="showFiabLock(\'Analyse 0-0\',\'Corrélations et probabilités score nul\')" style="color:var(--dm)">🔒 0-0</button></div>';
+  html+='<div class="fiab-tabs"><button class="fiab-tab'+(fiabView==='resume'?' on':'')+'" data-v="resume" onclick="setFiabView(\'resume\')">Résumé</button><button class="fiab-tab'+(fiabView==='marches'?' on':'')+'" data-v="marches" onclick="setFiabView(\'marches\')">Marchés</button><button class="fiab-tab'+(fiabView==='analyse'?' on':'')+'" data-v="analyse" onclick="setFiabView(\'analyse\')">Analyse</button><button class="fiab-tab'+(fiabView==='roi'?' on':'')+'" data-v="roi" onclick="setFiabView(\'roi\')">ROI</button><button class="fiab-tab'+(fiabView==='combi'?' on':'')+'" data-v="combi" onclick="setFiabView(\'combi\')" style="color:var(--y)">🎲 Combinés</button><button class="fiab-tab" data-v="tranches" onclick="showFiabLock(\'Tranches\',\'Analyse de précision par tranche de confiance\')" style="color:var(--dm)">🔒 Tranches</button><button class="fiab-tab" data-v="scores" onclick="showFiabLock(\'Scores\',\'Précision détaillée des prédictions de score\')" style="color:var(--dm)">🔒 Scores</button><button class="fiab-tab'+(fiabView==='selection'?' on':'')+'" data-v="selection" onclick="setFiabView(\'selection\')">Sélection</button><button class="fiab-tab" data-v="zeroo" onclick="showFiabLock(\'Analyse 0-0\',\'Corrélations et probabilités score nul\')" style="color:var(--dm)">🔒 0-0</button></div>';
   if(calibApplied){html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:.64rem;line-height:1.7"><div style="font-weight:700;color:var(--g);margin-bottom:2px">⚡ Auto-calibration active</div><div style="color:var(--dm);font-family:var(--mono)">'+Object.entries(newCalib).map(function(e){var f=e[1],mkt=mkts.find(function(m){return m.id===e[0]});return'<span style="margin-right:5px">'+(mkt?mkt.label:e[0])+' '+(f>1.05?'↑':f<0.95?'↓':'≈')+'×'+f+'</span>'}).join('')+'</div></div>'}
   function accBox(id,lbl){var st=mktStats[id];if(!st||st.acc===null)return'<div class="sb"><div class="sv" style="color:var(--dm)">?</div><div class="sl">'+lbl+'</div></div>';var col=st.acc>=60?'var(--g)':st.acc>=45?'var(--y)':'var(--r)';return'<div class="sb"><div class="sv" style="color:'+col+'">'+st.acc+'%</div><div class="sl">'+lbl+'</div></div>'}
   if(fiabView==='resume'){
@@ -5894,37 +5894,27 @@ function renderFiabOut(){
     html+='</table></div>';
   }
   else if(fiabView==='roi'){
-    // ── ROI AVANCÉ ──
-    // Récupérer config mise/cotes depuis localStorage
     var roiCfg=(function(){try{return JSON.parse(localStorage.getItem('fsa_roi_cfg')||'{}')}catch(e){return{}}})();
     var mise=parseFloat(roiCfg.mise)||10;
     var bankroll=parseFloat(roiCfg.bankroll)||500;
+    var roiStrat=roiCfg.strat||'all50';
+    var STRATEGIES=[
+      {id:'all50',  label:'Tout \u226550%',       icon:'\ud83d\udcca', desc:'Toutes les pr\xe9dictions \u226550%',              minPred:50,minConv:0},
+      {id:'conf60', label:'Confiant \u226560%',   icon:'\ud83c\udfaf', desc:'Pr\xe9dictions \u226560%, signal min 1/3',         minPred:60,minConv:1},
+      {id:'conf70', label:'Fort \u226570%',       icon:'\u26a1',       desc:'Pr\xe9dictions \u226570%, convergence min 2/3',    minPred:70,minConv:2},
+      {id:'sig3',   label:'3/3 uniquement',       icon:'\ud83d\udd25', desc:'Convergence maximale 3/3 uniquement',              minPred:50,minConv:3},
+      {id:'strict', label:'Strict \u226580%+3/3', icon:'\ud83d\udc8e', desc:'Le plus s\xe9lectif : \u226580% ET 3/3',          minPred:80,minConv:3},
+    ];
+    var curStrat=STRATEGIES.find(function(s){return s.id===roiStrat})||STRATEGIES[0];
 
-    // Formulaire config
-    html+='<div class="card" style="margin-bottom:10px;padding:12px">';
-    html+='<div class="st" style="margin-top:0;margin-bottom:8px">⚙️ PARAMÈTRES SIMULATION</div>';
-    html+='<div class="r2" style="margin-bottom:8px">';
-    html+='<div><div class="lsm">Mise fixe (€)</div><input class="inp" id="roiMise" type="number" min="1" step="1" value="'+mise+'" placeholder="Ex: 10" oninput="saveRoiCfg()"/></div>';
-    html+='<div><div class="lsm">Bankroll départ (€)</div><input class="inp" id="roiBankroll" type="number" min="1" step="10" value="'+bankroll+'" placeholder="Ex: 500" oninput="saveRoiCfg()"/></div>';
-    html+='</div>';
-    html+='<div class="lsm" style="margin-bottom:4px">Cotes moyennes observées <span style="color:var(--g);font-size:.55rem">★ optionnel — affine le calcul</span></div>';
-    html+='<div id="roiCotesContainer">';
-    mkts.forEach(function(mkt){
-      var st=mktStats[mkt.id];if(!st||st.n<5)return;
-      var savedCote=(roiCfg.cotes&&roiCfg.cotes[mkt.id])||'';
-      html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
-      html+='<span style="flex:1;font-size:.68rem;font-family:var(--mono);color:var(--tx)">'+mkt.label+'</span>';
-      html+='<input class="inp" type="number" id="cote_'+mkt.id+'" min="1.01" step="0.01" value="'+savedCote+'" placeholder="auto" style="width:90px;text-align:center" oninput="saveRoiCfg()"/>';
-      html+='</div>';
-    });
-    html+='</div>';
-    html+='<button class="btn bg" style="margin-top:8px;font-size:.75rem;padding:9px" onclick="setFiabView(\'roi\')">📊 Recalculer</button>';
-    html+='</div>';
-
-    // ── Simulation par marché ──
-    var roiRows=mkts.map(function(mkt){
+    // Fonction simulation
+    function simMkt(mkt,minPred,minConv){
       var st=mktStats[mkt.id];if(!st||st.acc===null||st.n<5)return null;
-      var valid=entries.filter(function(t){return t[mkt.pKey]!==null&&t[mkt.pKey]>=50});
+      var valid=entries.filter(function(t){
+        if(t[mkt.pKey]===null||t[mkt.pKey]<minPred)return false;
+        if(minConv>0&&(t.pNbSig||t.pConv||0)<minConv)return false;
+        return true;
+      });
       if(valid.length<3)return null;
       var savedCote=parseFloat((roiCfg.cotes&&roiCfg.cotes[mkt.id])||0);
       var profit=0,series=[],bank=bankroll,minBank=bankroll,maxDD=0,peakBank=bankroll,breakEvenAt=null;
@@ -5941,68 +5931,396 @@ function renderFiabOut(){
         series.push(Math.round(bank));
       });
       var roi=valid.length?Math.round(profit/valid.length/mise*100)/100:0;
-      var bankNeeded=Math.max(0,Math.round(maxDD+mise));
-      return{mkt:mkt,n:valid.length,profit:Math.round(profit*100)/100,roi:roi,st:st,series:series,maxDD:Math.round(maxDD),bankNeeded:bankNeeded,minBank:Math.round(minBank),breakEvenAt:breakEvenAt,finalBank:Math.round(bank)};
+      return{n:valid.length,profit:Math.round(profit*100)/100,roi:roi,series:series,
+        maxDD:Math.round(maxDD),bankNeeded:Math.max(0,Math.round(maxDD+mise)),
+        minBank:Math.round(minBank),breakEvenAt:breakEvenAt,finalBank:Math.round(bank)};
+    }
+
+    // Formulaire
+    html+='<div class="card" style="margin-bottom:10px;padding:12px">';
+    html+='<div class="st" style="margin-top:0;margin-bottom:8px">\u2699\ufe0f PARAM\u00c8TRES SIMULATION</div>';
+    html+='<div class="r2" style="margin-bottom:10px">';
+    html+='<div><div class="lsm">Mise fixe (\u20ac)</div><input class="inp" id="roiMise" type="number" min="1" step="1" value="'+mise+'" placeholder="Ex: 10" oninput="saveRoiCfg()"/></div>';
+    html+='<div><div class="lsm">Bankroll d\xe9part (\u20ac)</div><input class="inp" id="roiBankroll" type="number" min="1" step="10" value="'+bankroll+'" placeholder="Ex: 500" oninput="saveRoiCfg()"/></div>';
+    html+='</div>';
+    html+='<div class="lsm" style="margin-bottom:6px">\ud83c\udfb2 Strat\xe9gie de s\xe9lection</div>';
+    html+='<div style="display:flex;flex-direction:column;gap:5px;margin-bottom:10px">';
+    STRATEGIES.forEach(function(st){
+      var active=st.id===roiStrat;
+      html+='<div onclick="saveRoiCfg(\'strat\',\''+st.id+'\')" style="cursor:pointer;padding:8px 11px;border-radius:8px;border:1px solid '+(active?'var(--g)':'var(--bd)')+';background:'+(active?'rgba(0,229,160,.08)':'var(--s1)')+';display:flex;align-items:center;gap:8px">';
+      html+='<span style="font-size:1rem">'+st.icon+'</span><div style="flex:1">';
+      html+='<div style="font-size:.75rem;font-weight:'+(active?'900':'500')+';color:'+(active?'var(--g)':'var(--tx)')+'">'+st.label+'</div>';
+      html+='<div style="font-size:.58rem;color:var(--dm);font-family:var(--mono)">'+st.desc+'</div></div>';
+      if(active)html+='<span style="color:var(--g)">\u2713</span>';
+      html+='</div>';
+    });
+    html+='</div>';
+    html+='<div class="lsm" style="margin-bottom:4px">Cotes observ\xe9es <span style="color:var(--g);font-size:.55rem">\u2605 optionnel</span></div>';
+    mkts.forEach(function(mkt){
+      var st2=mktStats[mkt.id];if(!st2||st2.n<5)return;
+      var savedCote=(roiCfg.cotes&&roiCfg.cotes[mkt.id])||'';
+      html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">';
+      html+='<span style="flex:1;font-size:.64rem;font-family:var(--mono)">'+mkt.label+'</span>';
+      html+='<input class="inp" type="number" id="cote_'+mkt.id+'" min="1.01" step="0.01" value="'+savedCote+'" placeholder="auto" style="width:76px;text-align:center;font-size:.7rem" oninput="saveRoiCfg()"/>';
+      html+='</div>';
+    });
+    html+='<button class="btn bg" style="margin-top:8px;font-size:.75rem;padding:9px" onclick="setFiabView(\'roi\')">Recalculer</button>';
+    html+='</div>';
+
+    // Bandeau stratégie active
+    html+='<div style="background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.25);border-radius:9px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px">';
+    html+='<span style="font-size:1.4rem">'+curStrat.icon+'</span><div>';
+    html+='<div style="font-size:.72rem;font-weight:900;color:var(--g)">Simulation : '+curStrat.label+'</div>';
+    html+='<div style="font-size:.6rem;color:var(--dm);font-family:var(--mono)">Pr\xe9d. \u2265'+curStrat.minPred+'% \xb7 Conv. \u2265'+curStrat.minConv+'/3 \xb7 Cotes bas\xe9es sur la pr\xe9cision historique</div>';
+    html+='</div></div>';
+
+    // Résultats
+    var roiRows=mkts.map(function(mkt){
+      var res=simMkt(mkt,curStrat.minPred,curStrat.minConv);
+      if(!res)return null;
+      return Object.assign({mkt:mkt,st:mktStats[mkt.id]},res);
     }).filter(Boolean).sort(function(a,b){return b.roi-a.roi});
 
-    if(!roiRows.length){html+='<div style="color:var(--dm);font-size:.72rem;font-family:var(--mono);padding:12px;text-align:center">Pas assez de données (min 5 matchs par marché)</div>';}
+    if(!roiRows.length){
+      html+='<div style="color:var(--dm);font-size:.72rem;font-family:var(--mono);padding:12px;text-align:center">Pas assez de donn\xe9es avec cette strat\xe9gie \u2014 essaie une moins restrictive</div>';
+    }
 
-    html+='<div class="st">📈 RÉSULTATS PAR MARCHÉ</div>';
+    html+='<div class="st">\ud83d\udcc8 R\u00c9SULTATS \u2014 '+curStrat.label+'</div>';
     roiRows.forEach(function(row){
       var col=row.profit>0?'var(--g)':row.profit>-mise*2?'var(--y)':'var(--r)';
       var ddCol=row.maxDD>bankroll*0.3?'var(--r)':row.maxDD>bankroll*0.15?'var(--y)':'var(--g)';
       html+='<div class="card" style="margin-bottom:8px;padding:11px">';
-      html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
+      html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
       html+='<span style="font-weight:900;font-size:.82rem">'+row.mkt.label+'</span>';
-      html+='<span style="font-size:.82rem;font-weight:900;color:'+col+'">'+(row.profit>=0?'+':'')+row.profit+'€</span>';
+      html+='<span style="font-weight:900;color:'+col+'">'+(row.profit>=0?'+':'')+row.profit+'\u20ac</span></div>';
+      html+='<div style="font-size:.57rem;font-family:var(--mono);color:var(--dm);padding:3px 7px;background:var(--s1);border-radius:5px;margin-bottom:7px">';
+      html+=curStrat.icon+' '+row.n+' paris \xb7 Pr\xe9d. \u2265'+curStrat.minPred+'% \xb7 Conv. \u2265'+curStrat.minConv+'/3';
       html+='</div>';
       html+='<div class="sg g3" style="margin-bottom:8px">';
-      html+='<div class="sb"><div class="sv" style="font-size:1rem;color:'+col+'">'+(row.roi>=0?'+':'')+row.roi+'u</div><div class="sl">ROI / mise</div></div>';
-      html+='<div class="sb"><div class="sv" style="font-size:1rem">'+row.n+'</div><div class="sl">Paris sim.</div></div>';
-      html+='<div class="sb"><div class="sv" style="font-size:1rem;color:'+col+'">'+row.st.acc+'%</div><div class="sl">Précision</div></div>';
+      html+='<div class="sb"><div class="sv" style="color:'+col+'">'+(row.roi>=0?'+':'')+row.roi+'u</div><div class="sl">ROI/mise</div></div>';
+      html+='<div class="sb"><div class="sv">'+row.n+'</div><div class="sl">Paris</div></div>';
+      html+='<div class="sb"><div class="sv" style="color:'+col+'">'+row.st.acc+'%</div><div class="sl">Pr\xe9cision</div></div>';
       html+='</div>';
-      // Drawdown & bankroll analysis
-      html+='<div style="background:rgba(255,61,90,.05);border:1px solid rgba(255,61,90,.2);border-radius:7px;padding:8px 10px;margin-bottom:7px">';
-      html+='<div style="font-size:.6rem;letter-spacing:2px;color:var(--r);font-family:var(--mono);margin-bottom:5px">📉 ANALYSE DRAWDOWN</div>';
+      html+='<div style="background:rgba(255,61,90,.05);border:1px solid rgba(255,61,90,.2);border-radius:7px;padding:7px 10px;margin-bottom:6px">';
+      html+='<div style="font-size:.58rem;letter-spacing:2px;color:var(--r);font-family:var(--mono);margin-bottom:4px">\ud83d\udcc9 DRAWDOWN</div>';
       html+='<div class="r2" style="gap:6px">';
-      html+='<div><div style="font-size:.58rem;color:var(--dm);font-family:var(--mono)">Perte max enchaînée</div><div style="font-weight:900;color:'+ddCol+'">'+row.maxDD+'€</div></div>';
-      html+='<div><div style="font-size:.58rem;color:var(--dm);font-family:var(--mono)">Bankroll min atteinte</div><div style="font-weight:900;color:'+(row.minBank<bankroll*0.5?'var(--r)':'var(--y)')+'">'+row.minBank+'€</div></div>';
+      html+='<div><div style="font-size:.56rem;color:var(--dm);font-family:var(--mono)">Perte max</div><div style="font-weight:900;color:'+ddCol+'">'+row.maxDD+'\u20ac</div></div>';
+      html+='<div><div style="font-size:.56rem;color:var(--dm);font-family:var(--mono)">Bank. min</div><div style="font-weight:900;color:'+(row.minBank<bankroll*0.5?'var(--r)':'var(--y)')+'">'+row.minBank+'\u20ac</div></div>';
+      html+='</div></div>';
+      html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:7px;padding:7px 10px;margin-bottom:6px">';
+      html+='<div style="font-size:.58rem;letter-spacing:2px;color:var(--g);font-family:var(--mono);margin-bottom:3px">\ud83c\udfe6 BANKROLL MIN.</div>';
+      html+='<div style="font-weight:900;font-size:1.05rem;color:var(--g)">'+row.bankNeeded+'\u20ac</div>';
       html+='</div>';
-      html+='</div>';
-      // Bankroll needed
-      html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:7px;padding:8px 10px;margin-bottom:7px">';
-      html+='<div style="font-size:.6rem;letter-spacing:2px;color:var(--g);font-family:var(--mono);margin-bottom:5px">🏦 BANKROLL RECOMMANDÉE</div>';
-      html+='<div style="font-weight:900;font-size:1.1rem;color:var(--g)">'+row.bankNeeded+'€ minimum</div>';
-      html+='<div style="font-size:.6rem;color:var(--dm);font-family:var(--mono);margin-top:2px">Pour absorber le pire drawdown observé</div>';
-      html+='</div>';
-      // Break even
       if(row.breakEvenAt!==null){
-        html+='<div style="font-size:.64rem;font-family:var(--mono);color:var(--teal)">✅ Rentable à partir du pari n°'+row.breakEvenAt+'</div>';
+        html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--teal)">\u2705 Rentable d\xe8s le pari n\xb0'+row.breakEvenAt+'</div>';
       } else if(row.profit<0){
-        html+='<div style="font-size:.64rem;font-family:var(--mono);color:var(--r)">❌ Jamais rentable sur cette période — marché déficitaire</div>';
+        html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--r)">\u274c Pas rentable sur cette p\xe9riode</div>';
       }
-      // Mini sparkline (text-based)
       var s=row.series,mn=Math.min.apply(null,s),mx=Math.max.apply(null,s),range=mx-mn||1;
-      var bars=['▁','▂','▃','▄','▅','▆','▇','█'];
+      var bars=['\u2581','\u2582','\u2583','\u2584','\u2585','\u2586','\u2587','\u2588'];
       var step=Math.max(1,Math.floor(s.length/20));
-      var spark='';for(var si=0;si<s.length;si+=step){var lvl=Math.round((s[si]-mn)/range*7);spark+=bars[Math.min(7,Math.max(0,lvl))];}
-      var sparkCol=row.finalBank>bankroll?'var(--g)':'var(--r)';
-      html+='<div style="font-size:.72rem;color:'+sparkCol+';letter-spacing:1px;margin-top:6px;font-family:var(--mono)">'+spark+'</div>';
+      var spark='';for(var si=0;si<s.length;si+=step){spark+=bars[Math.min(7,Math.max(0,Math.round((s[si]-mn)/range*7)))];}
+      html+='<div style="font-size:.72rem;color:'+(row.finalBank>bankroll?'var(--g)':'var(--r)')+';letter-spacing:1px;margin-top:5px;font-family:var(--mono)">'+spark+'</div>';
       html+='</div>';
     });
 
-    // Global summary
+    // Comparaison stratégies
+    html+='<div class="st">\ud83d\udd2c COMPARAISON STRAT\u00c9GIES</div>';
+    html+='<div class="card" style="padding:10px">';
+    html+='<div style="font-size:.6rem;color:var(--dm);font-family:var(--mono);margin-bottom:8px">Meilleur march\xe9 de chaque strat\xe9gie</div>';
+    STRATEGIES.forEach(function(strat){
+      var bestRow=null,bestRoi=-999;
+      mkts.forEach(function(mkt){
+        var res=simMkt(mkt,strat.minPred,strat.minConv);
+        if(res&&res.roi>bestRoi){bestRoi=res.roi;bestRow={mkt:mkt,res:res};}
+      });
+      var active=strat.id===roiStrat;
+      var col=bestRow&&bestRow.res.roi>0?'var(--g)':bestRow&&bestRow.res.roi>-0.1?'var(--y)':'var(--r)';
+      html+='<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd)">';
+      html+='<span style="width:20px">'+strat.icon+'</span>';
+      html+='<div style="flex:1"><div style="font-size:.7rem;font-weight:'+(active?900:500)+';color:'+(active?'var(--g)':'var(--tx)')+'">'+strat.label+'</div>';
+      if(bestRow)html+='<div style="font-size:.57rem;color:var(--dm);font-family:var(--mono)">'+bestRow.mkt.label+' \xb7 '+bestRow.res.n+' paris</div>';
+      else html+='<div style="font-size:.57rem;color:var(--dm);font-family:var(--mono)">Pas assez de donn\xe9es</div>';
+      html+='</div>';
+      if(bestRow)html+='<span style="font-weight:900;font-size:.8rem;color:'+col+'">'+(bestRow.res.roi>=0?'+':'')+bestRow.res.roi+'u</span>';
+      html+='</div>';
+    });
+    html+='</div>';
+
     if(roiRows.length>0){
       var bestMkt=roiRows[0],worstMkt=roiRows[roiRows.length-1];
-      html+='<div class="card" style="padding:11px;margin-top:4px">';
-      html+='<div class="st" style="margin-top:0;margin-bottom:8px">🏆 SYNTHÈSE</div>';
+      html+='<div class="card" style="padding:10px;margin-top:8px">';
+      html+='<div class="st" style="margin-top:0;margin-bottom:8px">\ud83c\udfc6 SYNTH\u00c8SE</div>';
       html+='<div class="r2" style="gap:8px">';
-      html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:9px"><div style="font-size:.55rem;letter-spacing:1.5px;color:var(--g);font-family:var(--mono);margin-bottom:3px">MEILLEUR MARCHÉ</div><div style="font-weight:900">'+bestMkt.mkt.label+'</div><div style="font-size:.7rem;color:var(--g)">'+(bestMkt.profit>=0?'+':'')+bestMkt.profit+'€ · '+bestMkt.roi+'u</div></div>';
-      html+='<div style="background:rgba(255,61,90,.05);border:1px solid rgba(255,61,90,.2);border-radius:8px;padding:9px"><div style="font-size:.55rem;letter-spacing:1.5px;color:var(--r);font-family:var(--mono);margin-bottom:3px">À ÉVITER</div><div style="font-weight:900">'+worstMkt.mkt.label+'</div><div style="font-size:.7rem;color:var(--r)">'+(worstMkt.profit>=0?'+':'')+worstMkt.profit+'€ · '+worstMkt.roi+'u</div></div>';
+      html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:9px"><div style="font-size:.55rem;letter-spacing:1.5px;color:var(--g);font-family:var(--mono);margin-bottom:3px">MEILLEUR</div><div style="font-weight:900;font-size:.78rem">'+bestMkt.mkt.label+'</div><div style="font-size:.7rem;color:var(--g)">'+(bestMkt.profit>=0?'+':'')+bestMkt.profit+'\u20ac</div></div>';
+      html+='<div style="background:rgba(255,61,90,.05);border:1px solid rgba(255,61,90,.2);border-radius:8px;padding:9px"><div style="font-size:.55rem;letter-spacing:1.5px;color:var(--r);font-family:var(--mono);margin-bottom:3px">\u00c0 \u00c9VITER</div><div style="font-weight:900;font-size:.78rem">'+worstMkt.mkt.label+'</div><div style="font-size:.7rem;color:var(--r)">'+(worstMkt.profit>=0?'+':'')+worstMkt.profit+'\u20ac</div></div>';
       html+='</div></div>';
     }
   }
-  else if(fiabView==='tranches'){
+
+  else if(fiabView==='combi'){
+    // ══════════════════════════ COMBINÉS ROI ══════════════════════════
+    var combiCfg=(function(){try{return JSON.parse(localStorage.getItem('fsa_combi_cfg')||'{}')}catch(e){return{}}})();
+    var combiN=parseInt(combiCfg.n)||3;
+    var combiMode=combiCfg.mode||'daily';
+    var combiStrat=combiCfg.strat||'conf60';
+    var combiMise=parseFloat(combiCfg.mise)||10;
+    var combiBankroll=parseFloat(combiCfg.bankroll)||500;
+    var combiMaxSel=parseInt(combiCfg.maxSel)||500;
+    var CSTRATEGIES=[
+      {id:'all50', label:'Tout \u226550%',      minPred:50,minConv:0},
+      {id:'conf60',label:'Confiant \u226560%',  minPred:60,minConv:1},
+      {id:'conf70',label:'Fort \u226570%',      minPred:70,minConv:2},
+      {id:'sig3',  label:'3/3 uniquement',      minPred:50,minConv:3},
+      {id:'strict',label:'Strict \u226580%+3/3',minPred:80,minConv:3},
+    ];
+    var cst=CSTRATEGIES.find(function(s){return s.id===combiStrat})||CSTRATEGIES[1];
+
+    // ── Config UI ──
+    html+='<div class="card" style="padding:12px;margin-bottom:10px">';
+    html+='<div class="st" style="margin-top:0;margin-bottom:8px">\u2699\ufe0f PARAM\u00c8TRES COMBIN\u00c9S</div>';
+    html+='<div class="r2" style="margin-bottom:8px">';
+    html+='<div><div class="lsm">Mise fixe (\u20ac)</div><input class="inp" id="cMise" type="number" min="1" step="1" value="'+combiMise+'" oninput="saveCombiCfg()"/></div>';
+    html+='<div><div class="lsm">Bankroll (\u20ac)</div><input class="inp" id="cBank" type="number" min="10" step="10" value="'+combiBankroll+'" oninput="saveCombiCfg()"/></div>';
+    html+='</div>';
+    html+='<div class="r2" style="margin-bottom:10px">';
+    html+='<div><div class="lsm">Nb s\xe9lections / ticket</div><input class="inp" id="cN" type="number" min="2" max="9" value="'+combiN+'" oninput="saveCombiCfg()"/></div>';
+    html+='<div><div class="lsm">Max combinaisons (mode B)</div><input class="inp" id="cMaxSel" type="number" min="50" max="2000" step="50" value="'+combiMaxSel+'" oninput="saveCombiCfg()"/></div>';
+    html+='</div>';
+    // Mode
+    html+='<div class="lsm" style="margin-bottom:6px">Mode de simulation</div>';
+    html+='<div class="r2" style="margin-bottom:10px">';
+    [{id:'daily',label:'\ud83d\udcc5 Par journ\xe9e',desc:'1 ticket/jour avec les N meilleures pr\xe9dictions'},{id:'combi',label:'\ud83d\udd00 Toutes combinaisons',desc:'Exhaustif \u2014 \xe9chantillon al\xe9atoire (exp\xe9rimental)'}].forEach(function(m){
+      var active=m.id===combiMode;
+      html+='<div onclick="saveCombiCfg(\'mode\',\''+m.id+'\')" style="cursor:pointer;padding:8px;border-radius:8px;border:1px solid '+(active?'var(--g)':'var(--bd)')+';background:'+(active?'rgba(0,229,160,.08)':'var(--s1)')+'">';
+      html+='<div style="font-size:.72rem;font-weight:'+(active?900:500)+';color:'+(active?'var(--g)':'var(--tx)')+'">'+m.label+'</div>';
+      html+='<div style="font-size:.57rem;color:var(--dm);font-family:var(--mono)">'+m.desc+'</div></div>';
+    });
+    html+='</div>';
+    // Stratégie
+    html+='<div class="lsm" style="margin-bottom:5px">Strat\xe9gie de s\xe9lection</div>';
+    html+='<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">';
+    CSTRATEGIES.forEach(function(s){
+      var active=s.id===combiStrat;
+      html+='<div onclick="saveCombiCfg(\'strat\',\''+s.id+'\')" style="cursor:pointer;padding:5px 10px;border-radius:6px;font-size:.68rem;border:1px solid '+(active?'var(--g)':'var(--bd)')+';color:'+(active?'var(--g)':'var(--dm)')+';background:'+(active?'rgba(0,229,160,.08)':'transparent')+'">'+s.label+'</div>';
+    });
+    html+='</div>';
+    html+='<button class="btn bg" style="font-size:.75rem;padding:9px" onclick="setFiabView(\'combi\')">Simuler</button>';
+    html+='</div>';
+
+    // ── Filtrer les entrées selon stratégie ──
+    var eligible=entries.filter(function(t){
+      // Garder seulement si AU MOINS UN marché valide avec cette stratégie
+      return mkts.some(function(mkt){
+        return t[mkt.pKey]!==null&&t[mkt.pKey]>=cst.minPred&&
+          (cst.minConv===0||(t.pNbSig||t.pConv||0)>=cst.minConv);
+      });
+    });
+
+    if(eligible.length<combiN*2){
+      html+='<div style="color:var(--dm);font-size:.72rem;font-family:var(--mono);padding:12px;text-align:center">Pas assez d\u2019entr\xe9es \xe9ligibles ('+eligible.length+') pour simuler des combin\xe9s de '+combiN+'</div>';
+    } else {
+
+    // ── Choisir le meilleur marché par entrée ──
+    function bestMktForEntry(t){
+      var best=null,bestScore=-1;
+      mkts.forEach(function(mkt){
+        var p=t[mkt.pKey];
+        if(p===null||p<cst.minPred)return;
+        if(cst.minConv>0&&(t.pNbSig||t.pConv||0)<cst.minConv)return;
+        var score=p+(t.pNbSig||0)*5;
+        if(score>bestScore){bestScore=score;best=mkt;}
+      });
+      return best;
+    }
+
+    function simTicket(selections){
+      // selections = [{entry, mkt}]
+      var cote=1;
+      var allWon=true;
+      selections.forEach(function(sel){
+        var prob=sel.entry[sel.mkt.pKey]/100;
+        var c=Math.min(10,Math.max(1.1,1/prob*0.9));
+        cote*=c;
+        if(!getRealVal(sel.entry,sel.mkt))allWon=false;
+      });
+      cote=Math.round(cote*100)/100;
+      return{cote:cote,won:allWon,gain:allWon?combiMise*(cote-1):-combiMise};
+    }
+
+    var results=[];
+
+    if(combiMode==='daily'){
+      // ── MODE A : par journée ──
+      // Grouper par date
+      var byDate={};
+      eligible.forEach(function(t){
+        var d=t.date||t.dt||'?';
+        if(!byDate[d])byDate[d]=[];
+        var mkt=bestMktForEntry(t);
+        if(mkt)byDate[d].push({entry:t,mkt:mkt,score:t[mkt.pKey]+(t.pNbSig||0)*5});
+      });
+      Object.keys(byDate).sort().forEach(function(d){
+        var day=byDate[d];
+        if(day.length<combiN)return;
+        // Prendre les N meilleures prédictions du jour
+        day.sort(function(a,b){return b.score-a.score});
+        var sel=day.slice(0,combiN);
+        var res=simTicket(sel);
+        results.push({date:d,sel:sel,cote:res.cote,won:res.won,gain:res.gain,
+          markets:sel.map(function(s){return s.mkt.label}).join(' + ')});
+      });
+      html+='<div style="background:rgba(61,155,255,.06);border:1px solid rgba(61,155,255,.2);border-radius:9px;padding:9px 12px;margin-bottom:10px">';
+      html+='<div style="font-size:.62rem;color:var(--b);font-family:var(--mono)">\ud83d\udcc5 Mode Journ\xe9e \u2014 1 ticket/jour \xb7 Top '+combiN+' pr\xe9dictions \xb7 '+results.length+' tickets simul\xe9s</div></div>';
+    } else {
+      // ── MODE B : toutes combinaisons (échantillon) ──
+      // Enrichir eligible avec bestMkt
+      var pool=[];
+      eligible.forEach(function(t){
+        var mkt=bestMktForEntry(t);
+        if(mkt)pool.push({entry:t,mkt:mkt,score:t[mkt.pKey]+(t.pNbSig||0)*5});
+      });
+      // Shuffle
+      for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;}
+      var sampled=pool.slice(0,Math.min(pool.length,combiMaxSel));
+      // Generate random combinations of combiN
+      var MAX_COMBI=combiMaxSel;
+      var tried=0;
+      while(results.length<MAX_COMBI&&tried<MAX_COMBI*3){
+        tried++;
+        // Pick combiN random distinct entries
+        var sel=[];var usedIdx=new Set();
+        for(var k=0;k<combiN&&sel.length<combiN;k++){
+          var ri=Math.floor(Math.random()*sampled.length);
+          if(!usedIdx.has(ri)&&(!sel.length||sampled[ri].entry.id!==sel[sel.length-1].entry.id)){
+            usedIdx.add(ri);sel.push(sampled[ri]);
+          }
+        }
+        if(sel.length<combiN)continue;
+        var res=simTicket(sel);
+        results.push({sel:sel,cote:res.cote,won:res.won,gain:res.gain,
+          markets:sel.map(function(s){return s.mkt.label}).join(' + ')});
+      }
+      html+='<div style="background:rgba(255,200,0,.05);border:1px solid rgba(255,200,0,.2);border-radius:9px;padding:9px 12px;margin-bottom:10px">';
+      html+='\u26a0\ufe0f <span style="font-size:.62rem;color:var(--y);font-family:var(--mono)">Mode exp\xe9rimental \u2014 '+results.length+' combinaisons al\xe9atoires \xb7 R\xe9sultats estim\xe9s, non exhaustifs</span>';
+      html+='</div>';
+    }
+
+    if(!results.length){
+      html+='<div style="color:var(--dm);font-size:.72rem;font-family:var(--mono);padding:12px;text-align:center">Aucun ticket g\xe9n\xe9r\xe9 \u2014 essaie une strat\xe9gie moins restrictive</div>';
+    } else {
+      // ── Statistiques globales ──
+      var nWon=results.filter(function(r){return r.won}).length;
+      var totalGain=results.reduce(function(s,r){return s+r.gain},0);
+      totalGain=Math.round(totalGain*100)/100;
+      var winRate=Math.round(nWon/results.length*100);
+      var roiPerTicket=Math.round(totalGain/results.length/combiMise*100)/100;
+      var avgCote=Math.round(results.reduce(function(s,r){return s+r.cote},0)/results.length*100)/100;
+
+      // Bankroll simulation
+      var bank=combiBankroll,minBank=combiBankroll,maxDD=0,peakBank=combiBankroll,breakEvenAt=null,profit=0;
+      var bankSeries=[];
+      results.forEach(function(r,i){
+        profit+=r.gain;bank+=r.gain;
+        if(bank>peakBank)peakBank=bank;
+        var dd=peakBank-bank;if(dd>maxDD)maxDD=dd;
+        if(bank<minBank)minBank=bank;
+        if(breakEvenAt===null&&profit>=0&&i>0)breakEvenAt=i+1;
+        bankSeries.push(Math.round(bank));
+      });
+      var bankNeeded=Math.max(0,Math.round(maxDD+combiMise));
+      var profitCol=totalGain>0?'var(--g)':totalGain>-combiMise*3?'var(--y)':'var(--r)';
+
+      html+='<div class="card" style="padding:11px;margin-bottom:10px">';
+      html+='<div class="st" style="margin-top:0;margin-bottom:8px">\ud83d\udcca STATISTIQUES GLOBALES</div>';
+      html+='<div class="sg g3" style="margin-bottom:8px">';
+      html+='<div class="sb"><div class="sv" style="color:'+profitCol+'">'+(totalGain>=0?'+':'')+totalGain+'\u20ac</div><div class="sl">Profit total</div></div>';
+      html+='<div class="sb"><div class="sv" style="color:'+(winRate>=35?'var(--g)':winRate>=20?'var(--y)':'var(--r)')+'">'+winRate+'%</div><div class="sl">Taux gagnant</div></div>';
+      html+='<div class="sb"><div class="sv">'+avgCote+'</div><div class="sl">Cote moy.</div></div>';
+      html+='</div>';
+      html+='<div class="sg g3" style="margin-bottom:8px">';
+      html+='<div class="sb"><div class="sv" style="color:'+profitCol+'">'+(roiPerTicket>=0?'+':'')+roiPerTicket+'u</div><div class="sl">ROI/mise</div></div>';
+      html+='<div class="sb"><div class="sv">'+nWon+'/'+results.length+'</div><div class="sl">Gagn\xe9s</div></div>';
+      html+='<div class="sb"><div class="sv">'+combiN+'</div><div class="sl">S\xe9lections</div></div>';
+      html+='</div>';
+      // Drawdown
+      var ddCol=maxDD>combiBankroll*0.3?'var(--r)':maxDD>combiBankroll*0.15?'var(--y)':'var(--g)';
+      html+='<div style="background:rgba(255,61,90,.05);border:1px solid rgba(255,61,90,.2);border-radius:7px;padding:8px 10px;margin-bottom:8px">';
+      html+='<div style="font-size:.58rem;letter-spacing:2px;color:var(--r);font-family:var(--mono);margin-bottom:4px">\ud83d\udcc9 DRAWDOWN</div>';
+      html+='<div class="r2">';
+      html+='<div><div style="font-size:.56rem;color:var(--dm);font-family:var(--mono)">Perte max enchan\xee</div><div style="font-weight:900;color:'+ddCol+'">'+Math.round(maxDD)+'\u20ac</div></div>';
+      html+='<div><div style="font-size:.56rem;color:var(--dm);font-family:var(--mono)">Bankroll min</div><div style="font-weight:900;color:'+(minBank<combiBankroll*0.5?'var(--r)':'var(--y)')+'">'+minBank+'\u20ac</div></div>';
+      html+='</div></div>';
+      html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:7px;padding:8px 10px;margin-bottom:8px">';
+      html+='<div style="font-size:.58rem;letter-spacing:2px;color:var(--g);font-family:var(--mono);margin-bottom:3px">\ud83c\udfe6 BANKROLL MIN. RECOMMAND\u00c9E</div>';
+      html+='<div style="font-weight:900;font-size:1.1rem;color:var(--g)">'+bankNeeded+'\u20ac</div>';
+      html+='</div>';
+      if(breakEvenAt!==null)html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--teal)">\u2705 Rentable d\xe8s le ticket n\xb0'+breakEvenAt+'</div>';
+      else if(totalGain<0)html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--r)">\u274c Pas rentable sur cette p\xe9riode</div>';
+      // Sparkline
+      var s=bankSeries,mn2=Math.min.apply(null,s),mx2=Math.max.apply(null,s),rng=mx2-mn2||1;
+      var bars=['\u2581','\u2582','\u2583','\u2584','\u2585','\u2586','\u2587','\u2588'];
+      var step=Math.max(1,Math.floor(s.length/24));
+      var spark='';for(var si=0;si<s.length;si+=step){spark+=bars[Math.min(7,Math.max(0,Math.round((s[si]-mn2)/rng*7)))];}
+      html+='<div style="font-size:.72rem;color:'+(bank>combiBankroll?'var(--g)':'var(--r)')+';letter-spacing:1px;margin-top:6px;font-family:var(--mono)">'+spark+'</div>';
+      html+='</div>';
+
+      // ── Marchés les plus fréquents dans les tickets gagnants ──
+      var mktFreq={};
+      results.filter(function(r){return r.won}).forEach(function(r){
+        r.sel.forEach(function(s2){
+          var id=s2.mkt.id;
+          if(!mktFreq[id])mktFreq[id]={label:s2.mkt.label,won:0,total:0};
+          mktFreq[id].won++;
+        });
+      });
+      results.forEach(function(r){
+        r.sel.forEach(function(s2){
+          var id=s2.mkt.id;
+          if(!mktFreq[id])mktFreq[id]={label:s2.mkt.label,won:0,total:0};
+          mktFreq[id].total++;
+        });
+      });
+      var mktRanked=Object.values(mktFreq).filter(function(m){return m.total>=3}).map(function(m){
+        return{label:m.label,total:m.total,won:m.won,rate:Math.round(m.won/m.total*100)};
+      }).sort(function(a,b){return b.rate-a.rate});
+
+      if(mktRanked.length){
+        html+='<div class="card" style="padding:11px;margin-bottom:10px">';
+        html+='<div class="st" style="margin-top:0;margin-bottom:6px">\ud83c\udfc6 MARCH\u00c9S LES PLUS AVANTAGEUX EN COMBIN\u00c9</div>';
+        html+='<div style="font-size:.58rem;color:var(--dm);font-family:var(--mono);margin-bottom:8px">Fr\xe9quence dans les tickets gagnants vs total</div>';
+        mktRanked.slice(0,8).forEach(function(m){
+          var col=m.rate>=50?'var(--g)':m.rate>=30?'var(--y)':'var(--r)';
+          html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
+          html+='<span style="flex:1;font-size:.68rem;font-family:var(--mono)">'+m.label+'</span>';
+          html+='<div style="width:80px;height:6px;background:var(--bd);border-radius:3px;overflow:hidden">';
+          html+='<div style="height:100%;width:'+m.rate+'%;background:'+col+';border-radius:3px"></div></div>';
+          html+='<span style="font-size:.7rem;font-weight:700;color:'+col+';width:32px;text-align:right">'+m.rate+'%</span>';
+          html+='<span style="font-size:.57rem;color:var(--dm);font-family:var(--mono)">'+m.won+'/'+m.total+'</span>';
+          html+='</div>';
+        });
+        html+='</div>';
+      }
+
+      // ── Derniers tickets (mode daily) ──
+      if(combiMode==='daily'&&results.length>0){
+        html+='<div class="card" style="padding:11px">';
+        html+='<div class="st" style="margin-top:0;margin-bottom:6px">\ud83d\uddd3 DERNIERS TICKETS SIMUL\u00c9S</div>';
+        results.slice(-10).reverse().forEach(function(r){
+          var col=r.won?'var(--g)':'var(--r)';
+          html+='<div style="border-bottom:1px solid var(--bd);padding:6px 0">';
+          html+='<div style="display:flex;justify-content:space-between;align-items:center">';
+          html+='<span style="font-size:.65rem;font-family:var(--mono);color:var(--dm)">'+r.date+'</span>';
+          html+='<span style="font-weight:900;color:'+col+'">'+(r.won?'\u2705':'\u274c')+' '+(r.gain>=0?'+':'')+Math.round(r.gain)+'\u20ac</span></div>';
+          html+='<div style="font-size:.6rem;color:var(--dm);font-family:var(--mono)">\xd7'+r.cote+' \xb7 '+r.markets+'</div>';
+          html+='</div>';
+        });
+        html+='</div>';
+      }
+    }
+    } // end eligible check
+  }
+    else if(fiabView==='tranches'){
     html+='<div style="font-size:.63rem;color:var(--dm);margin-bottom:10px;font-family:var(--mono);line-height:1.6">Pour chaque marché : à quelle tranche de prédiction FootStats est-il le plus précis ? La tranche verte = zone de confiance maximale.</div>';
     var TRANCHES=[{lbl:'<40%',min:0,max:39},{lbl:'40-49%',min:40,max:49},{lbl:'50-59%',min:50,max:59},{lbl:'60-69%',min:60,max:69},{lbl:'70-79%',min:70,max:79},{lbl:'80%+',min:80,max:100}];
     mkts.forEach(function(mkt){
@@ -6285,13 +6603,14 @@ window.addEventListener('DOMContentLoaded',function(){
 });
 
 
-function saveRoiCfg(){
-  var cfg={};
+function saveRoiCfg(key,val){
+  var cfg;try{cfg=JSON.parse(localStorage.getItem('fsa_roi_cfg')||'{}')}catch(e){cfg={}}
+  if(key&&val!==undefined){cfg[key]=val;localStorage.setItem('fsa_roi_cfg',JSON.stringify(cfg));setFiabView('roi');return;}
   var mise=document.getElementById('roiMise');
   var bk=document.getElementById('roiBankroll');
   if(mise)cfg.mise=parseFloat(mise.value)||10;
   if(bk)cfg.bankroll=parseFloat(bk.value)||500;
-  cfg.cotes={};
+  if(!cfg.cotes)cfg.cotes={};
   document.querySelectorAll('[id^="cote_"]').forEach(function(inp){
     var id=inp.id.replace('cote_','');
     if(inp.value)cfg.cotes[id]=parseFloat(inp.value);
@@ -6315,6 +6634,21 @@ function showFiabLock(name, desc){
     '<div style="font-size:.66rem;color:var(--dm);font-family:var(--mono);line-height:1.6;margin-bottom:16px">'+desc+'</div>'+
     '<div style="font-size:.62rem;color:var(--g);font-family:var(--mono)">Contacte-nous pour débloquer l\'accès complet</div>';
   out.appendChild(div);
+}
+
+
+function saveCombiCfg(key,val){
+  var cfg;try{cfg=JSON.parse(localStorage.getItem('fsa_combi_cfg')||'{}')}catch(e){cfg={}}
+  if(key&&val!==undefined){cfg[key]=val;localStorage.setItem('fsa_combi_cfg',JSON.stringify(cfg));setFiabView('combi');return;}
+  var n=document.getElementById('cN');
+  var mise=document.getElementById('cMise');
+  var bank=document.getElementById('cBank');
+  var maxSel=document.getElementById('cMaxSel');
+  if(n)cfg.n=parseInt(n.value)||3;
+  if(mise)cfg.mise=parseFloat(mise.value)||10;
+  if(bank)cfg.bankroll=parseFloat(bank.value)||500;
+  if(maxSel)cfg.maxSel=parseInt(maxSel.value)||500;
+  localStorage.setItem('fsa_combi_cfg',JSON.stringify(cfg));
 }
 
 </script>
