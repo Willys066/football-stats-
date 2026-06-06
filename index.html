@@ -1437,30 +1437,47 @@ async function deleteAnalysis(id){
 // ═══════════════════════════════════ API ═══
 async function apiCall(endpoint,params){
   if(!cfg.apiKey)return null;
+  // Build URL sans clé (pour les proxies qui bloquent les headers custom)
   var url=new URL(API+endpoint);
   Object.keys(params).forEach(function(k){url.searchParams.set(k,params[k])});
+  // Build URL avec clé en query param (fallback si headers bloqués par proxy)
+  var urlWithKey=new URL(API+endpoint);
+  Object.keys(params).forEach(function(k){urlWithKey.searchParams.set(k,params[k])});
+  urlWithKey.searchParams.set('apiKey',cfg.apiKey);
   var hdrs={'x-apisports-key':cfg.apiKey,'x-rapidapi-key':cfg.apiKey};
   var errors=[];
   for(var pi=0;pi<PROXIES.length;pi++){
-    try{
-      var fetchUrl=PROXIES[pi]===''?url.toString():PROXIES[pi]+encodeURIComponent(url.toString());
-      var ctrl=new AbortController();
-      var timer=setTimeout(function(){ctrl.abort();},12000);
-      var r=await fetch(fetchUrl,{headers:hdrs,signal:ctrl.signal});
-      clearTimeout(timer);
-      if(r.ok){
-        var d=await r.json();
-        if(d&&d.response!==undefined)return d;
-        if(d&&d.errors&&Object.keys(d.errors).length){
-          errors.push('API error: '+JSON.stringify(d.errors));
-          break; // erreur API réelle, pas la peine d'essayer les autres proxies
+    // Pour les proxies CORS publics, on essaie d'abord avec headers, puis avec clé en query
+    var urlsToTry=pi===0
+      ?[url.toString()]  // direct: headers seulement
+      :[PROXIES[pi]+encodeURIComponent(url.toString()),
+        PROXIES[pi]+encodeURIComponent(urlWithKey.toString())]; // proxy: headers puis query param
+    for(var ui=0;ui<urlsToTry.length;ui++){
+      try{
+        var ctrl=new AbortController();
+        var timer=setTimeout(function(){ctrl.abort();},12000);
+        var fetchOpts={signal:ctrl.signal};
+        // Headers seulement pour direct et premier essai proxy
+        if(pi===0||ui===0)fetchOpts.headers=hdrs;
+        var r=await fetch(urlsToTry[ui],fetchOpts);
+        clearTimeout(timer);
+        if(r.ok){
+          var d=await r.json();
+          if(d&&d.response!==undefined){
+            if(d.response.length>0)return d;
+            // response=[] : peut être quota ou mauvaise date — log mais continue
+            var errDetail=d.errors?JSON.stringify(d.errors):'aucun';
+            errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+(ui>0?' (qparam)':'')+': response[] errors='+errDetail);
+            if(d.errors&&Object.keys(d.errors).length){break;} // erreur API réelle
+            return d; // response vide légitime (0 match ce jour)
+          }
+          errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+(ui>0?' (qparam)':'')+': pas de champ response');
+        }else{
+          errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+(ui>0?' (qparam)':'')+': HTTP '+r.status);
         }
-        errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+': réponse invalide');
-      }else{
-        errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+': HTTP '+r.status);
+      }catch(e){
+        errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+(ui>0?' (qparam)':'')+': '+(e.name==='AbortError'?'timeout 12s':e.message));
       }
-    }catch(e){
-      errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+': '+(e.name==='AbortError'?'timeout 12s':e.message));
     }
   }
   apiCall._lastError=errors.join(' | ');
@@ -2107,9 +2124,11 @@ async function loadMatchs(mode){
     showAl('tdAl','er','Erreur API: '+(apiCall._lastError||'inconnue'));
     return;
   }
-  var matchs=(data.response||[]).map(function(f){return parseFix(f,tz)});
+  var raw=data.response||[];
+  var matchs=raw.map(function(f){return parseFix(f,tz)});
   if(!matchs.length){
-    showAl('tdAl','in','Aucun match trouvé pour cette date.');
+    var detail=apiCall._lastError?'<br><small style="opacity:.7">Détail: '+apiCall._lastError+'</small>':'';
+    showAl('tdAl','er','0 match retourné par l\'API pour le '+date+'.'+detail);
     return;
   }
   db[date]=matchs;
