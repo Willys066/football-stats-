@@ -1261,14 +1261,34 @@ tr:hover td{background:var(--s2)}
   <div class="al" id="fiabAl"></div>
   <div id="fiabOut" style="display:none"></div>
 
-  <!-- MODULE 0-0 -->
-  <div class="st" style="margin-top:16px">&#x1F512; Score 0-0 &#x2014; Analyse &amp; Corr&#xe9;lations</div>
+  <!-- MODULE SCORES EXACTS -->
+  <div class="st" style="margin-top:16px">&#x1F4CA; Scores Exacts &#x2014; Analyse &amp; Corr&#xe9;lations</div>
   <div class="card">
-    <p style="font-size:.72rem;color:var(--dm);font-family:var(--mono);line-height:1.5;margin-bottom:12px">Analyse tous les matchs termin&#xe9;s en base. Fr&#xe9;quence, corr&#xe9;lations ligue/heure/jour, &#xe9;quipes, H2H, et march&#xe9;s associ&#xe9;s.</p>
-    <button class="btn" style="background:linear-gradient(135deg,#1a0a2e,#2d0845);border:1px solid rgba(176,107,255,.4);color:var(--p);font-size:.8rem;margin-bottom:0" onclick="calc00()">&#x1F512; Calculer l'analyse 0-0</button>
+    <p style="font-size:.72rem;color:var(--dm);font-family:var(--mono);line-height:1.5;margin-bottom:10px">Analyse par score exact : fr&#xe9;quence, ligues, heures, jours, &#xe9;quipes, H2H, corr&#xe9;lations march&#xe9;s et tranches de pr&#xe9;diction.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+      <button class="btn" style="background:linear-gradient(135deg,#1a0a2e,#2d0845);border:1px solid rgba(176,107,255,.4);color:var(--p);font-size:.72rem;padding:6px 10px" onclick="calcScore(0,0)">&#x1F512; 0-0</button>
+      <button class="btn" style="background:linear-gradient(135deg,#0a1a14,#0d2a1a);border:1px solid rgba(0,229,160,.3);color:var(--g);font-size:.72rem;padding:6px 10px" onclick="calcScore(1,0)">&#x26BD; 1-0</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(0,1)">0-1</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(1,1)">1-1</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(2,0)">2-0</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(2,1)">2-1</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(0,2)">0-2</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(1,2)">1-2</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(2,2)">2-2</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(3,0)">3-0</button>
+      <button class="btn" style="font-size:.72rem;padding:6px 10px" onclick="calcScore(3,1)">3-1</button>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span style="font-size:.6rem;color:var(--dm);font-family:var(--mono)">Custom :</span>
+      <input class="inp" id="customH" type="number" min="0" max="9" value="0" style="width:46px;text-align:center;padding:5px"/>
+      <span style="color:var(--dm)">-</span>
+      <input class="inp" id="customA" type="number" min="0" max="9" value="0" style="width:46px;text-align:center;padding:5px"/>
+      <button class="btn bg" style="font-size:.7rem;padding:6px 10px" onclick="calcScore(parseInt(document.getElementById('customH').value)||0,parseInt(document.getElementById('customA').value)||0)">Analyser</button>
+    </div>
   </div>
   <div class="al" id="al00"></div>
   <div id="out00" style="display:none"></div>
+
 
   <!-- MODULE RECALAGE LIVE -->
   <div class="st" style="margin-top:16px">&#x23F1; Recalage Live &#x2014; Mesure de justesse</div>
@@ -1320,7 +1340,7 @@ tr:hover td{background:var(--s2)}
 </div><!-- end .app -->
 <script>
 // ═══════════════════════════════════ CONSTANTS & STATE ═══
-var DB_KEY='fsa_db_v5',CFG_KEY='fsa_cfg_v6',RES_KEY='fsa_res_v1',TRACK_KEY='fsa_track_v2',TK_KEY='fsa_tickets_v1',CALIB_KEY='fsa_calib_v1',AN_KEY='btts_h_v1';
+var DB_KEY='fsa_db_v5',CFG_KEY='fsa_cfg_v6',RES_KEY='fsa_res_v1',TRACK_KEY='fsa_track_v2',TK_KEY='fsa_tickets_v1',CALIB_KEY='fsa_calib_v1',AN_KEY='btts_h_v1',SCORE_CORR_KEY='fsa_score_corr_v1';
 var PROXIES=['','https://corsproxy.io/?','https://api.allorigins.win/raw?url='];
 var API='https://v3.football.api-sports.io';
 var TERM=['FT','AET','PEN','AWD','WO','CANC','ABD','SUSP','PST'],LIVE=['1H','HT','2H','ET','BT','P','INT','LIVE'];
@@ -1330,6 +1350,7 @@ var stopFlag=false,modalMatch=null,currentTickets=[],modalTkIdx=-1;
 var cfg={apiKey:'',groqKey:'',oddsApiKey:'',tz:0};
 var oddsFormat='decimal';
 var allMatchsCache=[],tdMkt='auto',statsMkt='totaux',fiabView='resume';
+var recalageActive=false;
 var ctxBonus=0,stakeHMul=1,stakeAMul=1,meteoMul=1,currentBttsProb=0.5;
 var calibratedWeights=null,aiModeActive=false;
 var DEFAULT_WEIGHTS={hist:.25,stats:.30,fs:.25,xg:.15,ctx:.05};
@@ -2285,7 +2306,12 @@ function ligBiasCorrection(ligStat,globalHistRate,liveRaw){
 function weightedLive(fn,lig,h,dw,liveVal){
   var vals=[];var vL=fn(lig),vH=fn(h),vD=fn(dw);
   if(vL!==null)vals.push([vL,.55]);if(vH!==null)vals.push([vH,.25]);if(vD!==null)vals.push([vD,.20]);
-  if(liveVal!==null&&vL!==null)vals.push([liveVal,.10]);
+  // Recalage live : s'applique dès qu'il y a une valeur live, que la ligue soit connue ou non
+  // Si ligue connue : poids 0.10 (complément), si ligue inconnue : poids 0.40 (signal principal)
+  if(liveVal!==null){
+    var liveW=vL===null&&vH===null&&vD===null?0.60:(vL===null?0.40:0.10);
+    vals.push([liveVal,liveW]);
+  }
   if(!vals.length)return null;
   var sw=vals.reduce(function(a,v){return a+v[1]},0);
   return vals.reduce(function(a,v){return a+v[0]*v[1]/sw},0);
@@ -2372,6 +2398,20 @@ function getCalib(){try{return JSON.parse(localStorage.getItem(CALIB_KEY)||'{}')
 function setCalib(c){localStorage.setItem(CALIB_KEY,JSON.stringify(c))}
 function resetCalib(){if(!confirm('Réinitialiser tous les facteurs de calibration?'))return;localStorage.removeItem(CALIB_KEY);showAl('fiabAl','ok','Calibration réinitialisée.');setTimeout(function(){hideAl('fiabAl')},3000)}
 function getCalibFactor(market){var c=getCalib();return c[market]!==undefined?c[market]:1.0}
+function getScoreCorr(){try{return JSON.parse(localStorage.getItem(SCORE_CORR_KEY)||'{}')}catch(e){return{}}}
+function setScoreCorr(d){localStorage.setItem(SCORE_CORR_KEY,JSON.stringify(d))}
+// Sauvegarde les corrélations d'un score dans le store persistant
+function saveScoreCorrData(targetH,targetA,corrArr,baseRate){
+  var store=getScoreCorr();
+  var key=targetH+'-'+targetA;
+  store[key]={
+    baseRate:baseRate,
+    corr:{},
+    saved:new Date().toISOString().slice(0,10)
+  };
+  corrArr.forEach(function(c){store[key].corr[c.k]=c.rate/100;});
+  setScoreCorr(store);
+}
 function applyCalib(val,market){if(val===null)return null;return Math.min(1,Math.max(0,val*getCalibFactor(market)))}
 
 // ═══════════════════════════════════ POISSON / DIXON-COLES ═══
@@ -3226,6 +3266,21 @@ function renderMatchsList(){
     return(m._pred?m._pred.convergence:0)>=convFilterVal;
   });
 
+  // Appliquer le recalage live si actif
+  if(recalageActive&&fx.length){
+    var _liveCtxV2=buildLiveContextV2(allMatchsCache,seuilTd);
+    if(_liveCtxV2){
+      fx.forEach(function(m){
+        if(m._pred){
+          var rp=applyRecalageToMatch(m,m._pred,_liveCtxV2,seuilTd);
+          m._predRecale=rp;
+        }
+      });
+    }
+  } else {
+    fx.forEach(function(m){m._predRecale=null;});
+  }
+
   if(!fx.length){
     list.innerHTML='<div style="color:var(--dm);padding:20px;text-align:center;font-size:.8rem;font-family:var(--mono)">Aucun match pour ce filtre</div>';
     return;
@@ -3272,7 +3327,8 @@ function renderMatchsList(){
       var midx=window._matchRefs.length;
       window._matchRefs.push(m);
 
-      var pred=m._pred;
+      var pred=(recalageActive&&m._predRecale)?m._predRecale:m._pred;
+      if(recalageActive&&m._predRecale)pred.recalageActif=true;
       var res=results[m.id];
       var isLive=LIVE.indexOf(m.status)>=0;
       var isDone=TERM.indexOf(m.status)>=0;
@@ -4778,7 +4834,9 @@ function renderSelection(){
       var predVal=pred[mk.predKey];
       if(predVal===null||predVal===undefined)return;
       var predPct=Math.round(predVal*100);
-      if(predPct<selSeuil)return; // sous le seuil prédit
+      // Seuil adaptatif : marchés 1X2 naturellement < 50%, seuil réduit
+      var seuilEffectif=mk.mktGroup==='1x2'?Math.min(selSeuil,40):selSeuil;
+      if(predPct<seuilEffectif)return;
 
       // Fiabilité de ce marché depuis le tracking
       var fiabData=calib[mk.fiabKey]||calib[mk.id]||null;
@@ -5330,72 +5388,138 @@ function get00Stats(){
   });
   return all;
 }
-// Calcule probabilité 0-0 pour badge sur match card
-function compute00Badge(m,pred){
+// Calcule probabilité d'un score exact pour badge / calibration passive
+function computeScoreBadge(targetH,targetA,m,pred){
   var all=window._00stats||get00Stats();
+  var key=targetH+'-'+targetA;
+  var scoreCorr=getScoreCorr();
+  var corrData=scoreCorr[key]||null;
+
+  // ── Score modèle (combinaison de prédictions) ──
   var modelScore=null;
   if(pred){
-    if(pred.csH!=null&&pred.csA!=null){ modelScore=pred.csH*pred.csA; }
+    // Facteurs universels adaptés au score cible
+    var needsCsH=targetA===0; // CS dom si 0 but extérieur
+    var needsCsA=targetH===0; // CS ext si 0 but domicile
+    var needsBtts=targetH>0&&targetA>0;
+    var needsV1=targetH>targetA;
+    var needsX=targetH===targetA;
+    var needsV2=targetH<targetA;
+    var totalButs=targetH+targetA;
+
+    if(needsCsH&&pred.csH!=null)  {modelScore=modelScore!=null?modelScore*0.6+pred.csH*0.4:pred.csH;}
+    if(needsCsA&&pred.csA!=null)  {modelScore=modelScore!=null?modelScore*0.6+pred.csA*0.4:pred.csA;}
+    if(!needsBtts&&pred.bttsNon!=null){var bv=pred.bttsNon*0.7;modelScore=modelScore!=null?modelScore*0.65+bv*0.35:bv;}
+    if(needsBtts&&pred.btts!=null){var bv2=pred.btts*0.5;modelScore=modelScore!=null?modelScore*0.65+bv2*0.35:bv2;}
     if(pred.hmsc!=null&&pred.amsc!=null){
-      var m2=(1-pred.hmsc)*(1-pred.amsc);
-      modelScore=modelScore!=null?(modelScore*0.55+m2*0.45):m2;
+      var m2=needsBtts?(pred.hmsc*pred.amsc):((1-pred.hmsc)*(1-pred.amsc));
+      modelScore=modelScore!=null?modelScore*0.55+m2*0.45:m2;
     }
-    if(pred.bttsNon!=null){
-      var bts=pred.bttsNon*pred.bttsNon*0.45;
-      if(modelScore!=null) modelScore=modelScore*0.70+bts*0.30; else modelScore=bts;
+    if(needsV1&&pred.v1!=null)    modelScore=modelScore!=null?modelScore*(0.8+pred.v1*0.4):null;
+    if(needsX&&pred.x!=null)      modelScore=modelScore!=null?modelScore*(0.8+pred.x*0.5):null;
+    if(needsV2&&pred.v2!=null)    modelScore=modelScore!=null?modelScore*(0.8+pred.v2*0.4):null;
+    // Ajustement total buts
+    if(totalButs===0&&pred.under!=null&&modelScore!=null) modelScore*=(0.8+pred.under*0.4);
+    if(totalButs===1&&pred.under!=null&&modelScore!=null) modelScore*=(0.7+pred.under*0.5);
+    if(modelScore!=null) modelScore=Math.min(0.60,Math.max(0.002,modelScore));
+
+    // ── Calibration passive via corrélations stockées ──
+    if(corrData&&corrData.corr){
+      var corrBoost=1.0;var nCorr=0;
+      var mktMap={v1:pred.v1,x:pred.x,v2:pred.v2,btts:pred.btts,bttsNon:pred.bttsNon,
+                  csH:pred.csH,csA:pred.csA,hmsc:pred.hmsc,amsc:pred.amsc,
+                  plus:pred.plus,under:pred.under,dc1x:pred.dc1x,dcx2:pred.dcx2,dc12:pred.dc12};
+      Object.keys(corrData.corr).forEach(function(k){
+        var predVal=mktMap[k];
+        if(predVal==null||predVal<0.5)return; // marché non prédit
+        var corrRate=corrData.corr[k]; // taux historique observé
+        var baseR=corrData.baseRate||0.05;
+        if(baseR>0){
+          // Ratio : combien fois plus probable que la base quand ce marché prédit
+          var ratio=corrRate/baseR;
+          // Limiter l'impact : max ×2, min ×0.5
+          corrBoost*=Math.min(2.0,Math.max(0.5,Math.pow(ratio,0.4)));
+          nCorr++;
+        }
+      });
+      if(nCorr>0&&modelScore!=null){
+        modelScore=Math.min(0.65,Math.max(0.002,modelScore*corrBoost));
+      }
     }
-    if(pred.under!=null&&modelScore!=null)  modelScore*=(0.80+pred.under*0.40);
-    if(pred.x!=null&&modelScore!=null)      modelScore*=(0.80+pred.x*0.60);
-    if(modelScore!=null) modelScore=Math.min(0.55,Math.max(0.005,modelScore));
   }
+
   if(!all||all.length<5)
-    return Math.min(99,Math.max(1,Math.round((modelScore!=null?modelScore:0.08)*100)));
-  var total=all.length, nb00=all.filter(function(x){return x.h===0&&x.a===0}).length;
-  var baseRate=nb00/total;
+    return Math.min(99,Math.max(1,Math.round((modelScore!=null?modelScore:0.05)*100)));
+
+  // ── Score statistique (historique ligue/heure/jour) ──
+  var total=all.length;
+  var nbTarget=all.filter(function(x){return x.h===targetH&&x.a===targetA}).length;
+  var baseRate=nbTarget/total;
   var ligMs=all.filter(function(x){return x.league===m.league});
-  var ligRate=ligMs.length>=5?(ligMs.filter(function(x){return x.h===0&&x.a===0}).length/ligMs.length):baseRate;
+  var ligRate=ligMs.length>=5?(ligMs.filter(function(x){return x.h===targetH&&x.a===targetA}).length/ligMs.length):baseRate;
   var hour=m.heure?(parseInt(m.heure.split(':')[0])||null):null;
   var hourMs=hour!=null?all.filter(function(x){return x.heure&&parseInt(x.heure.split(':')[0])===hour}):[];
-  var hourRate=hourMs.length>=5?(hourMs.filter(function(x){return x.h===0&&x.a===0}).length/hourMs.length):baseRate;
+  var hourRate=hourMs.length>=5?(hourMs.filter(function(x){return x.h===targetH&&x.a===targetA}).length/hourMs.length):baseRate;
   var dayRate=baseRate;
   var matchDate=m.date||(typeof selDate!=='undefined'?selDate:null);
   if(matchDate){
     var dow=new Date(matchDate).getDay();
     var dayMs=all.filter(function(x){return x.date&&new Date(x.date).getDay()===dow});
-    if(dayMs.length>=5) dayRate=dayMs.filter(function(x){return x.h===0&&x.a===0}).length/dayMs.length;
+    if(dayMs.length>=5) dayRate=dayMs.filter(function(x){return x.h===targetH&&x.a===targetA}).length/dayMs.length;
   }
   var statScore=ligRate*0.35+hourRate*0.30+dayRate*0.20+baseRate*0.15;
-  var finalScore=modelScore!=null?(statScore*0.50+modelScore*0.50):statScore;
+  var finalScore=modelScore!=null?(statScore*0.45+modelScore*0.55):statScore;
   return Math.min(99,Math.max(1,Math.round(finalScore*100)));
 }
 
-function calc00(){
+// Wrapper 0-0 pour rétrocompatibilité
+function compute00Badge(m,pred){return computeScoreBadge(0,0,m,pred);}
+
+function calc00(){calcScore(0,0);}
+
+function calcScore(targetH, targetA){
+  var label=targetH+'-'+targetA;
   var all=get00Stats();
   if(all.length<5){showAl('al00','er','Pas assez de matchs en base (minimum 5). Lance d\'abord une collecte.');return}
+
   var total=all.length;
-  var ms00=all.filter(function(m){return m.h===0&&m.a===0});
-  var n00=ms00.length;
-  var rate=n00/total;
+  var msTarget=all.filter(function(m){return m.h===targetH&&m.a===targetA});
+  var nTarget=msTarget.length;
+  var rate=nTarget/total;
+  var pct=Math.round(rate*100);
+
+  // Couleur selon score
+  var scoreCol=targetH===0&&targetA===0?'var(--p)':targetH>targetA?'var(--g)':targetH<targetA?'var(--b)':'var(--y)';
+  var scoreIcon=targetH===0&&targetA===0?'🔒':targetH===targetA?'🤝':targetH>targetA?'🏠':'✈️';
 
   // ─── Par ligue ───
   var ligMap={};
   all.forEach(function(m){
-    var k=m.league||'?';
-    if(!ligMap[k])ligMap[k]={total:0,n00:0};
+    var k=(m.country?m.country+' · ':'')+( m.league||'?');
+    if(!ligMap[k])ligMap[k]={total:0,n:0};
     ligMap[k].total++;
-    if(m.h===0&&m.a===0)ligMap[k].n00++;
+    if(m.h===targetH&&m.a===targetA)ligMap[k].n++;
   });
-  var ligArr=Object.keys(ligMap).map(function(k){return{name:k,total:ligMap[k].total,n00:ligMap[k].n00,rate:ligMap[k].n00/ligMap[k].total}}).filter(function(x){return x.total>=5}).sort(function(a,b){return b.rate-a.rate});
+  var ligArr=Object.keys(ligMap).map(function(k){
+    return{name:k,total:ligMap[k].total,n:ligMap[k].n,rate:ligMap[k].n/ligMap[k].total};
+  }).filter(function(x){return x.total>=5}).sort(function(a,b){return b.rate-a.rate});
+
+  // ─── Nb matchs par ligue (volume) ───
+  var ligVolume=Object.keys(ligMap).map(function(k){
+    return{name:k,total:ligMap[k].total,n:ligMap[k].n};
+  }).filter(function(x){return x.total>=3}).sort(function(a,b){return b.total-a.total});
 
   // ─── Par heure ───
   var hourMap={};
   all.forEach(function(m){
     var h=m.heure?m.heure.split(':')[0]:'?';
-    if(!hourMap[h])hourMap[h]={total:0,n00:0};
+    if(!hourMap[h])hourMap[h]={total:0,n:0};
     hourMap[h].total++;
-    if(m.h===0&&m.a===0)hourMap[h].n00++;
+    if(m.h===targetH&&m.a===targetA)hourMap[h].n++;
   });
-  var hourArr=Object.keys(hourMap).map(function(h){return{h:h,total:hourMap[h].total,n00:hourMap[h].n00,rate:hourMap[h].n00/hourMap[h].total}}).filter(function(x){return x.total>=3}).sort(function(a,b){return b.rate-a.rate});
+  var hourArr=Object.keys(hourMap).map(function(h){
+    return{h:h,total:hourMap[h].total,n:hourMap[h].n,rate:hourMap[h].n/hourMap[h].total};
+  }).filter(function(x){return x.total>=3}).sort(function(a,b){return b.rate-a.rate});
 
   // ─── Par jour ───
   var DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
@@ -5403,195 +5527,269 @@ function calc00(){
   all.forEach(function(m){
     if(!m.date)return;
     var d=new Date(m.date).getDay();var k=DAYS[d]||'?';
-    if(!dayMap[k])dayMap[k]={total:0,n00:0};
+    if(!dayMap[k])dayMap[k]={total:0,n:0};
     dayMap[k].total++;
-    if(m.h===0&&m.a===0)dayMap[k].n00++;
+    if(m.h===targetH&&m.a===targetA)dayMap[k].n++;
   });
-  var dayArr=DAYS.map(function(d){var e=dayMap[d]||{total:0,n00:0};return{d:d,total:e.total,n00:e.n00,rate:e.total>0?e.n00/e.total:0}}).filter(function(x){return x.total>0});
+  var dayArr=DAYS.map(function(d){
+    var e=dayMap[d]||{total:0,n:0};
+    return{d:d,total:e.total,n:e.n,rate:e.total>0?e.n/e.total:0};
+  }).filter(function(x){return x.total>0});
 
   // ─── Équipes ───
   var teamH={},teamA={};
   all.forEach(function(m){
     var h=m.home||'?',a=m.away||'?';
-    if(!teamH[h])teamH[h]={total:0,n00:0};teamH[h].total++;if(m.h===0&&m.a===0)teamH[h].n00++;
-    if(!teamA[a])teamA[a]={total:0,n00:0};teamA[a].total++;if(m.h===0&&m.a===0)teamA[a].n00++;
+    if(!teamH[h])teamH[h]={total:0,n:0};teamH[h].total++;if(m.h===targetH&&m.a===targetA)teamH[h].n++;
+    if(!teamA[a])teamA[a]={total:0,n:0};teamA[a].total++;if(m.h===targetH&&m.a===targetA)teamA[a].n++;
   });
-  var topH=Object.keys(teamH).filter(function(k){return teamH[k].total>=3}).map(function(k){return{name:k,total:teamH[k].total,n00:teamH[k].n00,rate:teamH[k].n00/teamH[k].total}}).sort(function(a,b){return b.rate-a.rate}).slice(0,8);
-  var topA=Object.keys(teamA).filter(function(k){return teamA[k].total>=3}).map(function(k){return{name:k,total:teamA[k].total,n00:teamA[k].n00,rate:teamA[k].n00/teamA[k].total}}).sort(function(a,b){return b.rate-a.rate}).slice(0,8);
+  var topH=Object.keys(teamH).filter(function(k){return teamH[k].total>=3}).map(function(k){
+    return{name:k,total:teamH[k].total,n:teamH[k].n,rate:teamH[k].n/teamH[k].total};
+  }).sort(function(a,b){return b.rate-a.rate}).slice(0,8);
+  var topA=Object.keys(teamA).filter(function(k){return teamA[k].total>=3}).map(function(k){
+    return{name:k,total:teamA[k].total,n:teamA[k].n,rate:teamA[k].n/teamA[k].total};
+  }).sort(function(a,b){return b.rate-a.rate}).slice(0,8);
 
   // ─── H2H ───
   var h2hMap={};
   all.forEach(function(m){
     var k=[m.home,m.away].sort().join(' vs ');
-    if(!h2hMap[k])h2hMap[k]={total:0,n00:0};h2hMap[k].total++;if(m.h===0&&m.a===0)h2hMap[k].n00++;
+    if(!h2hMap[k])h2hMap[k]={total:0,n:0};h2hMap[k].total++;
+    if(m.h===targetH&&m.a===targetA)h2hMap[k].n++;
   });
-  var topH2H=Object.keys(h2hMap).filter(function(k){return h2hMap[k].total>=2&&h2hMap[k].n00>0}).map(function(k){return{name:k,total:h2hMap[k].total,n00:h2hMap[k].n00,rate:h2hMap[k].n00/h2hMap[k].total}}).sort(function(a,b){return b.n00-a.n00||b.rate-a.rate}).slice(0,8);
+  var topH2H=Object.keys(h2hMap).filter(function(k){return h2hMap[k].total>=2&&h2hMap[k].n>0}).map(function(k){
+    return{name:k,total:h2hMap[k].total,n:h2hMap[k].n,rate:h2hMap[k].n/h2hMap[k].total};
+  }).sort(function(a,b){return b.n-a.n||b.rate-a.rate}).slice(0,8);
 
-  // ─── Corrélations avec marchés (sur les matchs trackés) ───
+  // ─── Distribution des scores dans la même catégorie (total buts identique) ───
+  var sameTotalButs=targetH+targetA;
+  var sameTotal=all.filter(function(m){return (m.h+m.a)===sameTotalButs});
+  var scoreDistrib={};
+  sameTotal.forEach(function(m){
+    var k=m.h+'-'+m.a;
+    if(!scoreDistrib[k])scoreDistrib[k]=0;
+    scoreDistrib[k]++;
+  });
+  var distribArr=Object.keys(scoreDistrib).map(function(k){
+    return{score:k,n:scoreDistrib[k],pct:Math.round(scoreDistrib[k]/sameTotal.length*100)};
+  }).sort(function(a,b){return b.n-a.n});
+
+  // ─── Corrélations avec marchés (tracking) ───
   var track=getTrackCompat();
+  var MKTS=['plus','under','btts','bttsNon','v1','x','v2','csH','csA','hmsc','amsc','dc1x','dcx2','dc12'];
+  var MLBLS={plus:'Over +seuil',under:'Under -seuil',btts:'BTTS Oui',bttsNon:'BTTS Non',
+    v1:'Victoire Dom',x:'Match Nul',v2:'Victoire Ext',
+    csH:'CS Dom (0 encaissé)',csA:'CS Ext (0 encaissé)',
+    hmsc:'Dom marque',amsc:'Ext marque',
+    dc1x:'DC 1X',dcx2:'DC X2',dc12:'DC 12'};
   var mktCorr={};
-  var MKTS=['plus','under','btts','bttsNon','v1','x','v2','csH','csA'];
-  var MLBLS={plus:'Over +seuil',under:'Under -seuil',btts:'BTTS Oui',bttsNon:'BTTS Non',v1:'Victoire Dom',x:'Match Nul',v2:'Victoire Ext',csH:'CS Dom',csA:'CS Ext'};
-  MKTS.forEach(function(k){mktCorr[k]={both:0,only00:0,onlyMkt:0,neither:0}});
+  MKTS.forEach(function(k){mktCorr[k]={withTarget:0,total:0}});
   track.forEach(function(t){
-    if(t.h===undefined||t.a===undefined)return;
-    var is00=t.h===0&&t.a===0;
+    if(t.rH===undefined||t.rA===undefined)return;
+    var isTarget=t.rH===targetH&&t.rA===targetA;
     MKTS.forEach(function(k){
-      var pred=t.pred&&t.pred[k]!==undefined?t.pred[k]:null;
-      if(pred===null)return;
-      var mktPred=pred>=0.5;
-      if(is00&&mktPred)mktCorr[k].both++;
-      else if(is00&&!mktPred)mktCorr[k].only00++;
-      else if(!is00&&mktPred)mktCorr[k].onlyMkt++;
-      else mktCorr[k].neither++;
+      var pKey='p'+k.charAt(0).toUpperCase()+k.slice(1);
+      // Map to actual tracking keys
+      var pmap={plus:'pPlus',under:'pUnder',btts:'pBtts',bttsNon:'pBttsNon',
+        v1:'pV1',x:'pX',v2:'pV2',csH:'pCsH',csA:'pCsA',
+        hmsc:'pHmsc',amsc:'pAmsc',dc1x:'pDc1x',dcx2:'pDcx2',dc12:'pDc12'};
+      var val=t[pmap[k]];
+      if(val===null||val===undefined)return;
+      if(val>=50){mktCorr[k].total++;if(isTarget)mktCorr[k].withTarget++;}
     });
   });
+  // Tri par taux de corrélation
+  var corrArr=MKTS.map(function(k){
+    var c=mktCorr[k];if(c.total<3)return null;
+    return{k:k,label:MLBLS[k],total:c.total,n:c.withTarget,rate:Math.round(c.withTarget/c.total*100)};
+  }).filter(Boolean).sort(function(a,b){return b.rate-a.rate});
 
-  // ─── Tranches de prédiction 0-0 ───
-  // Pour chaque entrée trackée, calculer la pred 0-0 et voir si le 0-0 s'est produit
-  var pred00Tranches=[
-    {lbl:'<15%',min:0,max:14,n:0,ok:0},
-    {lbl:'15–20%',min:15,max:20,n:0,ok:0},
-    {lbl:'20–25%',min:20,max:25,n:0,ok:0},
-    {lbl:'25–30%',min:25,max:30,n:0,ok:0},
-    {lbl:'30–40%',min:30,max:40,n:0,ok:0},
-    {lbl:'40%+',min:40,max:100,n:0,ok:0},
-  ];
-  var cache=buildCache();
-  if(cache.total>0){
-    track.forEach(function(t){
-      if(t.rH===undefined||t.rH===null||t.rA===null)return;
-      // Reconstruire le match depuis le tracking (rH/rA sont les vrais scores)
-      var fakeM={league:t.league||'?',country:t.country||'',heure:t.heure||'??',
-                 home:t.home||'?',away:t.away||'?',id:t.id};
-      // Reconstruire pred depuis les champs pXxx du tracking
-      var fakePred=t.pPlus!==null?{
-        plus:t.pPlus/100,under:t.pUnder/100,btts:t.pBtts/100,bttsNon:t.pBttsNon/100,
-        v1:t.pV1/100,x:t.pX/100,v2:t.pV2/100,csH:t.pCsH/100,csA:t.pCsA/100,
-        hmsc:t.pHmsc/100,amsc:t.pAmsc/100,conf:t.pConf||0
-      }:null;
-      var p00=compute00Badge(fakeM,fakePred);
-      if(p00===null)return;
-      var is00=t.rH===0&&t.rA===0;
-      pred00Tranches.forEach(function(tr){
-        if(p00>=tr.min&&p00<=tr.max){tr.n++;if(is00)tr.ok++;}
-      });
-    });
-  }
+  // ─── Analyse comparative : quand ce score arrive, quels autres marchés aussi vrai ───
+  var coScores={};
+  msTarget.forEach(function(m){
+    // Compter les patterns dans les matchs terminés avec ce score
+    var tot=m.h+m.a;
+    var k='total_'+tot;if(!coScores[k])coScores[k]=0;coScores[k]++;
+    if(m.h>0&&m.a>0){if(!coScores.btts)coScores.btts=0;coScores.btts++;}
+    if(m.h>m.a){if(!coScores.v1)coScores.v1=0;coScores.v1++;}
+    if(m.h<m.a){if(!coScores.v2)coScores.v2=0;coScores.v2++;}
+    if(m.h===m.a){if(!coScores.nul)coScores.nul=0;coScores.nul++;}
+    if(m.a===0){if(!coScores.csH)coScores.csH=0;coScores.csH++;}
+    if(m.h===0){if(!coScores.csA)coScores.csA=0;coScores.csA++;}
+  });
 
   // ─── RENDER ───
-  var pct=Math.round(rate*100);
   var html='<div class="card">';
-  html+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">';
-  html+='<div class="sb"><div class="sv" style="color:var(--p);font-size:2rem">'+pct+'%</div><div class="sl">Taux global 0-0</div></div>';
-  html+='<div class="sb"><div class="sv" style="color:var(--g)">'+n00+'</div><div class="sl">Matchs 0-0</div></div>';
+  // Header
+  html+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">';
+  html+='<div style="font-size:2.5rem;font-weight:900;color:'+scoreCol+'">'+scoreIcon+' '+label+'</div>';
+  html+='<div>';
+  html+='<div style="font-size:1.8rem;font-weight:900;color:'+scoreCol+'">'+pct+'%</div>';
+  html+='<div style="font-size:.62rem;color:var(--dm);font-family:var(--mono)">taux global · '+nTarget+'/'+total+' matchs</div>';
+  html+='</div></div>';
+
+  // Stats globales
+  html+='<div class="sg g3" style="margin-bottom:14px">';
+  html+='<div class="sb"><div class="sv" style="color:'+scoreCol+';font-size:1.8rem">'+pct+'%</div><div class="sl">Taux global</div></div>';
+  html+='<div class="sb"><div class="sv" style="color:var(--g)">'+nTarget+'</div><div class="sl">Occurrences</div></div>';
   html+='<div class="sb"><div class="sv" style="color:var(--dm)">'+total+'</div><div class="sl">Total matchs</div></div>';
   html+='</div>';
 
-  // Ligue
-  if(ligArr.length){
-    html+='<div class="st" style="margin-bottom:8px">Par ligue</div>';
+  // Profil du score (marchés liés)
+  if(nTarget>0){
+    html+='<div class="st" style="margin-bottom:8px">Profil du score '+label+'</div>';
+    html+='<div class="sg g3" style="margin-bottom:12px">';
+    var pV1=nTarget>0?Math.round((coScores.v1||0)/nTarget*100):0;
+    var pNul=nTarget>0?Math.round((coScores.nul||0)/nTarget*100):0;
+    var pV2=nTarget>0?Math.round((coScores.v2||0)/nTarget*100):0;
+    var pBtts=nTarget>0?Math.round((coScores.btts||0)/nTarget*100):0;
+    var pCsH=nTarget>0?Math.round((coScores.csH||0)/nTarget*100):0;
+    var pCsA=nTarget>0?Math.round((coScores.csA||0)/nTarget*100):0;
+    if(pV1>0)html+='<div class="sb"><div class="sv" style="color:var(--g)">'+pV1+'%</div><div class="sl">V1 Dom</div></div>';
+    if(pNul>0)html+='<div class="sb"><div class="sv" style="color:var(--y)">'+pNul+'%</div><div class="sl">Nul</div></div>';
+    if(pV2>0)html+='<div class="sb"><div class="sv" style="color:var(--b)">'+pV2+'%</div><div class="sl">V2 Ext</div></div>';
+    if(pBtts>0)html+='<div class="sb"><div class="sv">'+pBtts+'%</div><div class="sl">BTTS</div></div>';
+    if(pCsH>0)html+='<div class="sb"><div class="sv">'+pCsH+'%</div><div class="sl">CS Dom</div></div>';
+    if(pCsA>0)html+='<div class="sb"><div class="sv">'+pCsA+'%</div><div class="sl">CS Ext</div></div>';
+    html+='</div>';
+  }
+
+  // Distribution meme total de buts
+  if(sameTotal.length>0&&sameTotalButs>0){
+    html+='<div class="st" style="margin-bottom:6px">Distribution scores à '+sameTotalButs+' but(s)</div>';
     html+='<div class="bars">';
-    ligArr.slice(0,10).forEach(function(l){
-      var p=Math.round(l.rate*100);var col=p>=15?'var(--p)':p>=8?'var(--y)':'var(--dm)';
-      html+='<div class="br2"><div class="bn">'+l.name.substring(0,18)+'</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*4)+'%;background:'+col+'">'+p+'% ('+l.n00+'/'+l.total+')</div></div></div>';
+    distribArr.forEach(function(d){
+      var isTarget=(d.score===label);
+      html+='<div class="br2"><div class="bn" style="color:'+(isTarget?scoreCol:'var(--tx)');html+='">'+d.score+'</div>';
+      html+='<div class="bb2"><div class="bf" style="width:'+d.pct+'%;background:'+(isTarget?scoreCol:'var(--bd2)')+'">'+d.pct+'% ('+d.n+')</div></div></div>';
     });
     html+='</div>';
   }
 
-  // Heure
+  // Par ligue (taux)
+  if(ligArr.length){
+    html+='<div class="st" style="margin:12px 0 8px">Par ligue — taux '+label+'</div>';
+    html+='<div class="bars">';
+    ligArr.slice(0,12).forEach(function(l){
+      var p=Math.round(l.rate*100);
+      html+='<div class="br2"><div class="bn">'+l.name.substring(0,20)+'</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*5)+'%;background:'+scoreCol+'">'+p+'% ('+l.n+'/'+l.total+')</div></div></div>';
+    });
+    html+='</div>';
+  }
+
+  // Par ligue (volume)
+  if(ligVolume.length){
+    html+='<div class="st" style="margin:12px 0 8px">Ligues avec le plus de matchs en base</div>';
+    var maxVol=ligVolume[0].total;
+    html+='<div class="bars">';
+    ligVolume.slice(0,10).forEach(function(l){
+      html+='<div class="br2"><div class="bn">'+l.name.substring(0,20)+'</div><div class="bb2"><div class="bf" style="width:'+Math.round(l.total/maxVol*100)+'%;background:var(--dm)">'+l.total+' matchs ('+l.n+' × '+label+')</div></div></div>';
+    });
+    html+='</div>';
+  }
+
+  // Par heure
   if(hourArr.length){
     html+='<div class="st" style="margin:12px 0 8px">Par heure de coup d\'envoi</div>';
     html+='<div class="bars">';
     hourArr.forEach(function(h){
-      var p=Math.round(h.rate*100);var col=p>=15?'var(--p)':p>=8?'var(--y)':'var(--dm)';
-      html+='<div class="br2"><div class="bn" style="width:40px">'+h.h+'h</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*4)+'%;background:'+col+'">'+p+'% ('+h.n00+'/'+h.total+')</div></div></div>';
+      var p=Math.round(h.rate*100);
+      html+='<div class="br2"><div class="bn" style="width:36px">'+h.h+'h</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*5)+'%;background:'+scoreCol+'">'+p+'% ('+h.n+'/'+h.total+')</div></div></div>';
     });
     html+='</div>';
   }
 
-  // Jour
+  // Par jour
   if(dayArr.length){
     html+='<div class="st" style="margin:12px 0 8px">Par jour de la semaine</div>';
     html+='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">';
     dayArr.forEach(function(d){
-      var p=Math.round(d.rate*100);var col=p>=15?'var(--p)':p>=8?'var(--y)':'var(--dm)';
-      html+='<div style="text-align:center;background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:8px 4px"><div style="font-size:1rem;font-weight:900;color:'+col+'">'+p+'%</div><div style="font-size:.52rem;color:var(--dm);font-family:var(--mono)">'+d.d+'</div><div style="font-size:.5rem;color:var(--dm)">'+d.n00+'/'+d.total+'</div></div>';
+      var p=Math.round(d.rate*100);
+      html+='<div style="text-align:center;background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:8px 4px">';
+      html+='<div style="font-size:.9rem;font-weight:900;color:'+scoreCol+'">'+p+'%</div>';
+      html+='<div style="font-size:.52rem;color:var(--dm);font-family:var(--mono)">'+d.d+'</div>';
+      html+='<div style="font-size:.5rem;color:var(--dm)">'+d.n+'/'+d.total+'</div></div>';
     });
     html+='</div>';
   }
 
-  // Équipes domicile
+  // Équipes dom
   if(topH.length){
-    html+='<div class="st" style="margin:12px 0 8px">Top équipes 0-0 à domicile</div>';
+    html+='<div class="st" style="margin:12px 0 8px">Top équipes à domicile ('+label+')</div>';
     html+='<div class="bars">';
     topH.forEach(function(t){
       var p=Math.round(t.rate*100);
-      html+='<div class="br2"><div class="bn">'+t.name.substring(0,18)+'</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*3)+'%;background:var(--p)">'+p+'% ('+t.n00+'/'+t.total+')</div></div></div>';
+      html+='<div class="br2"><div class="bn">'+t.name.substring(0,18)+'</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*4)+'%;background:'+scoreCol+'">'+p+'% ('+t.n+'/'+t.total+')</div></div></div>';
     });
     html+='</div>';
   }
 
-  // Équipes extérieur
+  // Équipes ext
   if(topA.length){
-    html+='<div class="st" style="margin:12px 0 8px">Top équipes 0-0 à l\'ext&#xe9;rieur</div>';
+    html+='<div class="st" style="margin:12px 0 8px">Top équipes à l\'extérieur ('+label+')</div>';
     html+='<div class="bars">';
     topA.forEach(function(t){
       var p=Math.round(t.rate*100);
-      html+='<div class="br2"><div class="bn">'+t.name.substring(0,18)+'</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*3)+'%;background:var(--teal)">'+p+'% ('+t.n00+'/'+t.total+')</div></div></div>';
+      html+='<div class="br2"><div class="bn">'+t.name.substring(0,18)+'</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*4)+'%;background:var(--teal)">'+p+'% ('+t.n+'/'+t.total+')</div></div></div>';
     });
     html+='</div>';
   }
 
   // H2H
   if(topH2H.length){
-    html+='<div class="st" style="margin:12px 0 8px">Paires H2H avec le plus de 0-0</div>';
+    html+='<div class="st" style="margin:12px 0 8px">Paires H2H — score '+label+' récurrent</div>';
     html+='<div class="bars">';
     topH2H.forEach(function(t){
       var p=Math.round(t.rate*100);
-      html+='<div class="br2"><div class="bn" style="width:130px">'+t.name.substring(0,20)+'</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*3)+'%;background:var(--y)">'+t.n00+' 0-0 / '+t.total+' ('+p+'%)</div></div></div>';
+      html+='<div class="br2"><div class="bn" style="width:120px">'+t.name.substring(0,18)+'</div><div class="bb2"><div class="bf" style="width:'+Math.min(100,p*4)+'%;background:var(--y)">'+t.n+'× ('+p+'%)</div></div></div>';
     });
     html+='</div>';
   }
 
-  // ─── Tranches prédiction 0-0 ───
-  var validTranches=pred00Tranches.filter(function(t){return t.n>=2;});
-  if(validTranches.length){
-    html+='<div class="st" style="margin:12px 0 8px">&#x1F4CA; Tranches de prédiction 0-0</div>';
-    html+='<div style="font-size:.62rem;color:var(--dm);font-family:var(--mono);margin-bottom:8px;line-height:1.5">Quand FootStats prédit X% de 0-0, est-ce que ça se réalise ? La tranche avec le meilleur taux réel = signal le plus fiable.</div>';
-    html+='<div class="tbl"><table><thead><tr><th>Tranche pred</th><th>Matchs</th><th>0-0 réels</th><th>Taux réel</th><th>Fiabilité</th></tr></thead><tbody>';
-    var bestTranche=null,bestRate=0;
-    validTranches.forEach(function(tr){
-      var rate00=Math.round(tr.ok/tr.n*100);
-      var col=rate00>=25?'tg':rate00>=15?'ty':'';
-      var fiab=tr.n>=10?'★★★':tr.n>=5?'★★':'★';
-      html+='<tr><td style="font-weight:700">'+tr.lbl+'</td><td>'+tr.n+'</td><td>'+tr.ok+'</td><td class="'+col+'">'+rate00+'%</td><td style="color:var(--y)">'+fiab+'</td></tr>';
-      if(rate00>bestRate&&tr.n>=3){bestRate=rate00;bestTranche=tr;}
+  // Corrélations marchés
+  if(corrArr.length){
+    html+='<div class="st" style="margin:12px 0 8px">Corrélations marchés → score '+label+'</div>';
+    html+='<div style="font-size:.6rem;color:var(--dm);font-family:var(--mono);margin-bottom:7px">Quand le marché était prédit ≥50%, combien de fois le score '+label+' s\'est produit ?</div>';
+    html+='<div class="tbl"><table><thead><tr><th>Marché prédit</th><th>Matchs</th><th>Score '+label+'</th><th>Taux</th><th>Signal</th></tr></thead><tbody>';
+    corrArr.forEach(function(c){
+      var signalCol=c.rate>=25?'tg':c.rate>=12?'ty':'';
+      var signal=c.rate>=25?'🔥 Fort':c.rate>=12?'⚡ Moyen':'—';
+      html+='<tr><td>'+c.label+'</td><td>'+c.total+'</td><td>'+c.n+'</td><td class="'+signalCol+'">'+c.rate+'%</td><td>'+signal+'</td></tr>';
     });
     html+='</tbody></table></div>';
-    if(bestTranche){
-      html+='<div style="margin-top:8px;padding:8px;background:rgba(176,107,255,.08);border:1px solid rgba(176,107,255,.3);border-radius:7px;font-size:.68rem;font-family:var(--mono)">&#x1F3AF; Meilleure tranche : <strong style="color:var(--p)">'+bestTranche.lbl+'</strong> → 0-0 réel '+bestRate+'% des fois ('+bestTranche.n+' matchs)</div>';
-    }
   }
 
-  // Corrélations marchés
-  if(track.length>=5){
-    html+='<div class="st" style="margin:12px 0 8px">Corrélations marchés → 0-0</div>';
-    html+='<div style="font-size:.62rem;color:var(--dm);font-family:var(--mono);margin-bottom:8px">Sur '+track.length+' matchs trackés — quand le marché était prédit, combien se sont terminés 0-0 ?</div>';
-    html+='<div class="tbl"><table><thead><tr><th>Marché prédit</th><th>Matchs</th><th>0-0 dedans</th><th>Taux</th></tr></thead><tbody>';
-    MKTS.forEach(function(k){
-      var c=mktCorr[k];var tot=c.both+c.onlyMkt;if(tot<3)return;
-      var p=Math.round(c.both/tot*100);var col=p>=20?'tg':p>=10?'ty':'';
-      html+='<tr><td>'+MLBLS[k]+'</td><td>'+tot+'</td><td>'+c.both+'</td><td class="'+col+'">'+p+'%</td></tr>';
-    });
-    html+='</tbody></table></div>';
-    html+='<div style="font-size:.62rem;color:var(--dm);font-family:var(--mono);margin-top:6px;line-height:1.6">&#x1F4A1; Un taux &gt;20% signifie que quand ce march&#xe9; est pr&#xe9;dit, le 0-0 arrive souvent &#x2192; signal fort.<br>Le march&#xe9; <strong style="color:var(--p)">BTTS Non + Under</strong> pr&#xe9;dit ensemble est le meilleur indicateur 0-0.</div>';
-  }
+  // Bouton sauvegarder corrélations pour calibration passive
+  html+='<div class="card" style="margin-top:10px;padding:11px;background:rgba(0,229,160,.04);border:1px solid rgba(0,229,160,.2)">';
+  html+='<div class="st" style="margin-top:0;margin-bottom:6px;color:var(--g)">🔧 Calibration passive</div>';
+  html+='<div style="font-size:.62rem;color:var(--dm);font-family:var(--mono);line-height:1.6;margin-bottom:8px">';
+  html+='Sauvegarde les taux de corrélation observés. L\'app les utilisera pour ajuster la probabilité du score '+label+' sur les prochains matchs.';
+  html+='</div>';
+  // Check if already saved
+  var existingCorr=getScoreCorr();
+  var alreadySaved=existingCorr[label]&&existingCorr[label].saved;
+  if(alreadySaved)html+='<div style="font-size:.6rem;color:var(--g);font-family:var(--mono);margin-bottom:6px">✅ Dernière calibration : '+existingCorr[label].saved+'</div>';
+  html+='<button class="btn bg" style="font-size:.73rem;padding:8px" onclick="doSaveScoreCorr('+targetH+','+targetA+')">💾 Sauvegarder les corrélations '+label+'</button>';
+  html+='</div>';
 
   html+='</div>';
   var out=document.getElementById('out00');
   out.innerHTML=html;out.style.display='block';
+  hideAl('al00');
+  // Stocker corrArr dans window pour accès depuis doSaveScoreCorr
+  window._lastCorrArr=corrArr;
+  window._lastCorrScore={h:targetH,a:targetA,baseRate:rate};
 }
+
+function doSaveScoreCorr(h,a){
+  if(!window._lastCorrArr||window._lastCorrScore.h!==h||window._lastCorrScore.a!==a){
+    alert('Lance d\'abord l\'analyse du score '+h+'-'+a);return;
+  }
+  saveScoreCorrData(h,a,window._lastCorrArr,window._lastCorrScore.baseRate);
+  var btn=event.target;btn.textContent='✅ Sauvegardé !';btn.style.background='var(--g)';
+  setTimeout(function(){calcScore(h,a);},800);
+}
+
 
 // ═══════════════════════════════════ BILAN SÉLECTION ═══
 function renderBilanSelection(entries,s){
