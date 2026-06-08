@@ -491,6 +491,8 @@ tr:hover td{background:var(--s2)}
   <div class="card">
     <span class="clbl">Clé TheStatsAPI (Dump massif — essai 7j)</span>
     <div style="font-size:.62rem;color:var(--dm);margin-top:2px;margin-bottom:6px;font-family:var(--mono)">Matchs + stats + xG + cotes historiques · 100k req/mois · <a href="https://www.thestatsapi.com/auth?mode=signup" target="_blank" style="color:var(--b)">Démarrer l'essai gratuit</a></div>
+    <button class="bsm" onclick="testStatsKey()" style="font-size:.65rem;margin-bottom:4px;color:var(--y);border-color:var(--y)">🔍 Tester la clé TheStatsAPI</button>
+    <div id="statsKeyTestResult" style="font-size:.6rem;font-family:var(--mono);color:var(--dm);min-height:16px"></div>
     <div style="display:flex;gap:7px"><input class="inp" id="cfgStatsKey" type="password" placeholder="Bearer token TheStatsAPI..."/><button class="bsm" onclick="togglePwd('cfgStatsKey')">voir</button></div>
   </div>
   <div class="card">
@@ -4468,8 +4470,9 @@ async function statsCall(endpoint,params){
     if(resp.ok)return resp.json();
     if(resp.status===401||resp.status===403)throw new Error('Clé invalide ou expirée ('+resp.status+')');
     if(resp.status===429)throw new Error('RATE_LIMIT');
-    if(resp.status===404)return null;
-    throw new Error('Erreur API HTTP '+resp.status);
+    // Pour tout autre code, afficher le body pour debug
+    var errBody=await resp.text();
+    throw new Error('HTTP '+resp.status+' : '+errBody.slice(0,150));
   }catch(e){
     if(e.name==='AbortError')throw new Error('Timeout — vérifie ta connexion');
     throw e;
@@ -4555,7 +4558,8 @@ async function startDump(){
     upd('Récupération des compétitions...',2);
     var compsResp=await safeCall('/football/competitions',{per_page:100,type:'league'},nRef);
     if(!compsResp||!compsResp.data||!compsResp.data.length){
-      showAl('dumpAl','er','Impossible de récupérer les compétitions — vérifie ta clé');
+      var detail=compsResp?JSON.stringify(compsResp).slice(0,200):'null';
+      showAl('dumpAl','er','Réponse compétitions : '+detail);
       return finishDump(nMatches,nXg,nRef[0]);
     }
 
@@ -7157,6 +7161,42 @@ function exportDumpAsDB(){
   a.download='fsa_dump_export_'+today()+'.json';
   a.click();
   showAl('dumpAl','ok','✅ '+added+' matchs exportés — importe ce fichier via Config → Importer la base');
+}
+
+
+async function testStatsKey(){
+  var el=document.getElementById('statsKeyTestResult');
+  el.style.color='var(--dm)';el.textContent='Test en cours...';
+  saveCfg();
+  var key=cfg.statsApiKey||'';
+  if(!key){el.style.color='var(--r)';el.textContent='Clé vide — entre ta clé d\'abord';return;}
+
+  var workerUrl='https://fspa-proxy.manikantan7070.workers.dev?target=stats&path='+encodeURIComponent('/football/competitions')+'&query='+encodeURIComponent('per_page=1');
+  try{
+    var ctrl=new AbortController();
+    setTimeout(function(){ctrl.abort();},15000);
+    var r=await fetch(workerUrl,{
+      headers:{'Authorization':'Bearer '+key,'Accept':'application/json'},
+      signal:ctrl.signal
+    });
+    var body=await r.text();
+    if(r.ok){
+      var d=JSON.parse(body);
+      if(d&&d.data&&d.data.length){
+        el.style.color='var(--g)';
+        el.textContent='✅ Clé valide ! '+d.data.length+' compétition(s) reçue(s). Ex: '+d.data[0].name;
+      } else {
+        el.style.color='var(--y)';
+        el.textContent='⚠ Réponse reçue mais vide : '+body.slice(0,100);
+      }
+    } else {
+      el.style.color='var(--r)';
+      el.textContent='❌ HTTP '+r.status+' : '+body.slice(0,150);
+    }
+  }catch(e){
+    el.style.color='var(--r)';
+    el.textContent='❌ Erreur : '+e.message;
+  }
 }
 
 </script>
