@@ -4435,14 +4435,35 @@ async function statsCall(endpoint,params){
   var url=STATS_BASE+endpoint;
   if(params&&Object.keys(params).length)
     url+='?'+Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
-  var resp=await fetch(url,{headers:{'Authorization':'Bearer '+key,'Accept':'application/json'}});
-  if(!resp.ok){
-    if(resp.status===401||resp.status===403)throw new Error('Clé invalide ou expirée ('+resp.status+')');
-    if(resp.status===429)throw new Error('RATE_LIMIT');
-    if(resp.status===404)return null;
-    throw new Error('Erreur API '+resp.status);
+
+  // Essayer d'abord sans proxy, puis avec proxy CORS si ça échoue
+  var attempts=[
+    {fetchUrl:url, headers:{'Authorization':'Bearer '+key,'Accept':'application/json'}},
+    {fetchUrl:'https://corsproxy.io/?'+encodeURIComponent(url), headers:{'Authorization':'Bearer '+key,'Accept':'application/json'}},
+    {fetchUrl:'https://api.allorigins.win/raw?url='+encodeURIComponent(url), headers:{}},
+  ];
+
+  var lastErr='';
+  for(var ai=0;ai<attempts.length;ai++){
+    try{
+      var ctrl=new AbortController();
+      var timer=setTimeout(function(){ctrl.abort();},15000);
+      var resp=await fetch(attempts[ai].fetchUrl,{headers:attempts[ai].headers,signal:ctrl.signal});
+      clearTimeout(timer);
+      if(resp.ok){
+        var d=await resp.json();
+        return d;
+      }
+      if(resp.status===401||resp.status===403)throw new Error('Clé invalide ou expirée ('+resp.status+')');
+      if(resp.status===429)throw new Error('RATE_LIMIT');
+      if(resp.status===404)return null;
+      lastErr='HTTP '+resp.status;
+    }catch(e){
+      if(e.message==='RATE_LIMIT'||e.message.indexOf('Clé')>=0)throw e;
+      lastErr=e.name==='AbortError'?'timeout':e.message;
+    }
   }
-  return resp.json();
+  throw new Error('Erreur API '+lastErr);
 }
 
 async function safeCall(endpoint,params,nRef){
@@ -4716,7 +4737,7 @@ function renderDumpStats(){
   html+='<div class="sb"><div class="sv" style="color:var(--b)">'+withScore+'</div><div class="sl">Avec score</div></div>';
   html+='<div class="sb"><div class="sv" style="color:var(--p)">'+withXg+'</div><div class="sl">xG</div></div>';
   html+='</div>';
-  html+='<button class="btn bg" style="width:100%;padding:10px;margin-bottom:6px;font-size:.8rem" onclick="importDumpToBase()">📥 Importer dans la base</button>';
+  html+='<button class="btn bg" style="width:100%;padding:10px;margin-bottom:6px;font-size:.8rem" onclick="exportDumpAsDB()">📥 Exporter en JSON (import manuel)</button>';
   html+='<button class="bsm" onclick="injectDumpIntoMatchCards()" style="width:100%;padding:8px;text-align:center;color:var(--teal,#20c997);border-color:var(--teal,#20c997)">Injecter dans les matchs ouverts</button>';
   html+='<button class="bsm" onclick="diagDump()" style="margin-top:5px;width:100%;padding:8px;text-align:center;color:var(--y);border-color:var(--y)">🔍 Diagnostic matching</button>';
   html+='<button class="bsm" onclick="if(confirm(\'Effacer le dump ?\'))clearDumpDB()" style="margin-top:5px;width:100%;padding:8px;text-align:center;color:var(--r);border-color:var(--r)">Effacer le dump</button>';
@@ -7079,6 +7100,53 @@ function importDumpToBase(){
   }
 
   nextBatch();
+}
+
+
+function exportDumpAsDB(){
+  var dump=getDumpDB();
+  var entries=Object.values(dump);
+  if(!entries.length){showAl('dumpAl','er','Dump vide');return;}
+
+  var db={};
+  var added=0;
+
+  entries.forEach(function(e){
+    if(!e.date||e.sh===null||e.sh===undefined)return;
+    if(!db[e.date])db[e.date]=[];
+
+    var tot=e.sh+e.sa;
+    var v1x2=e.sh>e.sa?'V1':e.sh<e.sa?'V2':'X';
+    var compParts=(e.comp||'?').split(' - ');
+    var country=compParts.length>1?compParts[0]:'?';
+    var league=compParts.length>1?compParts[1]:(e.comp||'?');
+
+    var m={
+      id:'dump_'+e.id,
+      ts:0,heure:'??:??',
+      status:'FT',elapsed:90,
+      league:league,country:country,
+      home:e.h||'?',away:e.a||'?',
+      h:e.sh,a:e.sa,
+      total:tot,v1x2:v1x2,
+      btts:e.sh>0&&e.sa>0,
+      date:e.date,
+      _fromDump:true
+    };
+    if(e.xg&&e.xg.h!==null){
+      m._xg={home:e.xg.h,away:e.xg.a,npxgHome:e.xg.nh,npxgAway:e.xg.na};
+    }
+    db[e.date].push(m);
+    added++;
+  });
+
+  var json=JSON.stringify(db);
+  var blob=new Blob([json],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='fsa_dump_export_'+today()+'.json';
+  a.click();
+  showAl('dumpAl','ok','✅ '+added+' matchs exportés — importe ce fichier via Config → Importer la base');
 }
 
 </script>
