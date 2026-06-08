@@ -4675,6 +4675,13 @@ async function startDump(){
     var db2=getDB();
     var allDates=Object.keys(db2);
     var injected=0,injectedXg=0,modifiedDates=[];
+    // Si aucune date en base, skip injection
+    if(!allDates.length){
+      setDumpDB(dumpDB);
+      showAl('dumpAl','ok','✅ '+nMatches+' matchs collectés dans le dump. Utilise "Exporter en JSON" pour les importer en base.');
+      return finishDump(nMatches,nXg,nRef[0]);
+    }
+
     var BATCH=50,bi=0;
 
     function nextBatch(){
