@@ -4716,6 +4716,7 @@ function renderDumpStats(){
   html+='<div class="sb"><div class="sv" style="color:var(--b)">'+withScore+'</div><div class="sl">Avec score</div></div>';
   html+='<div class="sb"><div class="sv" style="color:var(--p)">'+withXg+'</div><div class="sl">xG</div></div>';
   html+='</div>';
+  html+='<button class="btn bg" style="width:100%;padding:10px;margin-bottom:6px;font-size:.8rem" onclick="importDumpToBase()">📥 Importer dans la base</button>';
   html+='<button class="bsm" onclick="injectDumpIntoMatchCards()" style="width:100%;padding:8px;text-align:center;color:var(--teal,#20c997);border-color:var(--teal,#20c997)">Injecter dans les matchs ouverts</button>';
   html+='<button class="bsm" onclick="diagDump()" style="margin-top:5px;width:100%;padding:8px;text-align:center;color:var(--y);border-color:var(--y)">🔍 Diagnostic matching</button>';
   html+='<button class="bsm" onclick="if(confirm(\'Effacer le dump ?\'))clearDumpDB()" style="margin-top:5px;width:100%;padding:8px;text-align:center;color:var(--r);border-color:var(--r)">Effacer le dump</button>';
@@ -6980,6 +6981,104 @@ function diagDump(){
   html+='</div>';
   var out=document.getElementById('dumpOut');
   out.innerHTML+=html;out.style.display='block';
+}
+
+
+function importDumpToBase(){
+  var dump=getDumpDB();
+  var entries=Object.values(dump);
+  if(!entries.length){showAl('dumpAl','er','Dump vide — lance d\'abord le dump');return;}
+
+  if(!confirm('Importer '+entries.length+' matchs du dump dans la base ?\n\nLes matchs déjà présents ne seront pas écrasés.'))return;
+
+  var db=getDB();
+  var added=0,skipped=0,byDate={};
+
+  // Grouper les entrées dump par date
+  entries.forEach(function(e){
+    if(!e.date||e.sh===null||e.sh===undefined)return; // ignorer sans score
+    if(!byDate[e.date])byDate[e.date]=[];
+    byDate[e.date].push(e);
+  });
+
+  var dates=Object.keys(byDate);
+  var BATCH=30,bi=0;
+  showAl('dumpAl','in','Import en cours...');
+
+  function nextBatch(){
+    var end=Math.min(bi+BATCH,dates.length);
+    for(var di=bi;di<end;di++){
+      var date=dates[di];
+      var dayEntries=byDate[date];
+      if(!db[date])db[date]=[];
+
+      dayEntries.forEach(function(e){
+        // Vérifier si ce match existe déjà (matching par noms)
+        var exists=db[date].some(function(m){
+          return teamMatch(m.home,e.h)&&teamMatch(m.away,e.a);
+        });
+        if(exists){skipped++;return;}
+
+        // Convertir l'entrée dump au format fsa_db
+        var tot=(e.sh!==null&&e.sa!==null)?e.sh+e.sa:null;
+        var v1x2=null;
+        if(e.sh!==null&&e.sa!==null){
+          v1x2=e.sh>e.sa?'V1':e.sh<e.sa?'V2':'X';
+        }
+        // Extraire pays et ligue depuis comp (format: "Pays - Ligue" ou juste "Ligue")
+        var compParts=(e.comp||'?').split(' - ');
+        var country=compParts.length>1?compParts[0]:'?';
+        var league=compParts.length>1?compParts[1]:(e.comp||'?');
+
+        var m={
+          id:'dump_'+e.id,
+          ts:0,
+          heure:'??:??',
+          status:'FT',
+          elapsed:90,
+          league:league,
+          country:country,
+          home:e.h||'?',
+          away:e.a||'?',
+          h:e.sh,
+          a:e.sa,
+          total:tot,
+          v1x2:v1x2,
+          btts:(e.sh!==null&&e.sa!==null)?(e.sh>0&&e.sa>0):null,
+          date:date,
+          _fromDump:true
+        };
+        if(e.xg&&e.xg.h!==null){
+          m._xg={home:e.xg.h,away:e.xg.a,npxgHome:e.xg.nh,npxgAway:e.xg.na};
+        }
+        db[date].push(m);
+        added++;
+      });
+    }
+    bi=end;
+
+    if(bi<dates.length){
+      showAl('dumpAl','in','Import... '+bi+'/'+dates.length+' dates (\u2795'+added+')');
+      setTimeout(nextBatch,0);
+      return;
+    }
+
+    // Écriture finale par batch pour éviter overflow
+    try{
+      localStorage.setItem(DB_KEY,JSON.stringify(db));
+    }catch(ex){
+      // Fallback : écrire date par date
+      var db2=getDB();
+      dates.forEach(function(d){
+        try{db2[d]=db[d];localStorage.setItem(DB_KEY,JSON.stringify(db2));}catch(e2){}
+      });
+    }
+
+    majDB();
+    showAl('dumpAl','ok','\u2705 Import terminé — '+added+' matchs ajoutés, '+skipped+' déjà présents');
+  }
+
+  nextBatch();
 }
 
 </script>
