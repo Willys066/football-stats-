@@ -1458,27 +1458,43 @@ async function deleteAnalysis(id){
 // ═══════════════════════════════════ API ═══
 async function apiCall(endpoint,params){
   if(!cfg.apiKey)return null;
-  // Build URL sans clé (pour les proxies qui bloquent les headers custom)
+  var hdrs={'x-apisports-key':cfg.apiKey,'x-rapidapi-key':cfg.apiKey};
+  var errors=[];
+
+  // 1. Cloudflare Worker (priorité — pas de CORS, fiable)
+  try{
+    var query=Object.keys(params).map(function(k){return k+'='+encodeURIComponent(params[k])}).join('&');
+    var workerUrl='https://fsa-proxy.manikantan70.workers.dev?target=football&path='+encodeURIComponent(endpoint)+'&query='+encodeURIComponent(query);
+    var ctrl0=new AbortController();
+    var t0=setTimeout(function(){ctrl0.abort();},12000);
+    var r0=await fetch(workerUrl,{headers:hdrs,signal:ctrl0.signal});
+    clearTimeout(t0);
+    if(r0.ok){
+      var d0=await r0.json();
+      if(d0&&d0.response!==undefined){
+        if(d0.errors&&Object.keys(d0.errors).length){errors.push('API error: '+JSON.stringify(d0.errors));}
+        else return d0;
+      }
+    } else {errors.push('worker: HTTP '+r0.status);}
+  }catch(e0){errors.push('worker: '+(e0.name==='AbortError'?'timeout':e0.message));}
+
+  // 2. Proxies publics en fallback
   var url=new URL(API+endpoint);
   Object.keys(params).forEach(function(k){url.searchParams.set(k,params[k])});
-  // Build URL avec clé en query param (fallback si headers bloqués par proxy)
   var urlWithKey=new URL(API+endpoint);
   Object.keys(params).forEach(function(k){urlWithKey.searchParams.set(k,params[k])});
   urlWithKey.searchParams.set('apiKey',cfg.apiKey);
-  var hdrs={'x-apisports-key':cfg.apiKey,'x-rapidapi-key':cfg.apiKey};
-  var errors=[];
+
   for(var pi=0;pi<PROXIES.length;pi++){
-    // Pour les proxies CORS publics, on essaie d'abord avec headers, puis avec clé en query
     var urlsToTry=pi===0
-      ?[url.toString()]  // direct: headers seulement
+      ?[url.toString()]
       :[PROXIES[pi]+encodeURIComponent(url.toString()),
-        PROXIES[pi]+encodeURIComponent(urlWithKey.toString())]; // proxy: headers puis query param
+        PROXIES[pi]+encodeURIComponent(urlWithKey.toString())];
     for(var ui=0;ui<urlsToTry.length;ui++){
       try{
         var ctrl=new AbortController();
         var timer=setTimeout(function(){ctrl.abort();},12000);
         var fetchOpts={signal:ctrl.signal};
-        // Headers seulement pour direct et premier essai proxy
         if(pi===0||ui===0)fetchOpts.headers=hdrs;
         var r=await fetch(urlsToTry[ui],fetchOpts);
         clearTimeout(timer);
@@ -1486,11 +1502,10 @@ async function apiCall(endpoint,params){
           var d=await r.json();
           if(d&&d.response!==undefined){
             if(d.response.length>0)return d;
-            // response=[] : peut être quota ou mauvaise date — log mais continue
             var errDetail=d.errors?JSON.stringify(d.errors):'aucun';
             errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+(ui>0?' (qparam)':'')+': response[] errors='+errDetail);
-            if(d.errors&&Object.keys(d.errors).length){break;} // erreur API réelle
-            return d; // response vide légitime (0 match ce jour)
+            if(d.errors&&Object.keys(d.errors).length){break;}
+            return d;
           }
           errors.push('proxy '+(pi===0?'direct':PROXIES[pi])+(ui>0?' (qparam)':'')+': pas de champ response');
         }else{
@@ -1504,6 +1519,7 @@ async function apiCall(endpoint,params){
   apiCall._lastError=errors.join(' | ');
   return null;
 }
+
 
 // ═══════════════════════════════════ UI HELPERS ═══
 // ── openModal ──
@@ -4432,38 +4448,32 @@ function getStatsKey(){return cfg.statsApiKey||'';}
 async function statsCall(endpoint,params){
   var key=getStatsKey();
   if(!key)throw new Error('Clé TheStatsAPI manquante — configure-la dans Config');
-  var url=STATS_BASE+endpoint;
+
+  // Construire query string
+  var query='';
   if(params&&Object.keys(params).length)
-    url+='?'+Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+    query=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
 
-  // Essayer d'abord sans proxy, puis avec proxy CORS si ça échoue
-  var attempts=[
-    {fetchUrl:url, headers:{'Authorization':'Bearer '+key,'Accept':'application/json'}},
-    {fetchUrl:'https://corsproxy.io/?'+encodeURIComponent(url), headers:{'Authorization':'Bearer '+key,'Accept':'application/json'}},
-    {fetchUrl:'https://api.allorigins.win/raw?url='+encodeURIComponent(url), headers:{}},
-  ];
+  // Appel via Cloudflare Worker (pas de problème CORS)
+  var workerUrl='https://fsa-proxy.manikantan70.workers.dev?target=stats&path='+encodeURIComponent(endpoint)+(query?'&query='+encodeURIComponent(query):'');
 
-  var lastErr='';
-  for(var ai=0;ai<attempts.length;ai++){
-    try{
-      var ctrl=new AbortController();
-      var timer=setTimeout(function(){ctrl.abort();},15000);
-      var resp=await fetch(attempts[ai].fetchUrl,{headers:attempts[ai].headers,signal:ctrl.signal});
-      clearTimeout(timer);
-      if(resp.ok){
-        var d=await resp.json();
-        return d;
-      }
-      if(resp.status===401||resp.status===403)throw new Error('Clé invalide ou expirée ('+resp.status+')');
-      if(resp.status===429)throw new Error('RATE_LIMIT');
-      if(resp.status===404)return null;
-      lastErr='HTTP '+resp.status;
-    }catch(e){
-      if(e.message==='RATE_LIMIT'||e.message.indexOf('Clé')>=0)throw e;
-      lastErr=e.name==='AbortError'?'timeout':e.message;
-    }
+  try{
+    var ctrl=new AbortController();
+    var timer=setTimeout(function(){ctrl.abort();},20000);
+    var resp=await fetch(workerUrl,{
+      headers:{'Authorization':'Bearer '+key,'Accept':'application/json'},
+      signal:ctrl.signal
+    });
+    clearTimeout(timer);
+    if(resp.ok)return resp.json();
+    if(resp.status===401||resp.status===403)throw new Error('Clé invalide ou expirée ('+resp.status+')');
+    if(resp.status===429)throw new Error('RATE_LIMIT');
+    if(resp.status===404)return null;
+    throw new Error('Erreur API HTTP '+resp.status);
+  }catch(e){
+    if(e.name==='AbortError')throw new Error('Timeout — vérifie ta connexion');
+    throw e;
   }
-  throw new Error('Erreur API '+lastErr);
 }
 
 async function safeCall(endpoint,params,nRef){
