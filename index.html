@@ -4429,19 +4429,21 @@ var _dumpRunning=false;
 var _dumpSaisons=3;
 var _dumpMode='scores'; // 'scores' ou 'scores+xg'
 
-function getDumpDB(){try{return JSON.parse(localStorage.getItem(STATS_DUMP_KEY)||'{}')}catch(e){return{}}}
+function getDumpDB(){if(window._dumpMemory&&Object.keys(window._dumpMemory).length)return window._dumpMemory;try{return JSON.parse(localStorage.getItem(STATS_DUMP_KEY)||'{}')}catch(e){return{}}}
 function setDumpDB(d){
+  // Toujours garder en mémoire vive (pas de limite)
+  window._dumpMemory=d;
   try{
     localStorage.setItem(STATS_DUMP_KEY,JSON.stringify(d));
   }catch(e){
-    // Stockage plein — on garde uniquement les entrées avec score
+    // localStorage plein — on garde en mémoire uniquement, c'est suffisant pour exporter
     try{
       var slim={};
       Object.values(d).forEach(function(e){if(e.sh!==null&&e.sh!==undefined)slim[e.id]=e;});
       localStorage.setItem(STATS_DUMP_KEY,JSON.stringify(slim));
-      showAl('dumpAl','in','Stockage quasi-plein — dump allégé (entrées sans score supprimées)');
+      showAl('dumpAl','in','Stockage local quasi-plein — dump gardé en mémoire. Exporte en JSON maintenant.');
     }catch(e2){
-      showAl('dumpAl','er','Stockage plein — efface le dump ou la base avant de continuer');
+      showAl('dumpAl','in','Stockage local plein — dump en mémoire uniquement. Exporte en JSON avant de quitter la page.');
     }
   }
 }
