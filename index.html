@@ -2062,17 +2062,52 @@ function importDB(ev,force){
   var r=new FileReader();
   r.onload=function(e){
     try{
-      var data=JSON.parse(e.target.result),existing=getDB(),added=0,updated=0,skipped=0;
-      Object.keys(data).forEach(function(date){
-        var ms=data[date];
-        if(!existing[date]||existing[date].length===0){existing[date]=ms;added++}
-        else if(force||ms.length>existing[date].length){existing[date]=ms;updated++}
-        else skipped++;
-      });
-      setDB(existing);majDB();
-      showAl('cfgAl','ok','Import: '+added+' ajoutés, '+updated+' maj, '+skipped+' ignorés');
-      setTimeout(function(){hideAl('cfgAl')},4000);
-    }catch(err){showAl('cfgAl','er','Fichier invalide')}
+      var data=JSON.parse(e.target.result);
+      if(typeof data!=='object'||Array.isArray(data))throw new Error('Format invalide — attendu objet avec dates comme clés');
+      var dates=Object.keys(data);
+      if(!dates.length)throw new Error('Fichier vide');
+
+      var existing=getDB(),added=0,updated=0,skipped=0,storeFailed=0;
+      showAl('cfgAl','in','Import en cours... 0/'+dates.length);
+
+      // Import par batch asynchrone pour ne pas geler l'UI
+      var BATCH=50,bi=0;
+      function nextImportBatch(){
+        var end=Math.min(bi+BATCH,dates.length);
+        for(var di=bi;di<end;di++){
+          var date=dates[di];
+          var ms=data[date];
+          if(!existing[date]||existing[date].length===0){existing[date]=ms;added++;}
+          else if(force||ms.length>existing[date].length){existing[date]=ms;updated++;}
+          else skipped++;
+        }
+        bi=end;
+        if(bi<dates.length){
+          showAl('cfgAl','in','Import... '+bi+'/'+dates.length);
+          setTimeout(nextImportBatch,0);
+          return;
+        }
+        // Écriture finale
+        try{
+          localStorage.setItem(DB_KEY,JSON.stringify(existing));
+        }catch(ex){
+          // Trop gros — écrire date par date en ignorant les erreurs
+          var saved=getDB();
+          dates.forEach(function(d){
+            if(!saved[d]||saved[d].length===0){
+              try{saved[d]=existing[d];localStorage.setItem(DB_KEY,JSON.stringify(saved));}
+              catch(e2){storeFailed++;}
+            }
+          });
+        }
+        majDB();
+        var msg='✅ Import: '+added+' ajoutés, '+updated+' maj, '+skipped+' ignorés';
+        if(storeFailed)msg+=' (⚠ '+storeFailed+' dates non sauvegardées — stockage plein)';
+        showAl('cfgAl','ok',msg);
+        setTimeout(function(){hideAl('cfgAl');},6000);
+      }
+      nextImportBatch();
+    }catch(err){showAl('cfgAl','er','Fichier invalide : '+err.message);}
   };r.readAsText(f);ev.target.value='';
 }
 function clearDB(){
