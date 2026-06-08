@@ -4017,13 +4017,62 @@ function valueEdge(predProb,cote){
 }
 
 // Fuzzy match équipes (The Odds API n'a pas les mêmes noms qu'API-Football)
+// Abréviations courantes pour le matching cross-source
+var TEAM_ALIASES={
+  'psg':'paris saint germain','paris sg':'paris saint germain',
+  'man utd':'manchester united','man united':'manchester united','manutd':'manchester united',
+  'man city':'manchester city','mancity':'manchester city',
+  'atletico':'atletico madrid','atletico de madrid':'atletico madrid',
+  'inter':'inter milan','internazionale':'inter milan',
+  'ac milan':'milan','acmilan':'milan',
+  'sporting cp':'sporting','sporting clube':'sporting',
+  'newcastle utd':'newcastle','newcastle united':'newcastle',
+  'wolves':'wolverhampton','wolverhampton wanderers':'wolverhampton',
+  'tottenham hotspur':'tottenham','spurs':'tottenham',
+  'brighton hove albion':'brighton','brighton and hove albion':'brighton',
+  'west ham united':'west ham','westham':'west ham',
+  'nottingham forest':'nottm forest','nott forest':'nottingham forest',
+  'sheffield utd':'sheffield united','sheff utd':'sheffield united',
+  'leicester city':'leicester','leicester c':'leicester',
+  'aston villa':'aston villa',
+  'rb leipzig':'leipzig','rasenballsport leipzig':'leipzig',
+  'borussia dortmund':'dortmund','bvb':'dortmund',
+  'borussia monchengladbach':'mgladbach','gladbach':'mgladbach',
+  'bayer leverkusen':'leverkusen','bayer 04':'leverkusen',
+  'eintracht frankfurt':'frankfurt','sgf':'frankfurt',
+  'fc barcelona':'barcelona','barca':'barcelona',
+  'real madrid cf':'real madrid','cf real madrid':'real madrid',
+  'sevilla fc':'sevilla','fc sevilla':'sevilla',
+  'real betis balompie':'real betis','betis':'real betis',
+  'villarreal cf':'villarreal',
+  'olympique lyonnais':'lyon','ol':'lyon',
+  'olympique marseille':'marseille','om':'marseille',
+  'stade rennais':'rennes',
+  'as monaco':'monaco',
+  'ogc nice':'nice',
+  'rc strasbourg':'strasbourg',
+  'aj auxerre':'auxerre',
+  'losc':'lille','losc lille':'lille',
+};
+function normalizeTeam(s){
+  if(!s)return '';
+  var n=s.toLowerCase()
+    .replace(/fc|ac|sc|af|if|sk|fk|cf|rc|sv|vfl|vfb|tsg/g,'')
+    .replace(/[^a-z0-9]/g,' ')
+    .replace(/\s+/g,' ').trim();
+  return TEAM_ALIASES[n]||n;
+}
 function teamMatch(a,b){
   if(!a||!b)return false;
-  a=a.toLowerCase().replace(/[^a-z0-9]/g,' ').trim();
-  b=b.toLowerCase().replace(/[^a-z0-9]/g,' ').trim();
-  if(a===b)return true;
-  var aW=a.split(' ').filter(function(w){return w.length>2});
-  var bW=b.split(' ').filter(function(w){return w.length>2});
+  var na=normalizeTeam(a), nb=normalizeTeam(b);
+  if(na===nb)return true;
+  // Contient l'un l'autre (ex: "Lyon" dans "Olympique Lyonnais")
+  if(na.length>=4&&nb.indexOf(na)>=0)return true;
+  if(nb.length>=4&&na.indexOf(nb)>=0)return true;
+  // Mots communs
+  var aW=na.split(' ').filter(function(w){return w.length>2});
+  var bW=nb.split(' ').filter(function(w){return w.length>2});
+  if(!aW.length||!bW.length)return false;
   var common=aW.filter(function(w){return bW.indexOf(w)>=0});
   return common.length>=1&&(common.length/Math.max(aW.length,bW.length))>=0.5;
 }
@@ -4586,50 +4635,63 @@ async function startDump(){
     // ── ÉTAPE 5 : Injection en base locale (jour par jour) ───
     upd('Injection en base...',97);
     _dumpIdx=null;buildDumpIdx(dumpDB);
-    var injected=0,injectedXg=0;
+
+    // Injection asynchrone par batch pour ne pas geler l'UI
     var db2=getDB();
-    var modifiedDates=[];
-    Object.keys(db2).forEach(function(date){
-      var modified=false;
-      db2[date].forEach(function(m){
-        var e=findInDump(dumpDB,m.home,m.away,date);
-        if(!e)return;
-        // Injecter score uniquement si le match n'en a pas et que le dump en a un
-        if(e.sh!==null&&e.sh!==undefined&&(m.h===null||m.h===undefined)){
-          m.h=e.sh;m.a=e.sa;
-          // NE PAS toucher au statut — laisser l'API gérer ça
-          injected++;modified=true;
-        }
-        // xG
-        if(e.xg&&e.xg.h!==null&&!m._xg){
-          m._xg={home:e.xg.h,away:e.xg.a,npxgHome:e.xg.nh,npxgAway:e.xg.na};
-          injectedXg++;modified=true;
-        }
-      });
-      if(modified)modifiedDates.push(date);
-    });
+    var allDates=Object.keys(db2);
+    var injected=0,injectedXg=0,modifiedDates=[];
+    var BATCH=50,bi=0;
 
-    // Écrire toutes les dates modifiées en une seule passe
-    if(modifiedDates.length){
-      try{
-        localStorage.setItem(DB_KEY,JSON.stringify(db2));
-      }catch(ex){
-        // Fallback : écrire jour par jour
-        var db4=getDB();
-        modifiedDates.forEach(function(date){
-          try{db4[date]=db2[date];localStorage.setItem(DB_KEY,JSON.stringify(db4));}catch(e2){}
+    function nextBatch(){
+      var end=Math.min(bi+BATCH,allDates.length);
+      for(var di=bi;di<end;di++){
+        var date=allDates[di];
+        var modified=false;
+        (db2[date]||[]).forEach(function(m){
+          var e=findInDump(dumpDB,m.home,m.away,date);
+          if(!e)return;
+          if(e.sh!==null&&e.sh!==undefined&&(m.h===null||m.h===undefined)){
+            m.h=e.sh;m.a=e.sa;injected++;modified=true;
+          }
+          if(e.xg&&e.xg.h!==null&&!m._xg){
+            m._xg={home:e.xg.h,away:e.xg.a,npxgHome:e.xg.nh,npxgAway:e.xg.na};
+            injectedXg++;modified=true;
+          }
         });
+        if(modified)modifiedDates.push(date);
       }
+      bi=end;
+      var pct=97+Math.round((bi/allDates.length)*2);
+      upd('Injection '+bi+'/'+allDates.length+'...',pct);
+      if(bi<allDates.length){
+        setTimeout(nextBatch,0);
+        return;
+      }
+      // Écriture finale
+      try{
+        if(modifiedDates.length){
+          try{
+            localStorage.setItem(DB_KEY,JSON.stringify(db2));
+          }catch(ex){
+            // Fallback par date
+            var db4=getDB();
+            modifiedDates.forEach(function(date){
+              try{db4[date]=db2[date];localStorage.setItem(DB_KEY,JSON.stringify(db4));}catch(e2){}
+            });
+          }
+        }
+        setDumpDB(dumpDB);
+        var msg='✅ '+nMatches+' matchs collectés';
+        if(injected)msg+=' · '+injected+' scores injectés';
+        if(injectedXg)msg+=' · '+injectedXg+' xG';
+        showAl('dumpAl','ok',msg);
+      }catch(e){showAl('dumpAl','er','Erreur écriture : '+e.message);}
+      finishDump(nMatches,nXg,nRef[0]);
     }
+    nextBatch();
+    return; // finishDump appelé dans nextBatch
 
-    setDumpDB(dumpDB);
-    var msg='✅ '+nMatches+' matchs collectés';
-    if(injected)msg+=' · '+injected+' scores injectés en base';
-    if(injectedXg)msg+=' · '+injectedXg+' xG';
-    showAl('dumpAl','ok',msg);
-
-  }catch(e){showAl('dumpAl','er','Erreur : '+e.message);}
-  finishDump(nMatches,nXg,nRef[0]);
+  }catch(e){showAl('dumpAl','er','Erreur : '+e.message);finishDump(nMatches,nXg,nRef[0]);}
 }
 
 function finishDump(nMatches,nXg,nReq){
@@ -4654,7 +4716,8 @@ function renderDumpStats(){
   html+='<div class="sb"><div class="sv" style="color:var(--b)">'+withScore+'</div><div class="sl">Avec score</div></div>';
   html+='<div class="sb"><div class="sv" style="color:var(--p)">'+withXg+'</div><div class="sl">xG</div></div>';
   html+='</div>';
-  html+='<button class="bsm" onclick="injectDumpIntoMatchCards()" style="width:100%;padding:8px;text-align:center;color:var(--teal,#20c997);border-color:var(--teal,#20c997)">↩ Injecter dans les matchs ouverts</button>';
+  html+='<button class="bsm" onclick="injectDumpIntoMatchCards()" style="width:100%;padding:8px;text-align:center;color:var(--teal,#20c997);border-color:var(--teal,#20c997)">Injecter dans les matchs ouverts</button>';
+  html+='<button class="bsm" onclick="diagDump()" style="margin-top:5px;width:100%;padding:8px;text-align:center;color:var(--y);border-color:var(--y)">🔍 Diagnostic matching</button>';
   html+='<button class="bsm" onclick="if(confirm(\'Effacer le dump ?\'))clearDumpDB()" style="margin-top:5px;width:100%;padding:8px;text-align:center;color:var(--r);border-color:var(--r)">Effacer le dump</button>';
   html+='</div>';
   var out=document.getElementById('dumpOut');out.innerHTML=html;out.style.display='block';
@@ -6866,6 +6929,57 @@ function saveCombiCfg(key,val){
   if(bank)cfg.bankroll=parseFloat(bank.value)||500;
   if(maxSel)cfg.maxSel=parseInt(maxSel.value)||500;
   localStorage.setItem('fsa_combi_cfg',JSON.stringify(cfg));
+}
+
+
+function diagDump(){
+  var dump=getDumpDB();
+  var db=getDB();
+  var date=document.getElementById('tdDate').value;
+  if(!date){showAl('dumpAl','er','Ouvre d\'abord un jour dans l\'onglet Matchs');return;}
+
+  // Matchs de la base pour cette date
+  var dbMatchs=(db[date]||[]);
+  // Matchs du dump pour cette date (approximatif sur date string)
+  var dumpEntries=Object.values(dump).filter(function(e){return e.date===date;});
+
+  var html='<div class="card" style="margin-top:10px;padding:11px">';
+  html+='<div class="st" style="margin-top:0;margin-bottom:8px">🔍 DIAGNOSTIC — '+date+'</div>';
+  html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--dm);margin-bottom:10px">';
+  html+=dbMatchs.length+' matchs en base · '+dumpEntries.length+' entrées dump pour cette date</div>';
+
+  if(!dumpEntries.length){
+    // Montrer quelques dates dispo dans le dump
+    var dumpDates=[...new Set(Object.values(dump).map(function(e){return e.date}))].sort().slice(-10);
+    html+='<div style="color:var(--y);font-size:.68rem;font-family:var(--mono)">⚠ Aucune entrée dump pour '+date+'</div>';
+    html+='<div style="font-size:.6rem;color:var(--dm);font-family:var(--mono);margin-top:6px">Dernières dates dans le dump :</div>';
+    dumpDates.forEach(function(d){html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--b)">'+d+'</div>';});
+    html+='</div>';
+    var out=document.getElementById('dumpOut');out.innerHTML+=html;return;
+  }
+
+  // Afficher les 5 premiers de chaque
+  html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--g);margin-bottom:4px">BASE (api-football) :</div>';
+  dbMatchs.slice(0,5).forEach(function(m){
+    html+='<div style="font-size:.6rem;font-family:var(--mono);color:var(--tx);padding:2px 0">"'+m.home+'" vs "'+m.away+'"</div>';
+  });
+  html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--b);margin-top:8px;margin-bottom:4px">DUMP (TheStatsAPI) :</div>';
+  dumpEntries.slice(0,5).forEach(function(e){
+    html+='<div style="font-size:.6rem;font-family:var(--mono);color:var(--tx);padding:2px 0">"'+e.h+'" vs "'+e.a+'" → score: '+(e.sh!==null?e.sh+'-'+e.sa:'?')+'</div>';
+  });
+
+  // Tenter matching sur les 3 premiers
+  html+='<div style="font-size:.62rem;font-family:var(--mono);color:var(--y);margin-top:10px;margin-bottom:4px">RÉSULTAT MATCHING :</div>';
+  dbMatchs.slice(0,5).forEach(function(m){
+    var found=dumpEntries.find(function(e){return teamMatch(m.home,e.h)&&teamMatch(m.away,e.a);});
+    var col=found?'var(--g)':'var(--r)';
+    var icon=found?'✅':'❌';
+    html+='<div style="font-size:.6rem;font-family:var(--mono);color:'+col+';padding:2px 0">'+icon+' "'+m.home+'" → '+(found?'"'+found.h+'"':'non trouvé')+'</div>';
+  });
+
+  html+='</div>';
+  var out=document.getElementById('dumpOut');
+  out.innerHTML+=html;out.style.display='block';
 }
 
 </script>
