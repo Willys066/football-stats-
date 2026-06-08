@@ -4740,6 +4740,7 @@ function finishDump(nMatches,nXg,nReq){
   _dumpRunning=false;
   document.getElementById('btnDump').disabled=false;
   document.getElementById('btnDumpStop').style.display='none';
+  document.getElementById('dumpProgress').style.display='none';
   document.getElementById('dumpReqCount').textContent='Total requêtes : '+nReq;
   renderDumpStats();
 }
