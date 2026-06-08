@@ -1464,7 +1464,7 @@ async function apiCall(endpoint,params){
   // 1. Cloudflare Worker (priorité — pas de CORS, fiable)
   try{
     var query=Object.keys(params).map(function(k){return k+'='+encodeURIComponent(params[k])}).join('&');
-    var workerUrl='https://fsa-proxy.manikantan70.workers.dev?target=football&path='+encodeURIComponent(endpoint)+'&query='+encodeURIComponent(query);
+    var workerUrl='https://fspa-proxy.manikantan7070.workers.dev?target=football&path='+encodeURIComponent(endpoint)+'&query='+encodeURIComponent(query);
     var ctrl0=new AbortController();
     var t0=setTimeout(function(){ctrl0.abort();},12000);
     var r0=await fetch(workerUrl,{headers:hdrs,signal:ctrl0.signal});
@@ -4455,7 +4455,7 @@ async function statsCall(endpoint,params){
     query=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
 
   // Appel via Cloudflare Worker (pas de problème CORS)
-  var workerUrl='https://fsa-proxy.manikantan70.workers.dev?target=stats&path='+encodeURIComponent(endpoint)+(query?'&query='+encodeURIComponent(query):'');
+  var workerUrl='https://fspa-proxy.manikantan7070.workers.dev?target=stats&path='+encodeURIComponent(endpoint)+(query?'&query='+encodeURIComponent(query):'');
 
   try{
     var ctrl=new AbortController();
