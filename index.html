@@ -3312,8 +3312,9 @@ async function loadMatchs(source){
     if(!cfg.apiKey){document.getElementById('tdLd').classList.remove('on');showAl('tdAl','er','Entre ta clé API dans Config');return}
     var data=await apiCall('/fixtures',{date:date});document.getElementById('tdLd').classList.remove('on');
     if(!data){showAl('tdAl','er','Erreur API: '+(apiCall._lastError||'inconnue'));return}
-    fx=data.response.map(function(f){return parseFix(f,tz)});
-    if(fx.length>0){var db2=getDB();db2[date]=fx;setDB(db2);majDB()}
+    fx=(data.response||[]).map(function(f){return parseFix(f,tz)});
+    if(!fx.length){showAl('tdAl','er','0 match retourné par l\'API pour le '+date+(apiCall._lastError?' — '+apiCall._lastError:''));return}
+    var db2=getDB();db2[date]=fx;setDB(db2);majDB();
     showAl('tdAl','ok',fx.length+' matchs chargés et sauvegardés.');
   }
   // Stocker TOUS les matchs - le filtre mode s'applique dans renderMatchsList
@@ -3330,7 +3331,10 @@ async function loadMatchs(source){
   document.getElementById('tSoo').textContent=fx.filter(function(f){return TERM.indexOf(f.status)<0&&LIVE.indexOf(f.status)<0}).length;
   document.getElementById('tDon').textContent=fx.filter(function(f){return TERM.indexOf(f.status)>=0}).length;
   document.getElementById('tdSum').style.display='block';
-  renderMatchsList();
+  try{renderMatchsList();}
+  catch(e){
+    document.getElementById('tdList').innerHTML='<div style="color:var(--r);padding:16px;font-size:.75rem;font-family:var(--mono)">Erreur rendu: '+e.message+'</div>';
+  }
 }
 function toggleAllGroups(open){
   document.querySelectorAll('.lg-body').forEach(function(b){b.classList.toggle('open',open)});
