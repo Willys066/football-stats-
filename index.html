@@ -1369,17 +1369,83 @@ function getDB(){try{return JSON.parse(localStorage.getItem(DB_KEY)||'{}')}catch
 function setDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
 function getRes(){try{return JSON.parse(localStorage.getItem(RES_KEY)||'{}')}catch(e){return{}}}
 function setRes(r){localStorage.setItem(RES_KEY,JSON.stringify(r))}
-function getTrack(){if(window._trackMemory&&window._trackMemory.length)return window._trackMemory;try{return JSON.parse(localStorage.getItem(TRACK_KEY)||'[]')}catch(e){return[]}}
-function setTrack(t){
-  // Garder en mémoire vive (pas de limite)
-  window._trackMemory=t;
-  // Tenter localStorage — si trop gros, on se contente de la mémoire
-  try{
-    var s=JSON.stringify(t);
-    if(s.length<3500000)localStorage.setItem(TRACK_KEY,s); // max ~3.5MB
-    else localStorage.removeItem(TRACK_KEY); // trop gros, mémoire uniquement
-  }catch(e){localStorage.removeItem(TRACK_KEY);}
+// ══════════════════════════════════════════════
+// TRACKING — IndexedDB (pas de limite de taille)
+// ══════════════════════════════════════════════
+var _trackIDB=null;
+var _trackCache=null; // cache mémoire
+
+async function openTrackIDB(){
+  if(_trackIDB)return _trackIDB;
+  return new Promise(function(res,rej){
+    var req=indexedDB.open('fsa_track_idb_v1',1);
+    req.onupgradeneeded=function(e){
+      var db=e.target.result;
+      if(!db.objectStoreNames.contains('entries'))
+        db.createObjectStore('entries',{keyPath:'id'});
+    };
+    req.onsuccess=function(e){_trackIDB=e.target.result;res(_trackIDB);};
+    req.onerror=function(){rej(req.error);};
+  });
 }
+
+async function getTrackIDB(){
+  if(_trackCache)return _trackCache;
+  try{
+    var db=await openTrackIDB();
+    return new Promise(function(res){
+      var tx=db.transaction('entries','readonly');
+      var req=tx.objectStore('entries').getAll();
+      req.onsuccess=function(){_trackCache=req.result||[];res(_trackCache);};
+      req.onerror=function(){res([]);};
+    });
+  }catch(e){return[];}
+}
+
+async function setTrackIDB(arr){
+  _trackCache=arr;
+  try{
+    var db=await openTrackIDB();
+    return new Promise(function(res){
+      var tx=db.transaction('entries','readwrite');
+      var store=tx.objectStore('entries');
+      store.clear();
+      arr.forEach(function(e){store.put(e);});
+      tx.oncomplete=function(){res();};
+      tx.onerror=function(){res();};
+    });
+  }catch(e){}
+}
+
+async function appendTrackIDB(entry){
+  if(_trackCache)_trackCache.push(entry);
+  try{
+    var db=await openTrackIDB();
+    return new Promise(function(res){
+      var tx=db.transaction('entries','readwrite');
+      tx.objectStore('entries').put(entry);
+      tx.oncomplete=function(){res();};
+      tx.onerror=function(){res();};
+    });
+  }catch(e){}
+}
+
+async function clearTrackIDB(){
+  _trackCache=null;
+  try{
+    var db=await openTrackIDB();
+    return new Promise(function(res){
+      var tx=db.transaction('entries','readwrite');
+      tx.objectStore('entries').clear();
+      tx.oncomplete=function(){res();};
+      tx.onerror=function(){res();};
+    });
+  }catch(e){}
+}
+
+// Wrappers synchrones de compatibilité (lecture depuis cache)
+function getTrack(){return _trackCache||[];}
+function setTrack(t){_trackCache=t;setTrackIDB(t);} // async en arrière-plan
 function getTickets(){try{return JSON.parse(localStorage.getItem(TK_KEY)||'[]')}catch(e){return[]}}
 function setTickets(t){localStorage.setItem(TK_KEY,JSON.stringify(t))}
 function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}')}catch(e){return{}}}
@@ -1549,7 +1615,7 @@ function saveResult(){
   var h=parseInt(document.getElementById('moSH').value,10),a=parseInt(document.getElementById('moSA').value,10);
   if(isNaN(h)||isNaN(a)){alert('Entre les deux scores');return}
   var r=getRes();r[modalMatch.id]={h:h,a:a};setRes(r);
-  if(modalMatch._pred){var track=getTrack();if(!track.find(function(t){return t.id===modalMatch.id})){track.push(buildTrackEntry({id:modalMatch.id,home:modalMatch.home,away:modalMatch.away,league:modalMatch.league||'?',country:modalMatch.country||'?'},modalMatch._pred,modalMatch._seuil||seuilTd,h,a));setTrack(track)}}
+  if(modalMatch._pred){var track=getTrack();if(!track.find(function(t){return t.id===modalMatch.id})){var ne=buildTrackEntry({id:modalMatch.id,home:modalMatch.home,away:modalMatch.away,league:modalMatch.league||'?',country:modalMatch.country||'?'},modalMatch._pred,modalMatch._seuil||seuilTd,h,a);track.push(ne);_trackCache=track;appendTrackIDB(ne);}}
   document.getElementById('modal').classList.remove('on');renderMatchsList();
 }
 
@@ -2184,41 +2250,7 @@ async function lancer(force){
 function stopCol(){stopFlag=true;document.getElementById('btnStop').style.display='none'}
 
 // ═══════════════════════════════════ LOAD MATCHS (onglet Matchs) ═══
-async function loadMatchs(mode){
-  var date=document.getElementById('tdDate').value;
-  if(!date){showAl('tdAl','er','Sélectionne une date');return}
-  var tz=getTz(),db=getDB();
-  if(mode==='local'){
-    if(!db[date]||!db[date].length){
-      showAl('tdAl','er','Aucune donnée en base pour cette date. Utilise le bouton "API ↻".');
-    }else{
-      hideAl('tdAl');
-      renderMatchsList();
-    }
-    return;
-  }
-  // mode === 'api'
-  if(!cfg.apiKey){showAl('tdAl','er','Entre ta clé API dans Config');return}
-  hideAl('tdAl');
-  document.getElementById('tdLd').classList.add('on');
-  var data=await apiCall('/fixtures',{date:date});
-  document.getElementById('tdLd').classList.remove('on');
-  if(!data){
-    showAl('tdAl','er','Erreur API: '+(apiCall._lastError||'inconnue'));
-    return;
-  }
-  var raw=data.response||[];
-  var matchs=raw.map(function(f){return parseFix(f,tz)});
-  if(!matchs.length){
-    var detail=apiCall._lastError?'<br><small style="opacity:.7">Détail: '+apiCall._lastError+'</small>':'';
-    showAl('tdAl','er','0 match retourné par l\'API pour le '+date+'.'+detail);
-    return;
-  }
-  db[date]=matchs;
-  setDB(db);
-  hideAl('tdAl');
-  renderMatchsList();
-}
+
 
 // ═══════════════════════════════════ TEAM CACHE ═══
 function buildTeamCache(){
@@ -3279,7 +3311,7 @@ async function loadMatchs(source){
   }else{
     if(!cfg.apiKey){document.getElementById('tdLd').classList.remove('on');showAl('tdAl','er','Entre ta clé API dans Config');return}
     var data=await apiCall('/fixtures',{date:date});document.getElementById('tdLd').classList.remove('on');
-    if(!data){showAl('tdAl','er','Erreur API. Vérifie ta clé et ton quota.');return}
+    if(!data){showAl('tdAl','er','Erreur API: '+(apiCall._lastError||'inconnue'));return}
     fx=data.response.map(function(f){return parseFix(f,tz)});
     if(fx.length>0){var db2=getDB();db2[date]=fx;setDB(db2);majDB()}
     showAl('tdAl','ok',fx.length+' matchs chargés et sauvegardés.');
@@ -6129,21 +6161,24 @@ function syncGlobal(){
 
   // Construire cache GLOBAL une seule fois (toutes les données historiques)
   var cache=buildCache();
-  var track=getTrack();
-  var trackIdSet=new Set(track.map(function(t){return t.id;}));
   var added=0,skipped=0,processed=0;
   var total=candidates.length;
+
+  // Charger le tracking depuis IDB avant de commencer
+  getTrackIDB().then(function(track){
+    var trackIdSet=new Set(track.map(function(t){return t.id;}));
 
   function processChunk(idx){
     if(!_syncRunning){
       finishSync(added,skipped,total,'Arrêté');return;
     }
     if(idx>=total){
-      // Sauvegarder le tracking mis à jour
-      setTrack(track);
-      // Auto-calibration
-      computeAndSaveCalib(track,seuilFiab);
-      finishSync(added,skipped,total,'Terminé');
+      // Sauvegarder dans IDB en arrière-plan
+      setTrackIDB(track).then(function(){
+        _trackCache=track; // mettre à jour le cache mémoire
+        computeAndSaveCalib(getTrackCompat(),seuilFiab);
+        finishSync(added,skipped,total,'Terminé');
+      });
       return;
     }
     // Traiter par lots de 10 pour ne pas bloquer l'UI
@@ -6184,6 +6219,7 @@ function syncGlobal(){
     setTimeout(function(){processChunk(end)},0);
   }
   processChunk(0);
+  }); // end getTrackIDB().then
 }
 function finishSync(added,skipped,total,status){
   _syncRunning=false;
@@ -6193,23 +6229,31 @@ function finishSync(added,skipped,total,status){
   document.getElementById('syncPct').textContent='100%';
   document.getElementById('syncFill').style.width='100%';
   document.getElementById('syncFill').style.background=added>0?'var(--g)':'var(--y)';
-  var track=getTrackCompat();
-  if(track.length){
-    hideAl('fiabAl');
-    try{computeAndSaveCalib(track,seuilFiab);}catch(e){console.warn('calib err',e);}
-    try{renderFiabOut();}catch(e){showAl('fiabAl','er','Erreur rendu: '+e.message);}
-  } else {
-    showAl('fiabAl','in','Sync terminée — '+added+' ajoutés. Clique sur "Analyser la fiabilité".');
-  }
+  // Lire depuis IDB pour afficher la fiabilité
+  getTrackIDB().then(function(rawTrack){
+    _trackCache=rawTrack;
+    var track=getTrackCompat();
+    if(track.length){
+      hideAl('fiabAl');
+      try{computeAndSaveCalib(track,seuilFiab);}catch(e){console.warn('calib err',e);}
+      try{renderFiabOut();}catch(e){showAl('fiabAl','er','Erreur rendu: '+e.message);}
+    } else {
+      showAl('fiabAl','in','Sync terminée — '+added+' ajoutés. Clique sur "Analyser la fiabilité".');
+    }
+  });
 }
 
 function calcFiabilite(){
-  var track=getTrackCompat();
-  if(!track.length){showAl('fiabAl','er','Aucune donnée — Lance d\'abord la Synchronisation globale');return}
-  hideAl('fiabAl');
-  try{computeAndSaveCalib(track,seuilFiab);}catch(e){console.warn('calib err',e);}
-  try{renderFiabOut();}
-  catch(e){showAl('fiabAl','er','Erreur analyse: '+e.message);}
+  showAl('fiabAl','in','Chargement...');
+  getTrackIDB().then(function(rawTrack){
+    _trackCache=rawTrack;
+    var track=getTrackCompat();
+    if(!track.length){showAl('fiabAl','er','Aucune donnée — Lance d\'abord la Synchronisation globale');return;}
+    hideAl('fiabAl');
+    try{computeAndSaveCalib(track,seuilFiab);}catch(e){console.warn('calib err',e);}
+    try{renderFiabOut();}
+    catch(e){showAl('fiabAl','er','Erreur analyse: '+e.message);}
+  });
 }
 function renderFiabOut(){
   try{
@@ -6840,7 +6884,7 @@ function showMarcheFor(id,btn){
   panel.innerHTML=h;
 }
 function exportTrack(){var blob=new Blob([JSON.stringify(getTrack(),null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tracking_'+today()+'.json';a.click()}
-function clearTrack(){if(!confirm('Effacer tout le tracking?'))return;localStorage.removeItem(TRACK_KEY);document.getElementById('fiabOut').style.display='none';showAl('fiabAl','in','Tracking effacé');setTimeout(function(){hideAl('fiabAl')},2500)}
+function clearTrack(){if(!confirm('Effacer tout le tracking?'))return;clearTrackIDB().then(function(){localStorage.removeItem(TRACK_KEY);document.getElementById('fiabOut').style.display='none';showAl('fiabAl','in','Tracking effacé');setTimeout(function(){hideAl('fiabAl')},2500);});}
 
 // ═══════════════════════════════════ INIT ═══
 buildTz();initCfg();majDB();preset(2);loadRecalageWeights();loadScoreWeights();
@@ -6970,7 +7014,23 @@ goTab=function(i){
 // Init on load
 window.addEventListener('DOMContentLoaded',function(){
   checkAccess();
+  // Migration localStorage → IndexedDB au premier chargement
+  migrateTrackToIDB();
 });
+
+async function migrateTrackToIDB(){
+  try{
+    var existing=await getTrackIDB();
+    if(existing.length)return; // déjà migré
+    var old=localStorage.getItem(TRACK_KEY);
+    if(!old)return;
+    var arr=JSON.parse(old);
+    if(!arr||!arr.length)return;
+    await setTrackIDB(arr);
+    localStorage.removeItem(TRACK_KEY);
+    console.log('[FSA] Migration tracking localStorage → IDB : '+arr.length+' entrées');
+  }catch(e){console.warn('[FSA] Migration IDB échouée:',e);}
+}
 
 
 function saveRoiCfg(key,val){
