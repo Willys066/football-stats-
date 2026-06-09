@@ -1369,8 +1369,17 @@ function getDB(){try{return JSON.parse(localStorage.getItem(DB_KEY)||'{}')}catch
 function setDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
 function getRes(){try{return JSON.parse(localStorage.getItem(RES_KEY)||'{}')}catch(e){return{}}}
 function setRes(r){localStorage.setItem(RES_KEY,JSON.stringify(r))}
-function getTrack(){try{return JSON.parse(localStorage.getItem(TRACK_KEY)||'[]')}catch(e){return[]}}
-function setTrack(t){localStorage.setItem(TRACK_KEY,JSON.stringify(t))}
+function getTrack(){if(window._trackMemory&&window._trackMemory.length)return window._trackMemory;try{return JSON.parse(localStorage.getItem(TRACK_KEY)||'[]')}catch(e){return[]}}
+function setTrack(t){
+  // Garder en mémoire vive (pas de limite)
+  window._trackMemory=t;
+  // Tenter localStorage — si trop gros, on se contente de la mémoire
+  try{
+    var s=JSON.stringify(t);
+    if(s.length<3500000)localStorage.setItem(TRACK_KEY,s); // max ~3.5MB
+    else localStorage.removeItem(TRACK_KEY); // trop gros, mémoire uniquement
+  }catch(e){localStorage.removeItem(TRACK_KEY);}
+}
 function getTickets(){try{return JSON.parse(localStorage.getItem(TK_KEY)||'[]')}catch(e){return[]}}
 function setTickets(t){localStorage.setItem(TK_KEY,JSON.stringify(t))}
 function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}')}catch(e){return{}}}
