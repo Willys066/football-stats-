@@ -1365,8 +1365,89 @@ function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()
 function nAgo(n){var d=new Date();d.setDate(d.getDate()-n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function autoTz(){return -Math.round(new Date().getTimezoneOffset()/60)}
 function getTz(){return(cfg.tz!==undefined&&!isNaN(cfg.tz))?cfg.tz:0}
-function getDB(){try{return JSON.parse(localStorage.getItem(DB_KEY)||'{}')}catch(e){return{}}}
-function setDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
+// ══════════════════════════════════════════════
+// BASE DE DONNÉES — IndexedDB (pas de limite)
+// ══════════════════════════════════════════════
+var _dbIDB=null;
+var _dbCache=null;
+
+async function openDBIDB(){
+  if(_dbIDB)return _dbIDB;
+  return new Promise(function(res,rej){
+    var req=indexedDB.open('fsa_db_idb_v1',1);
+    req.onupgradeneeded=function(e){
+      var db=e.target.result;
+      if(!db.objectStoreNames.contains('dates'))
+        db.createObjectStore('dates',{keyPath:'date'});
+    };
+    req.onsuccess=function(e){_dbIDB=e.target.result;res(_dbIDB);};
+    req.onerror=function(){rej(req.error);};
+  });
+}
+
+async function loadDBFromIDB(){
+  try{
+    var db=await openDBIDB();
+    return new Promise(function(res){
+      var tx=db.transaction('dates','readonly');
+      var req=tx.objectStore('dates').getAll();
+      req.onsuccess=function(){
+        var result={};
+        (req.result||[]).forEach(function(row){result[row.date]=row.matchs;});
+        _dbCache=result;
+        res(result);
+      };
+      req.onerror=function(){res({});};
+    });
+  }catch(e){return{};}
+}
+
+async function saveDBToIDB(dbObj){
+  _dbCache=dbObj;
+  try{
+    var db=await openDBIDB();
+    return new Promise(function(res){
+      var tx=db.transaction('dates','readwrite');
+      var store=tx.objectStore('dates');
+      store.clear();
+      Object.keys(dbObj).forEach(function(date){
+        store.put({date:date,matchs:dbObj[date]});
+      });
+      tx.oncomplete=function(){res();};
+      tx.onerror=function(){res();};
+    });
+  }catch(e){}
+}
+
+async function saveDateToIDB(date,matchs){
+  if(_dbCache)_dbCache[date]=matchs;
+  try{
+    var db=await openDBIDB();
+    return new Promise(function(res){
+      var tx=db.transaction('dates','readwrite');
+      tx.objectStore('dates').put({date:date,matchs:matchs});
+      tx.oncomplete=function(){res();};
+      tx.onerror=function(){res();};
+    });
+  }catch(e){}
+}
+
+async function deleteDateFromIDB(date){
+  if(_dbCache)delete _dbCache[date];
+  try{
+    var db=await openDBIDB();
+    return new Promise(function(res){
+      var tx=db.transaction('dates','readwrite');
+      tx.objectStore('dates').delete(date);
+      tx.oncomplete=function(){res();};
+      tx.onerror=function(){res();};
+    });
+  }catch(e){}
+}
+
+// Wrappers synchrones (lecture depuis cache mémoire)
+function getDB(){return _dbCache||{};}
+function setDB(db){_dbCache=db;saveDBToIDB(db);} // async en arrière-plan
 function getRes(){try{return JSON.parse(localStorage.getItem(RES_KEY)||'{}')}catch(e){return{}}}
 function setRes(r){localStorage.setItem(RES_KEY,JSON.stringify(r))}
 // ══════════════════════════════════════════════
@@ -2063,12 +2144,13 @@ function setSort(key){
   if(btn)btn.classList.add('on');renderComps();
 }
 function majDB(){
-  var db=getDB(),j=Object.keys(db).length;
+  var db=_dbCache||{};
+  var j=Object.keys(db).length;
   var m=Object.values(db).reduce(function(s,v){return s+(v.length||0)},0);
   var l=new Set(Object.values(db).reduce(function(a,v){return a.concat(v.map(function(x){return x.league}))},[])).size;
-  document.getElementById('dbM').textContent=m;
-  document.getElementById('dbJ').textContent=j;
-  document.getElementById('dbL').textContent=l;
+  var dbM=document.getElementById('dbM');if(dbM)dbM.textContent=m;
+  var dbJ=document.getElementById('dbJ');if(dbJ)dbJ.textContent=j;
+  var dbL=document.getElementById('dbL');if(dbL)dbL.textContent=l;
 }
 function setConvFilter(v){
   convFilterVal=v;
@@ -2162,20 +2244,9 @@ function importDB(ev,force){
           setTimeout(nextImportBatch,0);
           return;
         }
-        // Écriture finale
-        try{
-          localStorage.setItem(DB_KEY,JSON.stringify(existing));
-        }catch(ex){
-          // Trop gros — écrire date par date en ignorant les erreurs
-          var saved=getDB();
-          dates.forEach(function(d){
-            if(!saved[d]||saved[d].length===0){
-              try{saved[d]=existing[d];localStorage.setItem(DB_KEY,JSON.stringify(saved));}
-              catch(e2){storeFailed++;}
-            }
-          });
-        }
-        majDB();
+        // Écriture via IDB (pas de limite)
+        _dbCache=existing;
+        saveDBToIDB(existing).then(function(){majDB();});
         var msg='✅ Import: '+added+' ajoutés, '+updated+' maj, '+skipped+' ignorés';
         if(storeFailed)msg+=' (⚠ '+storeFailed+' dates non sauvegardées — stockage plein)';
         showAl('cfgAl','ok',msg);
@@ -2187,7 +2258,7 @@ function importDB(ev,force){
 }
 function clearDB(){
   if(!confirm('Effacer toutes les données?'))return;
-  localStorage.removeItem(DB_KEY);localStorage.removeItem(RES_KEY);localStorage.removeItem(TRACK_KEY);majDB();
+  _dbCache={};_trackCache=null;Promise.all([saveDBToIDB({}),clearTrackIDB()]).then(function(){majDB();});localStorage.removeItem(DB_KEY);localStorage.removeItem(RES_KEY);localStorage.removeItem(TRACK_KEY);
   showAl('cfgAl','in','Données effacées');setTimeout(function(){hideAl('cfgAl')},2500);
 }
 
@@ -2237,7 +2308,7 @@ async function lancer(force){
         var nNS=ms.filter(function(x){return TERM.indexOf(x.status)<0&&LIVE.indexOf(x.status)<0}).length;
         addLog(date+' - '+ms.length+' matchs'+(nNS?' (⚠ '+nNS+' NS)':''),'var(--g)');
       }
-      if(ms.length>0){db[date]=ms;setDB(db)}
+      if(ms.length>0){if(_dbCache)_dbCache[date]=ms;else{var _tmp=getDB();_tmp[date]=ms;_dbCache=_tmp;}saveDateToIDB(date,ms);}
       j++;m+=ms.length;
     }
     setS();if(i<dates.length-1&&!stopFlag)await sleep(500);
@@ -3284,7 +3355,7 @@ async function loadMatchs(source){
           var tz2=getTz();
           var refreshed=refreshData.response.map(function(f){return parseFix(f,tz2)});
           if(refreshed.length>0){
-            var db3=getDB();db3[date]=refreshed;setDB(db3);majDB();
+            if(_dbCache)_dbCache[date]=refreshed;saveDateToIDB(date,refreshed);majDB();
             fx=refreshed;
             document.getElementById('tdLd').classList.remove('on');
             showAl('tdAl','ok',fx.length+' matchs rafraîchis depuis l\'API (statuts mis à jour).');
@@ -3314,7 +3385,8 @@ async function loadMatchs(source){
     if(!data){showAl('tdAl','er','Erreur API: '+(apiCall._lastError||'inconnue'));return}
     fx=(data.response||[]).map(function(f){return parseFix(f,tz)});
     if(!fx.length){showAl('tdAl','er','0 match retourné par l\'API pour le '+date+(apiCall._lastError?' — '+apiCall._lastError:''));return}
-    var db2=getDB();db2[date]=fx;setDB(db2);majDB();
+    if(_dbCache)_dbCache[date]=fx;
+    saveDateToIDB(date,fx);majDB();
     showAl('tdAl','ok',fx.length+' matchs chargés et sauvegardés.');
   }
   // Stocker TOUS les matchs - le filtre mode s'applique dans renderMatchsList
@@ -7017,10 +7089,28 @@ goTab=function(i){
 
 // Init on load
 window.addEventListener('DOMContentLoaded',function(){
-  checkAccess();
-  // Migration localStorage → IndexedDB au premier chargement
-  migrateTrackToIDB();
+  // Charger la base et le tracking depuis IDB avant tout
+  Promise.all([loadDBFromIDB(), migrateDBToIDB(), migrateTrackToIDB()]).then(function(){
+    majDB();
+    checkAccess();
+  });
 });
+
+async function migrateDBToIDB(){
+  try{
+    // Si IDB déjà peuplé, skip
+    var existing=await loadDBFromIDB();
+    if(Object.keys(existing).length>0)return;
+    // Migrer depuis localStorage
+    var old=localStorage.getItem(DB_KEY);
+    if(!old)return;
+    var obj=JSON.parse(old);
+    if(!obj||!Object.keys(obj).length)return;
+    await saveDBToIDB(obj);
+    localStorage.removeItem(DB_KEY);
+    console.log('[FSA] Migration DB localStorage → IDB : '+Object.keys(obj).length+' dates');
+  }catch(e){console.warn('[FSA] Migration DB IDB échouée:',e);}
+}
 
 async function migrateTrackToIDB(){
   try{
