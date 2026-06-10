@@ -1259,7 +1259,7 @@ tr:hover td{background:var(--s2)}
     </div>
     <button class="btn bb" onclick="calcFiabilite()" style="margin-bottom:7px">📊 Analyser la fiabilité</button>
     <button class="bsm" onclick="resetCalib()" style="width:100%;padding:9px;text-align:center;color:var(--y)">Réinitialiser la calibration</button>
-    <button class="bsm" onclick="fixDumpCountries()" style="width:100%;padding:9px;text-align:center;color:var(--b);margin-top:5px">🌍 Corriger les pays manquants (dump)</button>
+    <button class="bsm" onclick="resetDumpCountries()" style="width:100%;padding:9px;text-align:center;color:var(--r);margin-top:5px">↩ Réinitialiser les pays dump mal assignés</button>
   </div>
   <div class="al" id="fiabAl"></div>
   <div id="fiabOut" style="display:none"></div>
@@ -1345,60 +1345,7 @@ tr:hover td{background:var(--s2)}
 // ═══════════════════════════════════ CONSTANTS & STATE ═══
 var DB_KEY='fsa_db_v5',CFG_KEY='fsa_cfg_v6',RES_KEY='fsa_res_v1',TRACK_KEY='fsa_track_v2',TK_KEY='fsa_tickets_v1',CALIB_KEY='fsa_calib_v1',AN_KEY='btts_h_v1',SCORE_CORR_KEY='fsa_score_corr_v1';
 
-// Dictionnaire ligue → pays pour enrichir les matchs du dump
-var LEAGUE_COUNTRY_MAP={
-  'Allsvenskan':'Sweden','Superettan':'Sweden','Division 1':'Sweden',
-  'Challenge League':'Switzerland','Super League':'Switzerland',
-  'Austrian Bundesliga':'Austria','2. Liga':'Austria',
-  'Algerian Ligue 1':'Algeria','Ligue Professionnelle 1':'Algeria',
-  'Ligue 1':'France','Ligue 2':'France','National':'France',
-  'Premier League':'England','Championship':'England','League One':'England','League Two':'England',
-  'Bundesliga':'Germany','2. Bundesliga':'Germany','3. Liga':'Germany',
-  'La Liga':'Spain','Segunda':'Spain','Primera Division':'Spain',
-  'Serie A':'Italy','Serie B':'Italy',
-  'Eredivisie':'Netherlands','Eerste Divisie':'Netherlands',
-  'Primeira Liga':'Portugal','Liga Portugal 2':'Portugal',
-  'Pro League':'Belgium','Challenger Pro League':'Belgium',
-  'Super League':'Greece','Football League':'Greece',
-  'Ekstraklasa':'Poland','I liga':'Poland',
-  'Fortuna Liga':'Czech Republic','FNL':'Czech Republic',
-  'Tippeliga':'Norway','1. Division':'Norway',
-  'Veikkausliiga':'Finland','Ykkönen':'Finland',
-  'Danish Superliga':'Denmark','1st Division':'Denmark',
-  'Scottish Premiership':'Scotland','Scottish Championship':'Scotland',
-  'Premier Division':'Republic of Ireland','First Division':'Republic of Ireland',
-  'Super Liga':'Serbia','First League':'Serbia',
-  'Süper Lig':'Turkey','1. Lig':'Turkey',
-  'Premier League':'Russia','FNL':'Russia',
-  'Serie A':'Brazil','Serie B':'Brazil','Brasileirao':'Brazil',
-  'Carioca':'Brazil','Paulista':'Brazil','Gauchão':'Brazil',
-  'Primera División':'Argentina','Primera Nacional':'Argentina',
-  'Liga MX':'Mexico','Ascenso MX':'Mexico',
-  'MLS':'USA','USL Championship':'USA',
-  'J1 League':'Japan','J2 League':'Japan',
-  'K League 1':'South Korea','K League 2':'South Korea',
-  'Chinese Super League':'China','China League One':'China',
-  'A-League':'Australia',
-  'Premier League':'Saudi Arabia',
-  'CAF Champions League':'World','CAF Confederation Cup':'World',
-  'UEFA Champions League':'World','UEFA Europa League':'World','UEFA Conference League':'World',
-  'AFC Champions League':'World','CONCACAF Champions League':'World',
-  'Copa Libertadores':'World','Copa Sudamericana':'World',
-  'World Cup':'World','Euro':'World','Copa America':'World','AFCON':'World',
-};
 
-function getCountryForLeague(league){
-  if(!league)return'?';
-  // Exact match
-  if(LEAGUE_COUNTRY_MAP[league])return LEAGUE_COUNTRY_MAP[league];
-  // Partial match
-  var keys=Object.keys(LEAGUE_COUNTRY_MAP);
-  for(var i=0;i<keys.length;i++){
-    if(league.toLowerCase().indexOf(keys[i].toLowerCase())>=0||keys[i].toLowerCase().indexOf(league.toLowerCase())>=0)
-      return LEAGUE_COUNTRY_MAP[keys[i]];
-  }
-  return'?';
-}
 
 var PROXIES=['','https://corsproxy.io/?','https://api.allorigins.win/raw?url='];
 var API='https://v3.football.api-sports.io';
@@ -7331,7 +7278,6 @@ function importDumpToBase(){
         var compParts=(e.comp||'?').split(' - ');
         var country=compParts.length>1?compParts[0]:'?';
         var league=compParts.length>1?compParts[1]:(e.comp||'?');
-        if(country==='?'||!country)country=getCountryForLeague(league);
 
         var m={
           id:'dump_'+e.id,
@@ -7402,8 +7348,6 @@ function exportDumpAsDB(){
     var compParts=(e.comp||'?').split(' - ');
     var country=compParts.length>1?compParts[0]:'?';
     var league=compParts.length>1?compParts[1]:(e.comp||'?');
-    // Enrichir le pays si inconnu
-    if(country==='?'||!country)country=getCountryForLeague(league);
 
     var m={
       id:'dump_'+e.id,
@@ -7642,6 +7586,22 @@ async function fixDumpCountries(){
   } else {
     showAl('cfgAl','in','Aucun pays manquant à corriger');
   }
+  setTimeout(function(){hideAl('cfgAl');},4000);
+}
+
+
+// Réinitialiser les pays mal assignés (mettre '?' pour les matchs _fromDump)
+async function resetDumpCountries(){
+  if(!confirm('Réinitialiser les pays de tous les matchs importés du dump ?\nIls passeront à "?" mais les données seront préservées.'))return;
+  var db=_dbCache||{};
+  var reset=0;
+  Object.keys(db).forEach(function(date){
+    (db[date]||[]).forEach(function(m){
+      if(m._fromDump){m.country='?';reset++;}
+    });
+  });
+  await saveDBToIDB(db);
+  showAl('cfgAl','ok','✅ '+reset+' matchs dump réinitialisés à country="?"');
   setTimeout(function(){hideAl('cfgAl');},4000);
 }
 
