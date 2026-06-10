@@ -1259,6 +1259,7 @@ tr:hover td{background:var(--s2)}
     </div>
     <button class="btn bb" onclick="calcFiabilite()" style="margin-bottom:7px">📊 Analyser la fiabilité</button>
     <button class="bsm" onclick="resetCalib()" style="width:100%;padding:9px;text-align:center;color:var(--y)">Réinitialiser la calibration</button>
+    <button class="bsm" onclick="fixDumpCountries()" style="width:100%;padding:9px;text-align:center;color:var(--b);margin-top:5px">🌍 Corriger les pays manquants (dump)</button>
   </div>
   <div class="al" id="fiabAl"></div>
   <div id="fiabOut" style="display:none"></div>
@@ -1343,6 +1344,62 @@ tr:hover td{background:var(--s2)}
 <script>
 // ═══════════════════════════════════ CONSTANTS & STATE ═══
 var DB_KEY='fsa_db_v5',CFG_KEY='fsa_cfg_v6',RES_KEY='fsa_res_v1',TRACK_KEY='fsa_track_v2',TK_KEY='fsa_tickets_v1',CALIB_KEY='fsa_calib_v1',AN_KEY='btts_h_v1',SCORE_CORR_KEY='fsa_score_corr_v1';
+
+// Dictionnaire ligue → pays pour enrichir les matchs du dump
+var LEAGUE_COUNTRY_MAP={
+  'Allsvenskan':'Sweden','Superettan':'Sweden','Division 1':'Sweden',
+  'Challenge League':'Switzerland','Super League':'Switzerland',
+  'Austrian Bundesliga':'Austria','2. Liga':'Austria',
+  'Algerian Ligue 1':'Algeria','Ligue Professionnelle 1':'Algeria',
+  'Ligue 1':'France','Ligue 2':'France','National':'France',
+  'Premier League':'England','Championship':'England','League One':'England','League Two':'England',
+  'Bundesliga':'Germany','2. Bundesliga':'Germany','3. Liga':'Germany',
+  'La Liga':'Spain','Segunda':'Spain','Primera Division':'Spain',
+  'Serie A':'Italy','Serie B':'Italy',
+  'Eredivisie':'Netherlands','Eerste Divisie':'Netherlands',
+  'Primeira Liga':'Portugal','Liga Portugal 2':'Portugal',
+  'Pro League':'Belgium','Challenger Pro League':'Belgium',
+  'Super League':'Greece','Football League':'Greece',
+  'Ekstraklasa':'Poland','I liga':'Poland',
+  'Fortuna Liga':'Czech Republic','FNL':'Czech Republic',
+  'Tippeliga':'Norway','1. Division':'Norway',
+  'Veikkausliiga':'Finland','Ykkönen':'Finland',
+  'Danish Superliga':'Denmark','1st Division':'Denmark',
+  'Scottish Premiership':'Scotland','Scottish Championship':'Scotland',
+  'Premier Division':'Republic of Ireland','First Division':'Republic of Ireland',
+  'Super Liga':'Serbia','First League':'Serbia',
+  'Süper Lig':'Turkey','1. Lig':'Turkey',
+  'Premier League':'Russia','FNL':'Russia',
+  'Serie A':'Brazil','Serie B':'Brazil','Brasileirao':'Brazil',
+  'Carioca':'Brazil','Paulista':'Brazil','Gauchão':'Brazil',
+  'Primera División':'Argentina','Primera Nacional':'Argentina',
+  'Liga MX':'Mexico','Ascenso MX':'Mexico',
+  'MLS':'USA','USL Championship':'USA',
+  'J1 League':'Japan','J2 League':'Japan',
+  'K League 1':'South Korea','K League 2':'South Korea',
+  'Chinese Super League':'China','China League One':'China',
+  'A-League':'Australia',
+  'Premier League':'Saudi Arabia',
+  'CAF Champions League':'World','CAF Confederation Cup':'World',
+  'UEFA Champions League':'World','UEFA Europa League':'World','UEFA Conference League':'World',
+  'AFC Champions League':'World','CONCACAF Champions League':'World',
+  'Copa Libertadores':'World','Copa Sudamericana':'World',
+  'World Cup':'World','Euro':'World','Copa America':'World','AFCON':'World',
+};
+
+function getCountryForLeague(league){
+  if(!league)return'?';
+  // Exact match
+  if(LEAGUE_COUNTRY_MAP[league])return LEAGUE_COUNTRY_MAP[league];
+  // Partial match
+  var keys=Object.keys(LEAGUE_COUNTRY_MAP);
+  for(var i=0;i<keys.length;i++){
+    if(league.toLowerCase().indexOf(keys[i].toLowerCase())>=0||keys[i].toLowerCase().indexOf(league.toLowerCase())>=0)
+      return LEAGUE_COUNTRY_MAP[keys[i]];
+  }
+  return'?';
+}
+
 var PROXIES=['','https://corsproxy.io/?','https://api.allorigins.win/raw?url='];
 var API='https://v3.football.api-sports.io';
 var TERM=['FT','AET','PEN','AWD','WO','CANC','ABD','SUSP','PST'],LIVE=['1H','HT','2H','ET','BT','P','INT','LIVE'];
@@ -3518,10 +3575,12 @@ function renderMatchsList(){
           '<div class="mte"><div class="tn th">'+m.home+'</div><div class="msc">'+score+'</div><div class="tn ta">'+m.away+'</div></div>'+
           html+
           '<div style="display:flex;gap:6px;margin-top:6px">'+
-          (!res?'<button class="bsm" onclick="openModal('+midx+')" style="flex:1;padding:7px;text-align:center">Saisir r\u00e9sultat</button>':'')+
-          '<button class="bsm" onclick="loadMatchToAnalyse(window._matchRefs['+midx+'])" style="flex:1;padding:7px;text-align:center;border-color:var(--p);color:var(--p)">\u26a1 Analyser</button>'+
-          '<button class="bsm" onclick="openScenarioModal('+midx+')" style="flex:1;padding:7px;text-align:center;border-color:var(--teal);color:var(--teal)">Sc\u00e9nario</button>'+
-          '</div>';
+          (!res?'<button class="bsm" onclick="openModal('+midx+')" style="flex:1;padding:7px;text-align:center">Saisir résultat</button>':'')+
+          '<button class="bsm" onclick="loadMatchToAnalyse(window._matchRefs['+midx+'])" style="flex:1;padding:7px;text-align:center;border-color:var(--p);color:var(--p)">⚡ Analyser</button>'+
+          '<button class="bsm" onclick="openScenarioModal('+midx+')" style="flex:1;padding:7px;text-align:center;border-color:var(--teal);color:var(--teal)">Scénario</button>'+
+          '</div>'+
+          '<div id="ai-block-'+m.id+'" style="display:none;margin-top:6px"></div>'+
+          (pred?'<button class="bsm" id="ai-btn-'+m.id+'" onclick="analyzeMatchAI(window._matchRefs['+midx+'],\"ai-block-'+m.id+'\",\"ai-btn-'+m.id+'\")" style="width:100%;margin-top:4px;padding:7px;text-align:center;border-color:var(--p);color:var(--p);font-size:.65rem">🤖 Analyse IA</button>':'');
       }catch(e){
         card.innerHTML=
           '<div class="mt-row"><div class="ml">'+m.heure+'</div></div>'+
@@ -7272,6 +7331,7 @@ function importDumpToBase(){
         var compParts=(e.comp||'?').split(' - ');
         var country=compParts.length>1?compParts[0]:'?';
         var league=compParts.length>1?compParts[1]:(e.comp||'?');
+        if(country==='?'||!country)country=getCountryForLeague(league);
 
         var m={
           id:'dump_'+e.id,
@@ -7342,6 +7402,8 @@ function exportDumpAsDB(){
     var compParts=(e.comp||'?').split(' - ');
     var country=compParts.length>1?compParts[0]:'?';
     var league=compParts.length>1?compParts[1]:(e.comp||'?');
+    // Enrichir le pays si inconnu
+    if(country==='?'||!country)country=getCountryForLeague(league);
 
     var m={
       id:'dump_'+e.id,
@@ -7405,6 +7467,182 @@ async function testStatsKey(){
     el.style.color='var(--r)';
     el.textContent='❌ Erreur : '+e.message;
   }
+}
+
+
+// ══════════════════════════════════════════════
+// ANALYSE IA PAR MATCH
+// ══════════════════════════════════════════════
+async function analyzeMatchAI(m, blockId, btnId){
+  if(!cfg.groqKey){
+    var bl=document.getElementById(blockId);
+    bl.style.display='block';
+    bl.innerHTML='<div style="font-size:.65rem;color:var(--r);padding:6px;font-family:var(--mono)">Clé Groq requise dans Config</div>';
+    return;
+  }
+  var btn=document.getElementById(btnId);
+  var block=document.getElementById(blockId);
+  if(!btn||!block)return;
+
+  // Toggle — si déjà affiché, masquer
+  if(block.style.display==='block'&&block.innerHTML&&!block.innerHTML.includes('en cours')){
+    block.style.display='none';
+    btn.textContent='\uD83E\uDD16 Analyse IA';
+    btn.style.borderColor='var(--p)';
+    btn.style.color='var(--p)';
+    return;
+  }
+
+  btn.textContent='\uD83E\uDD16 Analyse en cours...';
+  btn.disabled=true;
+  block.style.display='block';
+  block.innerHTML='<div style="display:flex;align-items:center;gap:6px;padding:8px;font-size:.65rem;color:var(--p);font-family:var(--mono)"><div class="sp" style="width:14px;height:14px;border-color:var(--p)"></div>Claude analyse le match...</div>';
+
+  var pred=m._predRecale||m._pred;
+  var date=m.date||document.getElementById('tdDate').value||'?';
+
+  // Construire le contexte complet
+  function pct(v){return v!==null&&v!==undefined?Math.round(v*100)+'%':'?';}
+
+  var predStr=pred?[
+    'Signaux: L='+pct(pred.sigL)+' H='+pct(pred.sigH)+' J='+pct(pred.sigD)+' Convergence='+pred.convergence+'/'+pred.nbSig,
+    'Over '+m._seuil+': '+pct(pred.plus)+' | Under: '+pct(pred.under),
+    'BTTS Oui: '+pct(pred.btts)+' | BTTS Non: '+pct(pred.bttsNon),
+    'V1: '+pct(pred.v1)+' | X: '+pct(pred.x)+' | V2: '+pct(pred.v2),
+    'CS Dom: '+pct(pred.csH)+' | CS Ext: '+pct(pred.csA),
+    'Dom marque: '+pct(pred.hmsc)+' | Ext marque: '+pct(pred.amsc),
+    'DC 1X: '+pct(pred.dc1x)+' | DC X2: '+pct(pred.dcx2)+' | DC 12: '+pct(pred.dc12),
+    pred.bestMarket?'Meilleur marché: '+pred.bestMarket.label+' ('+Math.round(pred.bestMarket.prob*100)+'%)':'',
+    pred.liveActive?'Recalage live actif':'',
+    pred.seuilAdapte?'Seuil adapté: '+pred.seuilAdapte:'',
+    pred.moyButs?'Moyenne buts ligue: '+pred.moyButs:''
+  ].filter(Boolean).join('\n'):'Aucune prédiction disponible';
+
+  // Stats ligue depuis tracking
+  var track=getTrackCompat();
+  var ligMatchs=track.filter(function(t){return t.league===m.league&&t.country===m.country});
+  var ligStats='';
+  if(ligMatchs.length>=5){
+    var nOver=ligMatchs.filter(function(t){return t.rPlus}).length;
+    var nBtts=ligMatchs.filter(function(t){return t.rBtts}).length;
+    var nV1=ligMatchs.filter(function(t){return t.rV1x2==='V1'}).length;
+    var nX=ligMatchs.filter(function(t){return t.rV1x2==='X'}).length;
+    var nV2=ligMatchs.filter(function(t){return t.rV1x2==='V2'}).length;
+    var n=ligMatchs.length;
+    ligStats='Stats ligue ('+m.league+', '+n+' matchs en base):\n'+
+      'Over: '+Math.round(nOver/n*100)+'% | BTTS: '+Math.round(nBtts/n*100)+'% | V1: '+Math.round(nV1/n*100)+'% | X: '+Math.round(nX/n*100)+'% | V2: '+Math.round(nV2/n*100)+'%';
+  }
+
+  // Score exact historique
+  var allDb=get00Stats?get00Stats():[];
+  var ligH=allDb.filter(function(x){return x.league===m.league});
+  var scoreStats='';
+  if(ligH.length>=10){
+    var sc={};
+    ligH.forEach(function(x){var k=x.h+'-'+x.a;sc[k]=(sc[k]||0)+1;});
+    var top=Object.keys(sc).sort(function(a,b){return sc[b]-sc[a]}).slice(0,5);
+    scoreStats='Scores les plus fréquents ('+m.league+'): '+top.map(function(k){return k+' ('+Math.round(sc[k]/ligH.length*100)+'%)'}).join(', ');
+  }
+
+  var prompt='Tu es un analyste football expert. Analyse ce match et fournis une analyse structurée en français.\n\n'+
+    'MATCH: '+m.home+' vs '+m.away+'\n'+
+    'Ligue: '+m.league+' ('+m.country+')\n'+
+    'Date: '+date+' '+m.heure+'\n'+
+    'Statut: '+m.status+(m.h!==null?' | Score actuel: '+m.h+'-'+m.a:'')+'\n\n'+
+    'PRÉDICTIONS APP:\n'+predStr+'\n\n'+
+    (ligStats?ligStats+'\n\n':'')+
+    (scoreStats?scoreStats+'\n\n':'')+
+    'Réponds UNIQUEMENT avec ce JSON (sans markdown):\n'+
+    '{"score_confiance":85,"resume":"2-3 phrases max sur ce match","marches":[{"nom":"Over 2.5","signal":"FAVORABLE","raison":"..."},{"nom":"BTTS Oui","signal":"NEUTRE","raison":"..."}],"meilleur_pari":"le marché le plus solide en 1 phrase","alerte":"risque principal ou null"}';
+
+  try{
+    var resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.groqKey},
+      body:JSON.stringify({
+        model:'llama-3.3-70b-versatile',
+        temperature:0.3,
+        max_tokens:600,
+        messages:[
+          {role:'system',content:'Expert analyste football. Réponds uniquement en JSON valide, sans markdown ni backticks.'},
+          {role:'user',content:prompt}
+        ]
+      })
+    });
+    var data=await resp.json();
+    var raw=(data.choices&&data.choices[0].message.content||'').replace(/```json|```/g,'').trim();
+    var ai=JSON.parse(raw);
+
+    var confCol=ai.score_confiance>=70?'var(--g)':ai.score_confiance>=50?'var(--y)':'var(--r)';
+    var html='<div style="background:rgba(176,107,255,.06);border:1px solid rgba(176,107,255,.25);border-radius:9px;padding:10px 11px">';
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
+    html+='<span style="font-size:.62rem;font-weight:900;color:var(--p);letter-spacing:2px;font-family:var(--mono)">\uD83E\uDD16 ANALYSE IA</span>';
+    html+='<span style="font-size:1rem;font-weight:900;color:'+confCol+'">'+ai.score_confiance+'<span style="font-size:.55rem;opacity:.7">/100</span></span>';
+    html+='</div>';
+    html+='<div style="font-size:.72rem;color:var(--tx);line-height:1.5;margin-bottom:8px">'+ai.resume+'</div>';
+
+    if(ai.marches&&ai.marches.length){
+      html+='<div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px">';
+      ai.marches.forEach(function(mk){
+        var sc=mk.signal==='FAVORABLE'?'var(--g)':mk.signal==='DEFAVORABLE'?'var(--r)':'var(--y)';
+        var icon=mk.signal==='FAVORABLE'?'✅':mk.signal==='DEFAVORABLE'?'❌':'⚡';
+        html+='<div style="display:flex;gap:7px;align-items:flex-start;padding:5px 7px;background:var(--s2);border-radius:6px">';
+        html+='<span style="font-size:.7rem;color:'+sc+';font-weight:900;white-space:nowrap">'+icon+' '+mk.nom+'</span>';
+        html+='<span style="font-size:.62rem;color:var(--dm);font-family:var(--mono);line-height:1.4">'+mk.raison+'</span>';
+        html+='</div>';
+      });
+      html+='</div>';
+    }
+
+    if(ai.meilleur_pari){
+      html+='<div style="background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);border-radius:7px;padding:7px 9px;margin-bottom:6px">';
+      html+='<div style="font-size:.55rem;color:var(--g);font-family:var(--mono);letter-spacing:2px;margin-bottom:2px">\uD83C\uDFC6 MEILLEUR PARI</div>';
+      html+='<div style="font-size:.7rem;color:var(--tx)">'+ai.meilleur_pari+'</div>';
+      html+='</div>';
+    }
+
+    if(ai.alerte){
+      html+='<div style="background:rgba(255,61,90,.05);border:1px solid rgba(255,61,90,.2);border-radius:7px;padding:6px 9px">';
+      html+='<div style="font-size:.55rem;color:var(--r);font-family:var(--mono);letter-spacing:2px;margin-bottom:2px">\u26a0\ufe0f ALERTE</div>';
+      html+='<div style="font-size:.68rem;color:var(--tx)">'+ai.alerte+'</div>';
+      html+='</div>';
+    }
+
+    html+='</div>';
+    block.innerHTML=html;
+    btn.textContent='\uD83E\uDD16 Masquer IA';
+    btn.disabled=false;
+    btn.style.borderColor='var(--p)';
+    btn.style.color='var(--p)';
+
+  }catch(e){
+    block.innerHTML='<div style="font-size:.65rem;color:var(--r);padding:6px;font-family:var(--mono)">\u274c Erreur: '+e.message+'</div>';
+    btn.textContent='\uD83E\uDD16 Analyse IA';
+    btn.disabled=false;
+  }
+}
+
+
+// Corriger les pays manquants dans la base existante
+async function fixDumpCountries(){
+  var db=_dbCache||{};
+  var fixed=0;
+  Object.keys(db).forEach(function(date){
+    (db[date]||[]).forEach(function(m){
+      if((m.country==='?'||!m.country)&&m.league){
+        var c=getCountryForLeague(m.league);
+        if(c!=='?'){m.country=c;fixed++;}
+      }
+    });
+  });
+  if(fixed>0){
+    await saveDBToIDB(db);
+    majDB();
+    showAl('cfgAl','ok','✅ '+fixed+' pays corrigés dans la base');
+  } else {
+    showAl('cfgAl','in','Aucun pays manquant à corriger');
+  }
+  setTimeout(function(){hideAl('cfgAl');},4000);
 }
 
 </script>
