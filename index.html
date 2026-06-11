@@ -1260,6 +1260,7 @@ tr:hover td{background:var(--s2)}
     <button class="btn bb" onclick="calcFiabilite()" style="margin-bottom:7px">📊 Analyser la fiabilité</button>
     <button class="bsm" onclick="resetCalib()" style="width:100%;padding:9px;text-align:center;color:var(--y)">Réinitialiser la calibration</button>
     <button class="bsm" onclick="resetDumpCountries()" style="width:100%;padding:9px;text-align:center;color:var(--r);margin-top:5px">↩ Réinitialiser les pays dump mal assignés</button>
+    <button class="btn bb" onclick="openLeagueEditor()" style="margin-top:10px;font-size:.78rem">🏆 Éditeur de ligues (pays manquants)</button>
   </div>
   <div class="al" id="fiabAl"></div>
   <div id="fiabOut" style="display:none"></div>
@@ -1340,6 +1341,33 @@ tr:hover td{background:var(--s2)}
     <button class="bsm" onclick="document.getElementById('modalTk').classList.remove('on')" style="width:100%;margin-top:7px;padding:9px;text-align:center">Annuler</button>
   </div>
 </div>
+
+<!-- LEAGUE EDITOR MODAL -->
+<div id="leagueEditorModal" style="display:none;position:fixed;inset:0;background:rgba(6,10,16,.97);z-index:9998;overflow-y:auto;padding:16px">
+  <div style="max-width:560px;margin:0 auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-size:1.1rem;font-weight:900;letter-spacing:3px;color:var(--g)">🏆 ÉDITEUR DE LIGUES</div>
+        <div style="font-size:.58rem;color:var(--dm);font-family:var(--mono);margin-top:2px">Ligues avec pays inconnu "?" — assigner le bon nom/pays</div>
+      </div>
+      <button onclick="closeLeagueEditor()" style="background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:7px;padding:8px 14px;font-family:var(--font);font-weight:700;cursor:pointer">✕ Fermer</button>
+    </div>
+    <div style="background:rgba(61,155,255,.06);border:1px solid rgba(61,155,255,.2);border-radius:9px;padding:10px 12px;margin-bottom:12px;font-size:.62rem;color:var(--b);font-family:var(--mono);line-height:1.6">
+      💡 Pour chaque ligue, vérifie les matchs afin d'identifier la compétition.<br>
+      Entre le nom exact tel qu'api-football l'utilise pour fusionner les données.
+    </div>
+    <div style="margin-bottom:10px;display:flex;gap:8px">
+      <input class="inp" id="leagueSearch" placeholder="Filtrer les ligues..." oninput="renderLeagueEditor()" style="flex:1"/>
+      <select class="inp" id="leagueFilter" onchange="renderLeagueEditor()" style="width:130px">
+        <option value="unknown">Pays = ?</option>
+        <option value="all">Toutes les ligues</option>
+      </select>
+    </div>
+    <div id="leagueEditorList"></div>
+    <div id="leagueEditorStatus" style="min-height:30px"></div>
+  </div>
+</div>
+
 </div><!-- end .app -->
 <script>
 // ═══════════════════════════════════ CONSTANTS & STATE ═══
@@ -2522,6 +2550,35 @@ function predict(match,cache,s,liveCtx){
   var sigD=dw&&dw.total>=3?dw[pkOver(s)]/dw.total:null;
   var conv=0,nbSig=0;
   if(sigL!==null){nbSig++;if(sigL>0.5)conv++}if(sigH!==null){nbSig++;if(sigH>0.5)conv++}if(sigD!==null){nbSig++;if(sigD>0.5)conv++}
+
+  // ── Signaux par marché (convergence propre à chaque marché) ──
+  function mktSigs(stKey,threshold){
+    threshold=threshold||0.5;
+    var sl=lig&&lig.total>=3?pct(lig,stKey):null;
+    var sh=h&&h.total>=3?pct(h,stKey):null;
+    var sd=dw&&dw.total>=3?pct(dw,stKey):null;
+    var c=0,n=0;
+    if(sl!==null){n++;if(sl>threshold)c++;}
+    if(sh!==null){n++;if(sh>threshold)c++;}
+    if(sd!==null){n++;if(sd>threshold)c++;}
+    return{sigL:sl,sigH:sh,sigD:sd,conv:c,nbSig:n};
+  }
+  var mktSignals={
+    over:    mktSigs(pkOver(s)),
+    under:   mktSigs(pkUnder(s)),
+    btts:    mktSigs('bO'),
+    bttsN:   mktSigs('bN'),
+    v1:      mktSigs('v1'),
+    x:       mktSigs('x'),
+    v2:      mktSigs('v2'),
+    dc1x:    mktSigs('dc1x',0.6),
+    dcx2:    mktSigs('dcx2',0.6),
+    dc12:    mktSigs('dc12',0.6),
+    csH:     mktSigs('csH',0.3),
+    csA:     mktSigs('csA',0.3),
+    hmsc:    mktSigs('hmsc',0.6),
+    amsc:    mktSigs('amsc',0.6)
+  };
   // Cherche le signal heure : même heure ou heure précédente la plus récente
   var liveHourSt=null;
   if(liveCtx){
@@ -2556,6 +2613,7 @@ function predict(match,cache,s,liveCtx){
     conf:lig?Math.min(100,Math.round(lig.total/50*100)):0,ligTotal:lig?lig.total:0,
     moyButs:lig&&lig.total?(lig.buts/lig.total).toFixed(2):null,
     sigL:sigL,sigH:sigH,sigD:sigD,convergence:conv,nbSig:nbSig,
+    mktSignals:mktSignals,
     liveActive:liveActive,liveHour:liveHourSt,liveDay:liveDaySt,
     seuilAdapte:seuilAdaptatif(lig),allMarkets:allM,bestMarket:allM.length?allM[0]:null,
     ligStats:lig?{over:lig.total?Math.round(lig[pkOver(s)]/lig.total*100):null,under:lig.total?Math.round(lig[pkUnder(s)]/lig.total*100):null,bttsO:lig.total?Math.round(lig.bO/lig.total*100):null,bttsN:lig.total?Math.round(lig.bN/lig.total*100):null,v1:lig.total?Math.round(lig.v1/lig.total*100):null,x:lig.total?Math.round(lig.x/lig.total*100):null,v2:lig.total?Math.round(lig.v2/lig.total*100):null,dc1x:lig.total?Math.round(lig.dc1x/lig.total*100):null,dcx2:lig.total?Math.round(lig.dcx2/lig.total*100):null,dc12:lig.total?Math.round(lig.dc12/lig.total*100):null,csH:lig.total?Math.round(lig.csH/lig.total*100):null,csA:lig.total?Math.round(lig.csA/lig.total*100):null,hmsc:lig.total?Math.round(lig.hmsc/lig.total*100):null,amsc:lig.total?Math.round(lig.amsc/lig.total*100):null}:null,
@@ -3259,7 +3317,8 @@ function buildMatchHTML(m,pred,s){
   var calibBadge=hasCalib?'<span class="calib-badge cb-ok" style="margin-left:5px">CALIBRÉ</span>':'';
   var convCls='conv-'+pred.convergence;
   function sigBadge(lbl,val){if(val===null)return'<span class="sig sig-d">'+lbl+': ?</span>';var v=Math.round(val*100);var cl=v>=60?'sig-g':v>=45?'sig-y':'sig-r';return'<span class="sig '+cl+'">'+lbl+': '+v+'%</span>'}
-  var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="sig-row" style="margin:0;flex:1">'+sigBadge('L',pred.sigL)+sigBadge('H',pred.sigH)+sigBadge('J',pred.sigD)+calibBadge+'</div><span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' ⚡</span></div>';
+  var _mktSig2=getActiveMktSig(pred,tdMkt);
+  var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="sig-row" style="margin:0;flex:1">'+sigBadge('L',_mktSig2.sigL)+sigBadge('H',_mktSig2.sigH)+sigBadge('J',_mktSig2.sigD)+calibBadge+'</div><span class="conv-star conv-'+_mktSig2.conv+'">'+_mktSig2.conv+'/'+_mktSig2.nbSig+' ⚡</span></div>';
   var sa=pred.seuilAdapte;
   if(sa!==null&&sa!==s)html+='<div style="font-size:.6rem;background:rgba(255,199,44,.06);border:1px solid rgba(255,199,44,.18);border-radius:5px;padding:3px 7px;margin-bottom:6px;color:var(--y)">Seuil adapté: +'+sa+' (moy '+pred.moyButs+' buts/match)</div>';
   var ligS=pred.ligStats;
@@ -3552,7 +3611,8 @@ function buildMatchHTMLFast(m,pred,s,res){
 
   var hasCalib=window._hasCalib;
   var calibBadge=hasCalib?'<span class="calib-badge cb-ok" style="margin-left:5px">CALIBR\u00c9</span>':'';
-  var convCls='conv-'+pred.convergence;
+  var _mktSig=getActiveMktSig(pred,tdMkt);
+  var convCls='conv-'+_mktSig.conv;
 
   function sigBadge(lbl,val){
     if(val===null)return'<span class="sig sig-d">'+lbl+': ?</span>';
@@ -3562,8 +3622,8 @@ function buildMatchHTMLFast(m,pred,s,res){
   }
 
   var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'+
-    '<div class="sig-row" style="margin:0;flex:1">'+sigBadge('L',pred.sigL)+sigBadge('H',pred.sigH)+sigBadge('J',pred.sigD)+calibBadge+'</div>'+
-    '<span class="conv-star '+convCls+'">'+pred.convergence+'/'+pred.nbSig+' \u26a1</span></div>';
+    '<div class="sig-row" style="margin:0;flex:1">'+sigBadge('L',_mktSig.sigL)+sigBadge('H',_mktSig.sigH)+sigBadge('J',_mktSig.sigD)+calibBadge+'</div>'+
+    '<span class="conv-star '+convCls+'">'+_mktSig.conv+'/'+_mktSig.nbSig+' \u26a1</span></div>';
 
   var sa=pred.seuilAdapte;
   if(sa!==null&&sa!==s)html+='<div style="font-size:.6rem;background:rgba(255,199,44,.06);border:1px solid rgba(255,199,44,.18);border-radius:5px;padding:3px 7px;margin-bottom:6px;color:var(--y)">Seuil adapt\u00e9: +'+sa+' (moy '+pred.moyButs+' buts/match)</div>';
@@ -7603,6 +7663,194 @@ async function resetDumpCountries(){
   await saveDBToIDB(db);
   showAl('cfgAl','ok','✅ '+reset+' matchs dump réinitialisés à country="?"');
   setTimeout(function(){hideAl('cfgAl');},4000);
+}
+
+
+// ══════════════════════════════════════════════
+// ÉDITEUR DE LIGUES
+// ══════════════════════════════════════════════
+var _leaguePendingEdits={}; // {oldKey: {league, country}}
+
+function openLeagueEditor(){
+  document.getElementById('leagueEditorModal').style.display='block';
+  renderLeagueEditor();
+}
+
+function closeLeagueEditor(){
+  document.getElementById('leagueEditorModal').style.display='none';
+  _leaguePendingEdits={};
+}
+
+function renderLeagueEditor(){
+  var db=_dbCache||{};
+  var search=(document.getElementById('leagueSearch').value||'').toLowerCase();
+  var filterMode=document.getElementById('leagueFilter').value;
+
+  // Collecter toutes les ligues uniques avec stats
+  var leagueMap={};
+  Object.keys(db).forEach(function(date){
+    (db[date]||[]).forEach(function(m){
+      var key=(m.league||'?')+'|||'+(m.country||'?');
+      if(!leagueMap[key]){
+        leagueMap[key]={
+          league:m.league||'?',
+          country:m.country||'?',
+          count:0,
+          samples:[]
+        };
+      }
+      leagueMap[key].count++;
+      if(leagueMap[key].samples.length<5)
+        leagueMap[key].samples.push((m.home||'?')+' vs '+(m.away||'?'));
+    });
+  });
+
+  // Filtrer
+  var entries=Object.entries(leagueMap).filter(function(e){
+    var v=e[1];
+    if(filterMode==='unknown'&&v.country!=='?')return false;
+    if(search&&v.league.toLowerCase().indexOf(search)<0)return false;
+    return true;
+  }).sort(function(a,b){
+    // Priorité aux ligues avec beaucoup de matchs non assignés
+    var aUnk=a[1].country==='?'?1:0;
+    var bUnk=b[1].country==='?'?1:0;
+    if(aUnk!==bUnk)return bUnk-aUnk;
+    return b[1].count-a[1].count;
+  });
+
+  var list=document.getElementById('leagueEditorList');
+  if(!entries.length){
+    list.innerHTML='<div style="text-align:center;color:var(--dm);font-size:.72rem;font-family:var(--mono);padding:20px">'+
+      (filterMode==='unknown'?'✅ Toutes les ligues ont un pays assigné !':'Aucune ligue trouvée')+'</div>';
+    return;
+  }
+
+  var html='<div style="font-size:.6rem;color:var(--dm);font-family:var(--mono);margin-bottom:8px">'+entries.length+' ligues — cliquer sur une pour éditer</div>';
+
+  entries.forEach(function(entry){
+    var key=entry[0];
+    var v=entry[1];
+    var pending=_leaguePendingEdits[key];
+    var isUnknown=v.country==='?';
+    var borderCol=pending?'var(--g)':isUnknown?'rgba(255,199,44,.3)':'var(--bd)';
+    var safeLg=v.league.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    var safeCo=v.country.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    var safeKey=key.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+
+    html+='<div class="card" style="margin-bottom:8px;padding:10px;border-color:'+borderCol+'">';
+    // Header
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">';
+    html+='<div>';
+    html+='<div style="font-weight:900;font-size:.85rem">'+v.league+'</div>';
+    html+='<div style="font-size:.6rem;font-family:var(--mono);color:'+(isUnknown?'var(--y)':'var(--dm)')+'">'+
+      (isUnknown?'⚠ Pays inconnu':v.country)+' · '+v.count+' match'+(v.count>1?'s':'')+'</div>';
+    html+='</div>';
+    if(pending){
+      html+='<span style="font-size:.55rem;color:var(--g);font-family:var(--mono);font-weight:700">EN ATTENTE</span>';
+    }
+    html+='</div>';
+    // Samples
+    html+='<div style="font-size:.58rem;color:var(--dm);font-family:var(--mono);margin-bottom:8px;line-height:1.5">';
+    v.samples.forEach(function(s){html+='· '+s+'<br>';});
+    html+='</div>';
+    // Edit form
+    html+='<div class="r2" style="gap:6px;margin-bottom:6px">';
+    html+='<div><div class="lsm">Nom ligue (api-football)</div>';
+    html+='<input class="inp" id="le_lg_'+btoa(key.slice(0,20)).replace(/=/g,'')+'" type="text" value="'+(pending?pending.league:safeLg)+'" placeholder="Ex: Allsvenskan" style="font-size:.72rem"/></div>';
+    html+='<div><div class="lsm">Pays (api-football)</div>';
+    html+='<input class="inp" id="le_co_'+btoa(key.slice(0,20)).replace(/=/g,'')+'" type="text" value="'+(pending?pending.country:safeCo)+'" placeholder="Ex: Sweden" style="font-size:.72rem"/></div>';
+    html+='</div>';
+    var inputId=btoa(key.slice(0,20)).replace(/=/g,'');
+    html+='<div style="display:flex;gap:6px">';
+    html+='<button class="btn bg" style="flex:1;padding:8px;font-size:.68rem" onclick="previewLeagueEdit(\''+safeKey+'\',\''+inputId+'\')">Prévisualiser</button>';
+    if(pending){
+      html+='<button class="btn br" style="flex:1;padding:8px;font-size:.68rem" onclick="cancelLeagueEdit(\''+safeKey+'\')">Annuler</button>';
+    }
+    html+='</div>';
+    html+='</div>';
+  });
+
+  list.innerHTML=html;
+
+  // Bouton appliquer si des edits en attente
+  var nPending=Object.keys(_leaguePendingEdits).length;
+  var status=document.getElementById('leagueEditorStatus');
+  if(nPending>0){
+    status.innerHTML='<button class="btn bg" style="width:100%;padding:12px;font-size:.85rem;margin-top:8px" onclick="applyLeagueEdits()">'+
+      '✅ Appliquer '+nPending+' modification'+(nPending>1?'s':'')+' à la base</button>';
+  } else {
+    status.innerHTML='';
+  }
+}
+
+function previewLeagueEdit(key, inputId){
+  var newLg=document.getElementById('le_lg_'+inputId).value.trim();
+  var newCo=document.getElementById('le_co_'+inputId).value.trim();
+  if(!newLg||!newCo){
+    alert('Entre le nom de la ligue ET le pays');return;
+  }
+  _leaguePendingEdits[key]={league:newLg,country:newCo};
+  renderLeagueEditor();
+}
+
+function cancelLeagueEdit(key){
+  delete _leaguePendingEdits[key];
+  renderLeagueEditor();
+}
+
+async function applyLeagueEdits(){
+  var nPending=Object.keys(_leaguePendingEdits).length;
+  if(!nPending)return;
+  if(!confirm('Appliquer '+nPending+' modification(s) ?\nCela va renommer les ligues dans tous les matchs concernés.'))return;
+
+  var db=_dbCache||{};
+  var totalFixed=0;
+
+  Object.keys(_leaguePendingEdits).forEach(function(key){
+    var parts=key.split('|||');
+    var oldLeague=parts[0];
+    var oldCountry=parts[1];
+    var edit=_leaguePendingEdits[key];
+
+    Object.keys(db).forEach(function(date){
+      (db[date]||[]).forEach(function(m){
+        if(m.league===oldLeague&&m.country===oldCountry){
+          m.league=edit.league;
+          m.country=edit.country;
+          totalFixed++;
+        }
+      });
+    });
+  });
+
+  _leaguePendingEdits={};
+  _dbCache=db;
+  await saveDBToIDB(db);
+  majDB();
+
+  var status=document.getElementById('leagueEditorStatus');
+  status.innerHTML='<div style="background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.3);border-radius:8px;padding:10px;text-align:center;color:var(--g);font-family:var(--mono);font-size:.72rem">'+
+    '✅ '+totalFixed+' matchs mis à jour ! Relance la Sync globale pour recalculer les signaux.</div>';
+
+  renderLeagueEditor();
+}
+
+
+// Retourne la convergence pour le marché actif
+function getActiveMktSig(pred, mktId){
+  if(!pred||!pred.mktSignals)return{sigL:pred?pred.sigL:null,sigH:pred?pred.sigH:null,sigD:pred?pred.sigD:null,conv:pred?pred.convergence:0,nbSig:pred?pred.nbSig:0};
+  // Mapper les IDs de marché vers les clés mktSignals
+  var mktMap={
+    'auto':'over','totaux':'over','over':'over','under':'under',
+    'btts':'btts','bttsN':'bttsN',
+    'v1x2':'v1','v1':'v1','x':'x','v2':'v2',
+    'dc':'dc1x','dc1x':'dc1x','dcx2':'dcx2','dc12':'dc12',
+    'cs':'csH','csH':'csH','csA':'csA',
+    'hmsc':'hmsc','amsc':'amsc'
+  };
+  var key=mktMap[mktId]||'over';
+  return pred.mktSignals[key]||{sigL:pred.sigL,sigH:pred.sigH,sigD:pred.sigD,conv:pred.convergence,nbSig:pred.nbSig};
 }
 
 </script>
