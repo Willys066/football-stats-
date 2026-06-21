@@ -414,51 +414,12 @@ tr:hover td{background:var(--s2)}
 .multi-remove{background:transparent;border:none;cursor:pointer;color:var(--dm);font-size:.9rem;transition:color .2s;padding:4px}
 .multi-remove:hover{color:var(--r)}
 
-/* ── TRIAL SYSTEM ── */
-#accessScreen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-#accessScreen h2{font-size:1.8rem;font-weight:900;letter-spacing:4px;color:var(--g);margin-bottom:4px;text-transform:uppercase}
-#accessScreen p{font-size:.65rem;color:var(--dm);font-family:var(--mono);letter-spacing:2px;margin-bottom:24px;text-align:center}
-.access-inp{width:100%;max-width:320px;background:var(--s1);border:2px solid var(--bd);border-radius:10px;padding:14px 16px;color:var(--tx);font-size:1rem;text-align:center;font-family:var(--mono);letter-spacing:4px;outline:none;margin-bottom:12px;text-transform:uppercase}
-.access-inp:focus{border-color:var(--g)}
-.access-btn{width:100%;max-width:320px;padding:13px;background:var(--g);color:#000;font-weight:900;font-size:.9rem;letter-spacing:3px;border:none;border-radius:9px;cursor:pointer;font-family:var(--font);text-transform:uppercase}
-.access-err{color:var(--r);font-size:.7rem;font-family:var(--mono);margin-top:8px;min-height:18px;text-align:center}
-.quota-bar{position:fixed;bottom:0;left:0;right:0;background:var(--s1);border-top:1px solid var(--bd);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;z-index:100;max-width:560px;margin:0 auto}
-.quota-txt{font-size:.62rem;font-family:var(--mono);color:var(--dm)}
-.quota-dots{display:flex;gap:5px}
-.quota-dot{width:10px;height:10px;border-radius:50%;background:var(--bd2)}
-.quota-dot.used{background:var(--g)}
-.quota-dot.last{background:var(--y)}
-.lock-overlay{position:relative;overflow:hidden;border-radius:10px}
-.lock-overlay::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,10,16,0) 0%,rgba(6,10,16,.92) 55%,rgba(6,10,16,1) 100%);z-index:2;pointer-events:none}
-.lock-badge{position:absolute;bottom:0;left:0;right:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 12px 14px;pointer-events:none}
-.lock-icon{font-size:2rem;margin-bottom:6px}
-.lock-label{font-size:.7rem;font-family:var(--mono);color:var(--tx);letter-spacing:2px;text-transform:uppercase;text-align:center;opacity:.8}
-.lock-sub{font-size:.58rem;font-family:var(--mono);color:var(--dm);margin-top:3px;text-align:center}
+
 
 </style>
 </head>
 <body>
 
-<!-- ACCESS SCREEN -->
-<div id="accessScreen">
-  <div style="font-size:2.5rem;margin-bottom:12px">⚽</div>
-  <h2>FootStats Pro</h2>
-  <p>Version Essai — Entre ton code d'accès</p>
-  <input class="access-inp" id="accessInp" type="text" placeholder="FSA-XXX-XXXXXXXX" maxlength="20" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')checkCode()"/>
-  <button class="access-btn" onclick="checkCode()">Accéder →</button>
-  <div class="access-err" id="accessErr"></div>
-  <div style="margin-top:28px;font-size:.58rem;font-family:var(--mono);color:var(--dm);text-align:center;line-height:1.8">3 prédictions / jour · Expire après 7 jours<br>Contacte-nous pour la version complète</div>
-</div>
-<!-- QUOTA BAR -->
-<div id="quotaBar" style="display:none" class="quota-bar">
-  <div class="quota-txt">PRÉDICTIONS AUJOURD'HUI</div>
-  <div class="quota-dots">
-    <div class="quota-dot" id="qd1"></div>
-    <div class="quota-dot" id="qd2"></div>
-    <div class="quota-dot" id="qd3"></div>
-  </div>
-  <div class="quota-txt" id="quotaTxt">0 / 3</div>
-</div>
 
 <div class="app">
 <div class="hdr">
@@ -1013,8 +974,6 @@ tr:hover td{background:var(--s2)}
 
 <!-- ═══════════════════════════════════════════════════════ TICKETS ══ -->
 <div class="panel" id="p5">
-<div class="lock-overlay" id="lockTickets">
-<div style="filter:blur(2px);pointer-events:none;max-height:340px;overflow:hidden">
   <div class="card">
     <span class="clbl">Générateur de tickets combinés</span>
     <div class="r2" style="margin-bottom:10px">
@@ -1058,7 +1017,6 @@ tr:hover td{background:var(--s2)}
     <button class="btn bg" id="btnTk" onclick="genTickets()">Générer les tickets</button>
   </div>
   <div class="al" id="tkAl"></div>
-  </div><!-- end blur --><div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-label">Tickets — Version Complète</div><div class="lock-sub">Génération automatique de combinés optimisés</div></div></div><!-- end lock-overlay -->
 <div class="ld" id="tkLd"><div class="sp"></div><p>Analyse des matchs...</p></div>
   <div id="tkCotesSection" style="display:none">
     <div class="card">
@@ -1072,8 +1030,6 @@ tr:hover td{background:var(--s2)}
 
 <!-- ═══════════════════════════════════════════════════════ ODDS ══ -->
 <div class="panel" id="p7">
-<div class="lock-overlay" id="lockCotes" style="min-height:320px">
-  <div style="filter:blur(2px);pointer-events:none;padding:14px">
     <div class="card" style="margin-bottom:10px">
       <span class="clbl">Collecte globale des cotes</span>
       <p style="font-size:.72rem;color:var(--dm);font-family:var(--mono);line-height:1.5;margin-bottom:12px">Détecte automatiquement toutes les compétitions foot actives via The Odds API et récupère les cotes en une seule opération.</p>
@@ -1084,9 +1040,6 @@ tr:hover td{background:var(--s2)}
       <p style="font-size:.72rem;color:var(--dm);font-family:var(--mono);line-height:1.5">Croisement entre les cotes bookmakers et les prédictions FootStats pour détecter les value bets.</p>
       <div style="height:80px;background:var(--bd);border-radius:7px;opacity:.3;margin-top:8px"></div>
     </div>
-  </div>
-  <div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-label">Analyse des Cotes — Version Complète</div><div class="lock-sub">Croisement cotes bookmakers × prédictions FootStats</div></div>
-</div>
 </div>
 
 <div class="panel" id="p8">
@@ -1827,7 +1780,9 @@ function buildTrackEntry(m,pred,s,h,a){
     p1x:pred.dc1x!==null?Math.round(pred.dc1x*100):null,
     px2:pred.dcx2!==null?Math.round(pred.dcx2*100):null,
     p12:pred.dc12!==null?Math.round(pred.dc12*100):null,
-    cf:pred.conf||0,cv:pred.convergence||0,ns:pred.nbSig||0};
+    cf:pred.conf||0,cv:pred.convergence||0,ns:pred.nbSig||0,
+    ms:(function(){if(!pred.mktSignals)return null;var ms={};['over','under','btts','bttsN','v1','x','v2','dc1x','dcx2','dc12','csH','csA','hmsc','amsc'].forEach(function(k){if(pred.mktSignals[k])ms[k]={c:pred.mktSignals[k].conv,n:pred.mktSignals[k].nbSig};});return ms;})(),
+    _v2:true};
 }
 // Accesseurs de compatibilité pour le code existant qui lit les anciens noms de champs
 function tkCompat(t){
@@ -3576,6 +3531,41 @@ function renderMatchsList(){
 
       try{
         var html=buildMatchHTMLFast(m,pred,seuilTd,res);
+        var amHtml='';
+        if(pred&&pred.mktSignals){
+          var amId='am-'+m.id;
+          var MG=[
+            {g:'Totaux',mk:[{id:'over',l:'Over '+(m._seuil||seuilTd),v:pred.plus},{id:'under',l:'Under '+(m._seuil||seuilTd),v:pred.under}]},
+            {g:'BTTS',mk:[{id:'btts',l:'BTTS Oui',v:pred.btts},{id:'bttsN',l:'BTTS Non',v:pred.bttsNon}]},
+            {g:'1X2',mk:[{id:'v1',l:'V1',v:pred.v1},{id:'x',l:'X',v:pred.x},{id:'v2',l:'V2',v:pred.v2}]},
+            {g:'DC',mk:[{id:'dc1x',l:'1X',v:pred.dc1x},{id:'dcx2',l:'X2',v:pred.dcx2},{id:'dc12',l:'12',v:pred.dc12}]},
+            {g:'CS/Mq',mk:[{id:'csH',l:'CS Dom',v:pred.csH},{id:'csA',l:'CS Ext',v:pred.csA},{id:'hmsc',l:'Dom Mq',v:pred.hmsc},{id:'amsc',l:'Ext Mq',v:pred.amsc}]}
+          ];
+          amHtml+='<div id="'+amId+'" style="display:none;margin-top:8px;border-top:1px solid var(--bd);padding-top:8px">';
+          amHtml+='<div style="font-size:.55rem;letter-spacing:2px;color:var(--dm);font-family:var(--mono);margin-bottom:6px">TOUS LES MARCHÉS — SIGNAUX L/H/J</div>';
+          amHtml+='<table style="width:100%;border-collapse:collapse;font-size:.62rem">';
+          amHtml+='<tr><th style="text-align:left;color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem;padding:2px 0">MARCHÉ</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">L</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">H</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">J</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">CV</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">%</th></tr>';
+          MG.forEach(function(grp){
+            amHtml+='<tr><td colspan="6" style="padding-top:5px;color:var(--dm);font-size:.52rem;font-family:var(--mono);letter-spacing:1.5px">'+grp.g+'</td></tr>';
+            grp.mk.forEach(function(mk){
+              if(mk.v===null||mk.v===undefined)return;
+              var sig=pred.mktSignals[mk.id]||{sigL:null,sigH:null,sigD:null,conv:0,nbSig:0};
+              var pct3=Math.round(mk.v*100);
+              var pCol=pct3>=70?'var(--g)':pct3>=55?'var(--y)':pct3>=40?'var(--o)':'var(--r)';
+              var cCol=sig.conv>=3?'var(--g)':sig.conv>=2?'var(--y)':'var(--dm)';
+              function sv(v){if(v===null||v===undefined)return'<td style="text-align:center;color:var(--bd2)">?</td>';var pv=Math.round(v*100);var vc=pv>=60?'var(--g)':pv>=45?'var(--y)':'var(--r)';return'<td style="text-align:center;color:'+vc+'">'+pv+'%</td>';}
+              var isAct=(mk.id===tdMkt||(tdMkt==='auto'&&mk.id==='over')||(tdMkt==='totaux'&&mk.id==='over'));
+              amHtml+='<tr style="border-bottom:1px solid rgba(255,255,255,.03)'+(isAct?';background:rgba(0,229,160,.04)':'')+'">';
+              amHtml+='<td style="padding:3px 0;color:'+(isAct?'var(--g)':'var(--tx)')+'">'+mk.l+'</td>';
+              amHtml+=sv(sig.sigL)+sv(sig.sigH)+sv(sig.sigD);
+              amHtml+='<td style="text-align:center;color:'+cCol+';font-weight:700">'+sig.conv+'/'+sig.nbSig+'</td>';
+              amHtml+='<td style="text-align:right;color:'+pCol+';font-weight:700">'+pct3+'%</td>';
+              amHtml+='</tr>';
+            });
+          });
+          amHtml+='</table></div>';
+          amHtml+='<button onclick="var el=document.getElementById(\''+amId+'\');el.style.display=el.style.display===\'none\'?\'block\':\'none\';this.textContent=el.style.display===\'block\'?\'▲ Masquer\':\'▼ Voir tous les marchés + signaux\'" style="width:100%;margin-top:5px;background:transparent;border:1px solid var(--bd);color:var(--dm);font-size:.6rem;padding:5px;border-radius:6px;cursor:pointer;font-family:var(--mono)">▼ Voir tous les marchés + signaux</button>';
+        }
         card.innerHTML=
           '<div class="mt-row"><div class="ml">'+m.heure+'</div><div class="ms '+scls+'">'+stxt+'</div></div>'+
           '<div class="mte"><div class="tn th">'+m.home+'</div><div class="msc">'+score+'</div><div class="tn ta">'+m.away+'</div></div>'+
@@ -3586,7 +3576,8 @@ function renderMatchsList(){
           '<button class="bsm" onclick="openScenarioModal('+midx+')" style="flex:1;padding:7px;text-align:center;border-color:var(--teal);color:var(--teal)">Scénario</button>'+
           '</div>'+
           '<div id="ai-block-'+m.id+'" style="display:none;margin-top:6px"></div>'+
-          (pred?'<button class="bsm" id="ai-btn-'+m.id+'" onclick="analyzeMatchAI(window._matchRefs['+midx+'],\"ai-block-'+m.id+'\",\"ai-btn-'+m.id+'\")" style="width:100%;margin-top:4px;padding:7px;text-align:center;border-color:var(--p);color:var(--p);font-size:.65rem">🤖 Analyse IA</button>':'');
+          (pred?'<button class="bsm" id="ai-btn-'+m.id+'" onclick="analyzeMatchAI(window._matchRefs['+midx+'],\"ai-block-'+m.id+'\",\"ai-btn-'+m.id+'\")" style="width:100%;margin-top:4px;padding:7px;text-align:center;border-color:var(--p);color:var(--p);font-size:.65rem">🤖 Analyse IA</button>':'')+
+          amHtml;
       }catch(e){
         card.innerHTML=
           '<div class="mt-row"><div class="ml">'+m.heure+'</div></div>'+
@@ -6397,6 +6388,117 @@ function calcFiabilite(){
     catch(e){showAl('fiabAl','er','Erreur analyse: '+e.message);}
   });
 }
+
+// ══════════════════════════════════════════════
+// ANALYSE PAR LIGUE — taux marchés + xG par pays
+// ══════════════════════════════════════════════
+function renderLeaguesTab(entries,s){
+  var search=(document.getElementById('leaguesSearch')?document.getElementById('leaguesSearch').value:'')||'';
+  search=search.toLowerCase();
+
+  // 1. Grouper le tracking par ligue+pays
+  var byLg={};
+  entries.forEach(function(t){
+    if(t.rH===null||t.rH===undefined||t.rA===null||t.rA===undefined)return;
+    var key=(t.league||'?')+'|||'+(t.country||'?');
+    if(!byLg[key])byLg[key]={league:t.league||'?',country:t.country||'?',entries:[]};
+    byLg[key].entries.push(t);
+  });
+
+  // 2. Buts moyens par match, par pays — depuis _dbCache (tous les matchs terminés)
+  var golsByCountry={};
+  var db=_dbCache||{};
+  Object.keys(db).forEach(function(date){
+    (db[date]||[]).forEach(function(m){
+      if(m.h!==null&&m.h!==undefined&&m.a!==null&&m.a!==undefined&&TERM.indexOf(m.status)>=0){
+        var co=m.country||'?';
+        if(!golsByCountry[co])golsByCountry[co]={sum:0,n:0};
+        golsByCountry[co].sum+=(m.h+m.a);golsByCountry[co].n++;
+      }
+    });
+  });
+
+  var mkts=getAllMarkets(s);
+  var MKT_QUICK=[
+    {id:'over',label:'+'+s},
+    {id:'btts',label:'BTTS'},
+    {id:'v1',label:'V1'},
+    {id:'x',label:'X'},
+    {id:'v2',label:'V2'}
+  ];
+
+  // 3. Construire la liste et trier par nombre de matchs
+  var list=Object.entries(byLg).map(function(e){
+    var key=e[0],v=e[1];
+    var n=v.entries.length;
+    var quick={};
+    MKT_QUICK.forEach(function(mq){
+      var mkt=mkts.find(function(m){return m.id===mq.id;});
+      var st=mktAccuracy(v.entries,mkt);
+      quick[mq.id]=st;
+    });
+    return{key:key,league:v.league,country:v.country,n:n,entries:v.entries,quick:quick};
+  }).filter(function(v){
+    if(!search)return true;
+    return v.league.toLowerCase().indexOf(search)>=0||v.country.toLowerCase().indexOf(search)>=0;
+  }).sort(function(a,b){return b.n-a.n;});
+
+  var html='<div style="margin-bottom:10px">';
+  html+='<input class="inp" id="leaguesSearch" placeholder="Filtrer par ligue ou pays..." value="'+search.replace(/"/g,'&quot;')+'" oninput="renderFiabOut()" style="font-size:.72rem"/>';
+  html+='</div>';
+
+  if(!list.length){
+    html+='<div style="text-align:center;color:var(--dm);font-size:.72rem;font-family:var(--mono);padding:20px">Aucune ligue trouvée — lance la Sync globale.</div>';
+    return html;
+  }
+
+  html+='<div style="font-size:.6rem;color:var(--dm);font-family:var(--mono);margin-bottom:8px">'+list.length+' ligues · taux réel et précision de nos prédictions</div>';
+
+  list.forEach(function(v){
+    var detailId='lg-'+btoa(unescape(encodeURIComponent(v.key.slice(0,20)))).replace(/[+=\/]/g,'_');
+    html+='<div class="card" style="margin-bottom:8px;padding:10px">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="var el=document.getElementById(\''+detailId+'\');el.style.display=el.style.display===\'none\'?\'block\':\'none\';">';
+    html+='<div><div style="font-weight:900;font-size:.85rem">'+v.league+'</div><div style="font-size:.6rem;font-family:var(--mono);color:var(--dm)">'+v.country+' · '+v.n+' matchs</div></div>';
+    html+='<div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:55%">';
+    MKT_QUICK.forEach(function(mq){
+      var st=v.quick[mq.id];
+      if(!st||st.realRate===null)return;
+      var col=st.realRate>=60?'var(--g)':st.realRate>=40?'var(--y)':'var(--r)';
+      html+='<span style="font-size:.58rem;font-family:var(--mono);padding:2px 5px;border:1px solid '+col+';border-radius:4px;color:'+col+'">'+mq.label+' '+st.realRate+'%</span>';
+    });
+    html+='</div></div>';
+
+    // Detail dépliable
+    html+='<div id="'+detailId+'" style="display:none;margin-top:8px;border-top:1px solid var(--bd);padding-top:8px">';
+
+    var gol=golsByCountry[v.country];
+    if(gol&&gol.n>0){
+      html+='<div style="font-size:.6rem;font-family:var(--mono);color:var(--p);margin-bottom:6px">⚽ Buts moy./match ('+v.country+', '+gol.n+' matchs) : '+(gol.sum/gol.n).toFixed(2)+'</div>';
+    }
+
+    html+='<table style="width:100%;border-collapse:collapse;font-size:.64rem">';
+    html+='<tr><th style="text-align:left;color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem;padding:2px 0">MARCHÉ</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">TAUX RÉEL</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">PRÉD. MOY</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">PRÉCISION</th><th style="color:var(--dm);font-weight:500;font-family:var(--mono);font-size:.55rem">N</th></tr>';
+    mkts.forEach(function(mkt){
+      var st=mktAccuracy(v.entries,mkt);
+      if(!st||st.n<3)return;
+      var rCol=st.realRate>=60?'var(--g)':st.realRate>=40?'var(--y)':'var(--r)';
+      var aCol=st.acc>=60?'var(--g)':st.acc>=45?'var(--y)':'var(--r)';
+      html+='<tr style="border-bottom:1px solid rgba(255,255,255,.03)">';
+      html+='<td style="padding:3px 0">'+mkt.label+'</td>';
+      html+='<td style="text-align:center;color:'+rCol+';font-weight:700">'+st.realRate+'%</td>';
+      html+='<td style="text-align:center;color:var(--dm)">'+st.predAvg+'%</td>';
+      html+='<td style="text-align:center;color:'+aCol+';font-weight:700">'+st.acc+'%</td>';
+      html+='<td style="text-align:center;color:var(--dm)">'+st.n+'</td>';
+      html+='</tr>';
+    });
+    html+='</table>';
+    html+='</div>'; // end detail
+    html+='</div>'; // end card
+  });
+
+  return html;
+}
+
 function renderFiabOut(){
   try{
   ensureScoresTab();
@@ -6414,7 +6516,7 @@ function renderFiabOut(){
   var savedTk=getTickets(),tkWon=savedTk.filter(function(t){return t.result==='won'}).length;
   var tkLost=savedTk.filter(function(t){return t.result==='lost'}).length,tkTotal=tkWon+tkLost;
   var html='';
-  html+='<div class="fiab-tabs"><button class="fiab-tab'+(fiabView==='resume'?' on':'')+'" data-v="resume" onclick="setFiabView(\'resume\')">Résumé</button><button class="fiab-tab'+(fiabView==='marches'?' on':'')+'" data-v="marches" onclick="setFiabView(\'marches\')">Marchés</button><button class="fiab-tab'+(fiabView==='analyse'?' on':'')+'" data-v="analyse" onclick="setFiabView(\'analyse\')">Analyse</button><button class="fiab-tab'+(fiabView==='roi'?' on':'')+'" data-v="roi" onclick="setFiabView(\'roi\')">ROI</button><button class="fiab-tab'+(fiabView==='combi'?' on':'')+'" data-v="combi" onclick="setFiabView(\'combi\')" style="color:var(--y)">🎲 Combinés</button><button class="fiab-tab" data-v="tranches" onclick="showFiabLock(\'Tranches\',\'Analyse de précision par tranche de confiance\')" style="color:var(--dm)">🔒 Tranches</button><button class="fiab-tab" data-v="scores" onclick="showFiabLock(\'Scores\',\'Précision détaillée des prédictions de score\')" style="color:var(--dm)">🔒 Scores</button><button class="fiab-tab'+(fiabView==='selection'?' on':'')+'" data-v="selection" onclick="setFiabView(\'selection\')">Sélection</button><button class="fiab-tab" data-v="zeroo" onclick="showFiabLock(\'Analyse 0-0\',\'Corrélations et probabilités score nul\')" style="color:var(--dm)">🔒 0-0</button></div>';
+  html+='<div class="fiab-tabs"><button class="fiab-tab'+(fiabView==='resume'?' on':'')+'" data-v="resume" onclick="setFiabView(\'resume\')">Résumé</button><button class="fiab-tab'+(fiabView==='marches'?' on':'')+'" data-v="marches" onclick="setFiabView(\'marches\')">Marchés</button><button class="fiab-tab'+(fiabView==='analyse'?' on':'')+'" data-v="analyse" onclick="setFiabView(\'analyse\')">Analyse</button><button class="fiab-tab'+(fiabView==='roi'?' on':'')+'" data-v="roi" onclick="setFiabView(\'roi\')">ROI</button><button class="fiab-tab'+(fiabView==='combi'?' on':'')+'" data-v="combi" onclick="setFiabView(\'combi\')" style="color:var(--y)">🎲 Combinés</button><button class="fiab-tab'+(fiabView==='tranches'?' on':'')+'" data-v="tranches" onclick="setFiabView(\'tranches\')">Tranches</button><button class="fiab-tab'+(fiabView==='scores'?' on':'')+'" data-v="scores" onclick="setFiabView(\'scores\')">Scores</button><button class="fiab-tab'+(fiabView==='selection'?' on':'')+'" data-v="selection" onclick="setFiabView(\'selection\')">Sélection</button><button class="fiab-tab'+(fiabView==='zeroo'?' on':'')+'" data-v="zeroo" onclick="setFiabView(\'zeroo\')">0-0</button><button class="fiab-tab'+(fiabView==='leagues'?' on':'')+'" data-v="leagues" onclick="setFiabView(\'leagues\')" style="color:var(--teal)">🌍 Par Ligue</button></div>';
   if(calibApplied){html+='<div style="background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:.64rem;line-height:1.7"><div style="font-weight:700;color:var(--g);margin-bottom:2px">⚡ Auto-calibration active</div><div style="color:var(--dm);font-family:var(--mono)">'+Object.entries(newCalib).map(function(e){var f=e[1],mkt=mkts.find(function(m){return m.id===e[0]});return'<span style="margin-right:5px">'+(mkt?mkt.label:e[0])+' '+(f>1.05?'↑':f<0.95?'↓':'≈')+'×'+f+'</span>'}).join('')+'</div></div>'}
   function accBox(id,lbl){var st=mktStats[id];if(!st||st.acc===null)return'<div class="sb"><div class="sv" style="color:var(--dm)">?</div><div class="sl">'+lbl+'</div></div>';var col=st.acc>=60?'var(--g)':st.acc>=45?'var(--y)':'var(--r)';return'<div class="sb"><div class="sv" style="color:'+col+'">'+st.acc+'%</div><div class="sl">'+lbl+'</div></div>'}
   if(fiabView==='resume'){
@@ -6461,14 +6563,24 @@ function renderFiabOut(){
       {id:'sig3',   label:'3/3 uniquement',       icon:'\ud83d\udd25', desc:'Convergence maximale 3/3 uniquement',              minPred:50,minConv:3},
       {id:'strict', label:'Strict \u226580%+3/3', icon:'\ud83d\udc8e', desc:'Le plus s\xe9lectif : \u226580% ET 3/3',          minPred:80,minConv:3},
     ];
+    var roiVer=roiCfg.ver||'all';
+    html+='<div class="lsm" style="margin-bottom:5px">🔬 Comparer</div>';
+    html+='<div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap">';
+    [{id:'all',label:'Tous'},{id:'v2',label:'✨ v2'},{id:'v1',label:'v1'}].forEach(function(vt){
+      var active=vt.id===roiVer;
+      html+='<div onclick="saveRoiCfg(\'ver\',\''+vt.id+'\')" style="cursor:pointer;padding:5px 9px;border-radius:7px;font-size:.62rem;border:1px solid '+(active?'var(--g)':'var(--bd)')+';color:'+(active?'var(--g)':'var(--dm)')+';background:'+(active?'rgba(0,229,160,.08)':'transparent')+'">'  +vt.label+'</div>';
+    });
+    html+='</div>';
     var curStrat=STRATEGIES.find(function(s){return s.id===roiStrat})||STRATEGIES[0];
 
     // Fonction simulation
     function simMkt(mkt,minPred,minConv){
       var st=mktStats[mkt.id];if(!st||st.acc===null||st.n<5)return null;
       var valid=entries.filter(function(t){
+        if(roiVer==='v2'&&!t._v2)return false;
+        if(roiVer==='v1'&&t._v2)return false;
         if(t[mkt.pKey]===null||t[mkt.pKey]<minPred)return false;
-        if(minConv>0&&(t.pNbSig||t.pConv||0)<minConv)return false;
+        if(minConv>0){var mc=tkMktConv(t,mkt.id);if(mc<minConv)return false;}
         return true;
       });
       if(valid.length<3)return null;
@@ -6877,55 +6989,60 @@ function renderFiabOut(){
     } // end eligible check
   }
     else if(fiabView==='tranches'){
-    html+='<div style="font-size:.63rem;color:var(--dm);margin-bottom:10px;font-family:var(--mono);line-height:1.6">Pour chaque marché : à quelle tranche de prédiction FootStats est-il le plus précis ? La tranche verte = zone de confiance maximale.</div>';
-    var TRANCHES=[{lbl:'<40%',min:0,max:39},{lbl:'40-49%',min:40,max:49},{lbl:'50-59%',min:50,max:59},{lbl:'60-69%',min:60,max:69},{lbl:'70-79%',min:70,max:79},{lbl:'80%+',min:80,max:100}];
+    html+='<div style="font-size:.63rem;color:var(--dm);margin-bottom:10px;font-family:var(--mono);line-height:1.6">Pour chaque marché : précision réelle à CHAQUE pourcentage prédit (pas de regroupement). Permet de repérer précisément les valeurs les plus profitables.</div>';
+    html+='<div style="margin-bottom:10px;display:flex;gap:6px;align-items:center">';
+    html+='<span class="lsm" style="margin:0">N min par %</span>';
+    html+='<input class="inp" id="trMinN" type="number" value="'+(window._trMinN||3)+'" min="1" max="20" style="width:60px;font-size:.7rem;padding:5px" onchange="window._trMinN=parseInt(this.value)||3;renderFiabOut();"/>';
+    html+='</div>';
+    var minN=window._trMinN||3;
+
     mkts.forEach(function(mkt){
       var valid=entries.filter(function(t){return t[mkt.pKey]!==null&&t[mkt.pKey]!==undefined;});
       if(valid.length<5)return;
-      // Calculer précision par tranche
-      var trData=TRANCHES.map(function(tr){
-        var inTr=valid.filter(function(t){return t[mkt.pKey]>=tr.min&&t[mkt.pKey]<=tr.max;});
-        if(!inTr.length)return null;
-        var ok=inTr.filter(function(t){return getRealVal(t,mkt);}).length;
-        var acc=Math.round(ok/inTr.length*100);
-        var mid=Math.round((tr.min+tr.max)/2);
-        var delta=acc-mid; // calibration : réel vs attendu
-        return{lbl:tr.lbl,n:inTr.length,ok:ok,acc:acc,mid:mid,delta:delta};
-      }).filter(Boolean);
-      if(!trData.length)return;
-      // Trouver la meilleure tranche (précision la plus haute avec min 3 matchs)
-      var best=trData.filter(function(t){return t.n>=3;}).sort(function(a,b){return b.acc-a.acc;})[0];
+
+      // Grouper par pourcentage EXACT (0-100)
+      var byPct={};
+      valid.forEach(function(t){
+        var p=t[mkt.pKey];
+        if(!byPct[p])byPct[p]={n:0,ok:0};
+        byPct[p].n++;
+        if(getRealVal(t,mkt))byPct[p].ok++;
+      });
+
+      var pctData=Object.keys(byPct).map(function(p){
+        var d=byPct[p];
+        var acc=Math.round(d.ok/d.n*100);
+        var delta=acc-parseInt(p);
+        return{pct:parseInt(p),n:d.n,ok:d.ok,acc:acc,delta:delta};
+      }).filter(function(d){return d.n>=minN;}).sort(function(a,b){return a.pct-b.pct;});
+
+      if(!pctData.length)return;
+
+      var best=pctData.slice().sort(function(a,b){return b.acc-a.acc;})[0];
+
       html+='<div class="card" style="margin-bottom:8px;padding:10px">';
       html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
       html+='<span style="font-size:.75rem;font-weight:700">'+mkt.label+'</span>';
-      if(best)html+='<span style="font-size:.62rem;font-family:var(--mono);background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.3);color:var(--g);padding:2px 8px;border-radius:5px">Optimal: '+best.lbl+' → '+best.acc+'%</span>';
+      html+='<span style="font-size:.6rem;font-family:var(--mono);color:var(--dm)">'+pctData.length+' valeurs (≥'+minN+' matchs)</span>';
       html+='</div>';
-      html+='<div class="bars">';
-      trData.forEach(function(tr){
-        var col=tr.acc>=65?'var(--g)':tr.acc>=50?'var(--y)':'var(--r)';
-        var isBest=best&&tr.lbl===best.lbl;
-        var deltaStr=(tr.delta>0?'+':'')+tr.delta+'%';
-        var deltacol=Math.abs(tr.delta)<=5?'var(--g)':Math.abs(tr.delta)<=10?'var(--y)':'var(--r)';
-        html+='<div class="br2" style="'+(isBest?'background:rgba(0,229,160,.04);border-radius:5px;padding:2px 0;':'')+'">'+
-          '<div class="bn" style="width:52px;'+(isBest?'color:var(--g);':'')+'">'+tr.lbl+'</div>'+
+      if(best)html+='<div style="font-size:.62rem;font-family:var(--mono);background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.3);color:var(--g);padding:4px 8px;border-radius:5px;margin-bottom:8px;display:inline-block">🎯 Plus profitable: '+best.pct+'% prédit → '+best.acc+'% réel ('+best.ok+'/'+best.n+')</div>';
+
+      html+='<div class="bars" style="max-height:340px;overflow-y:auto">';
+      pctData.forEach(function(d){
+        var col=d.acc>=65?'var(--g)':d.acc>=50?'var(--y)':'var(--r)';
+        var isBest=best&&d.pct===best.pct;
+        var deltaStr=(d.delta>0?'+':'')+d.delta+'%';
+        var deltacol=Math.abs(d.delta)<=5?'var(--g)':Math.abs(d.delta)<=10?'var(--y)':'var(--r)';
+        html+='<div class="br2" style="'+(isBest?'background:rgba(0,229,160,.06);border-radius:5px;padding:2px 0;':'')+'">'+
+          '<div class="bn" style="width:40px;'+(isBest?'color:var(--g);font-weight:700;':'')+'">'+d.pct+'%</div>'+
           '<div class="bb2">'+
-            '<div class="bf" style="width:'+Math.min(100,tr.acc)+'%;background:'+col+'">'+
-              tr.acc+'% ('+tr.ok+'/'+tr.n+') <span style="color:'+deltacol+';margin-left:4px">Δ'+deltaStr+'</span>'+
+            '<div class="bf" style="width:'+Math.min(100,d.acc)+'%;background:'+col+'">'+
+              d.acc+'% ('+d.ok+'/'+d.n+') <span style="color:'+deltacol+';margin-left:4px">Δ'+deltaStr+'</span>'+
             '</div>'+
           '</div>'+
         '</div>';
       });
       html+='</div>';
-      // Note si tranche faible meilleure que haute
-      var trFaibles=trData.filter(function(t){return t.mid<50&&t.n>=3;});
-      var trHautes=trData.filter(function(t){return t.mid>=50&&t.n>=3;});
-      if(trFaibles.length&&trHautes.length){
-        var bestFaible=trFaibles.sort(function(a,b){return b.acc-a.acc;})[0];
-        var bestHaute=trHautes.sort(function(a,b){return b.acc-a.acc;})[0];
-        if(bestFaible.acc>bestHaute.acc+5){
-          html+='<div style="margin-top:6px;font-size:.6rem;color:var(--y);font-family:var(--mono)">⚠️ Les prédictions faibles (&lt;50%) sont plus fiables que les hautes — logique inverse détectée</div>';
-        }
-      }
       html+='</div>';
     });
   }
@@ -6939,6 +7056,9 @@ function renderFiabOut(){
   }
   else if(fiabView==='selection'){
     html+=renderBilanSelection(entries,s)||'';
+  }
+  else if(fiabView==='leagues'){
+    html+=renderLeaguesTab(entries,s);
   }
   else if(fiabView==='zeroo'){
     var all00=get00Stats();
@@ -7037,128 +7157,9 @@ renderAnHist();
 initStDates();initSyncDates();
 
 // ══════════════════════════════════════════════
-// TRIAL SYSTEM
-// ══════════════════════════════════════════════
-var TRIAL_KEY='fsa_trial_v1';
-var TRIAL_CODES=[
-  {h:"c117a888a9eba435",e:"20260613"},
-  {h:"a0328ee5e9abea2f",e:"20260613"},
-  {h:"ee503887feaece76",e:"20260613"},
-  {h:"007a1d2150e42992",e:"20260613"},
-  {h:"c6d6d6a780784ecc",e:"20260613"}
-];
-var PRED_LIMIT=3;
-
-// Simple hash (same algo as Python sha256 truncated — we use a JS version)
-async function sha256hex(str){
-  var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('').slice(0,16);
-}
-
-function getTrial(){try{return JSON.parse(localStorage.getItem(TRIAL_KEY)||'{}')}catch(e){return{}}}
-function setTrial(t){localStorage.setItem(TRIAL_KEY,JSON.stringify(t))}
-
-function todayStr(){return new Date().toISOString().slice(0,10).replace(/-/g,'')}
-
-function getQuotaUsed(){
-  var t=getTrial();
-  if(t.lastDay!==todayStr())return 0;
-  return t.used||0;
-}
-
-function incrementQuota(){
-  var t=getTrial();
-  if(t.lastDay!==todayStr()){t.lastDay=todayStr();t.used=0}
-  t.used=(t.used||0)+1;
-  setTrial(t);
-  updateQuotaBar();
-}
-
-function updateQuotaBar(){
-  var used=getQuotaUsed();
-  document.getElementById('quotaBar').style.display='flex';
-  document.getElementById('quotaTxt').textContent=used+' / '+PRED_LIMIT;
-  for(var i=1;i<=3;i++){
-    var dot=document.getElementById('qd'+i);
-    dot.className='quota-dot'+(i<=used?(i===used&&used<PRED_LIMIT?' used last':' used'):'');
-  }
-}
-
-function isQuotaFull(){return getQuotaUsed()>=PRED_LIMIT}
-
-async function checkCode(){
-  var raw=document.getElementById('accessInp').value.trim().toUpperCase();
-  if(!raw){document.getElementById('accessErr').textContent='Entre ton code';return}
-  var h=await sha256hex(raw);
-  var today=todayStr();
-  var match=TRIAL_CODES.find(function(c){return c.h===h&&c.e>=today});
-  if(match){
-    var t=getTrial();
-    t.code=h;t.granted=true;
-    if(!t.lastDay){t.lastDay=today;t.used=0}
-    setTrial(t);
-    document.getElementById('accessScreen').style.display='none';
-    updateQuotaBar();
-    document.getElementById('accessErr').textContent='';
-  } else {
-    var anyMatch=TRIAL_CODES.find(function(c){return c.h===h});
-    document.getElementById('accessErr').textContent=anyMatch?'Code expiré — contacte-nous':'Code invalide';
-  }
-}
-
-function checkAccess(){
-  var t=getTrial();
-  if(t.granted){
-    // Check code still valid (re-verify expiry)
-    var today=todayStr();
-    var valid=TRIAL_CODES.find(function(c){return c.h===t.code&&c.e>=today});
-    if(valid){
-      document.getElementById('accessScreen').style.display='none';
-      updateQuotaBar();
-      return true;
-    } else {
-      // Expired
-      t.granted=false;setTrial(t);
-      document.getElementById('accessScreen').style.display='flex';
-      document.getElementById('accessErr').textContent='Ton accès a expiré — contacte-nous pour continuer';
-      return false;
-    }
-  }
-  document.getElementById('accessScreen').style.display='flex';
-  return false;
-}
-
-// Intercept openModal to check quota
-var _origOpenModal=openModal;
-openModal=function(idx){
-  if(!checkAccess())return;
-  if(isQuotaFull()){
-    showAl('tdAl','er','Quota atteint — 3 prédictions/jour. Reviens demain ou passe à la version complète.');
-    return;
-  }
-  _origOpenModal(idx);
-  incrementQuota();
-};
-
-// Intercept goTab to block locked tabs
-var _origGoTab=goTab;
-goTab=function(i){
-  if(!checkAccess())return;
-  // Tab 5 = Tickets, Tab 7 = Cotes
-  if(i===5||i===7){
-    // still allow tab switch to show lock UI
-    _origGoTab(i);
-    return;
-  }
-  _origGoTab(i);
-};
-
-// Init on load
 window.addEventListener('DOMContentLoaded',function(){
-  // Charger la base et le tracking depuis IDB avant tout
-  Promise.all([loadDBFromIDB(), migrateDBToIDB(), migrateTrackToIDB()]).then(function(){
+  Promise.all([loadDBFromIDB(),migrateDBToIDB(),migrateTrackToIDB()]).then(function(){
     majDB();
-    checkAccess();
   });
 });
 
@@ -7206,24 +7207,6 @@ function saveRoiCfg(key,val){
     if(inp.value)cfg.cotes[id]=parseFloat(inp.value);
   });
   localStorage.setItem('fsa_roi_cfg',JSON.stringify(cfg));
-}
-
-
-function showFiabLock(name, desc){
-  var out=document.getElementById('fiabOut');
-  if(!out)return;
-  out.style.display='block';
-  // Replace just the content area with lock message
-  var existing=document.getElementById('fiabLockMsg');
-  if(existing)existing.remove();
-  var div=document.createElement('div');
-  div.id='fiabLockMsg';
-  div.style.cssText='background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:32px 20px;text-align:center;margin-top:8px';
-  div.innerHTML='<div style="font-size:2.5rem;margin-bottom:10px">🔒</div>'+
-    '<div style="font-weight:900;font-size:1rem;margin-bottom:6px">'+name+' — Version Complète</div>'+
-    '<div style="font-size:.66rem;color:var(--dm);font-family:var(--mono);line-height:1.6;margin-bottom:16px">'+desc+'</div>'+
-    '<div style="font-size:.62rem;color:var(--g);font-family:var(--mono)">Contacte-nous pour débloquer l\'accès complet</div>';
-  out.appendChild(div);
 }
 
 
@@ -7838,6 +7821,11 @@ async function applyLeagueEdits(){
 
 
 // Retourne la convergence pour le marché actif
+function tkMktConv(t,mktId){
+  var map={over:'convOver',under:'convOver',plus:'convOver',btts:'convBtts',bttsN:'convBttsN',v1:'convV1',x:'convX',v2:'convV2',dc1x:'convDc1x',dcx2:'convDcx2',dc12:'convDc12',csH:'convCsH',csA:'convCsA',hmsc:'convHmsc',amsc:'convAmsc'};
+  var key=map[mktId]||'pNbSig';
+  return t[key]!==undefined?t[key]:(t.pNbSig||0);
+}
 function getActiveMktSig(pred, mktId){
   if(!pred||!pred.mktSignals)return{sigL:pred?pred.sigL:null,sigH:pred?pred.sigH:null,sigD:pred?pred.sigD:null,conv:pred?pred.convergence:0,nbSig:pred?pred.nbSig:0};
   // Mapper les IDs de marché vers les clés mktSignals
